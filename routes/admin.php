@@ -28,8 +28,6 @@ use App\Http\Controllers\Apps\Order\OrderController;
 use App\Http\Controllers\Apps\Settings\SettingController;
 use App\Http\Controllers\Apps\User\AdminManagementController;
 use App\Http\Controllers\Apps\Order\CouponController;
-use App\Http\Controllers\Apps\Order\WarrantyController;
-use App\Http\Controllers\Apps\Order\ServiceController;
 use App\Http\Controllers\Apps\Marketing\ReviewController;
 use App\Http\Controllers\Apps\Marketing\SliderController;
 use App\Http\Controllers\Apps\User\ContactMessageController;
@@ -128,15 +126,6 @@ Route::middleware(['isAdmin'])->group(function () {
         Route::get('trash-order', [OrderController::class, 'trash'])->name('order.trash');
     });
 
-
-    Route::resource('warranty', WarrantyController::class);
-    Route::get('/warranty/{year?}/{month?}', [WarrantyController::class, 'index'])->name('warranty.index');
-    Route::post('/warranty/update/{id}', [WarrantyController::class, 'update'])->name('warranty.update');
-    Route::get('all-warranty', [WarrantyController::class, 'all'])->name('all.warranty');
-
-    Route::resource('service', ServiceController::class);
-    Route::get('/service/{year?}/{month?}', [ServiceController::class, 'index'])->name('service.index');
-    Route::post('/service/update/{id}', [ServiceController::class, 'update'])->name('service.update');
 
     // coupon
     Route::name('coupon.')->group(function(){

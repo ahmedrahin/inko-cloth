@@ -13,7 +13,7 @@
     padding-bottom: 13px !important;
 }
 .text-active-primary.active {
-    color: #08b554 !important;
+    color: #3e97ff !important;
 }
 
 #kt_ecommerce_add_product_discount_percentage,
@@ -391,7 +391,7 @@ dt {
 }
 
 .tab-section .nav-link.active {
-    background-color: #08b554 !important;
+    background-color: #3e97ff !important;
     color: white !important;
 }
 
@@ -400,7 +400,7 @@ dt {
 }
 
 .tab-section .nav-tabs i {
-    color: #08b554;
+    color: #3e97ff;
     padding-right: 5px;
 }
 
@@ -411,7 +411,7 @@ dt {
 .tab-section .nav-link {
     padding: 10px 20px;
     font-weight: 600;
-     color: #08b554;
+     color: #3e97ff;
 }
 
 .tab-section .tab-pane p {

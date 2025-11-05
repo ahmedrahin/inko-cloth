@@ -14,9 +14,16 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
 class ShopController extends Controller
 {
     // show product in shop page
-    public function allProducts()
+    public function allProducts(Request $request)
     {
-        return view('frontend.pages.shop.shop');
+        $query = Product::activeProducts();
+        [$products, $perPage, $from, $to] = $this->getFilteredProducts($request, $query);
+
+        if ($request->ajax()) {
+            return view('frontend.pages.shop.product-list', compact('products'))->render();
+        }
+
+        return view('frontend.pages.shop.shop', compact('products', 'perPage', 'from', 'to'));
     }
 
     private function getFilteredProducts(Request $request, $query)
@@ -94,7 +101,7 @@ class ShopController extends Controller
             ->get();
 
         if ($request->ajax()) {
-            return view('frontend.pages.shop.category-product-list', compact('products'))->render();
+            return view('frontend.pages.shop.product-list', compact('products'))->render();
         }
 
         return view('frontend.pages.shop.category-product', compact('category', 'slug', 'products', 'perPage', 'from', 'to', 'filters'));
@@ -117,7 +124,7 @@ class ShopController extends Controller
             ->get();
 
         if ($request->ajax()) {
-            return view('frontend.pages.shop.category-product-list', compact('products'))->render();
+            return view('frontend.pages.shop.product-list', compact('products'))->render();
         }
 
         return view('frontend.pages.shop.subcategory-product', compact('category', 'slug', 'products', 'perPage', 'from', 'to', 'parentCategory', 'filters'));
@@ -141,7 +148,7 @@ class ShopController extends Controller
             ->get();
 
         if ($request->ajax()) {
-            return view('frontend.pages.shop.category-product-list', compact('products'))->render();
+            return view('frontend.pages.shop.product-list', compact('products'))->render();
         }
 
         return view('frontend.pages.shop.subsubcategory-product', compact('category', 'slug', 'products', 'perPage', 'from', 'to', 'parentCategory', 'filters'));
@@ -337,18 +344,3 @@ class ShopController extends Controller
         return redirect()->route('compare', ['ids' => $ids]);
     }
 }
-
-
-
-
-// case 'status':
-// $query->where(function ($q) use ($values) {
-//     foreach ($values as $value) {
-//         if ($value == 6) {
-//             $q->orWhere('pre_order', 1);
-//         } elseif ($value == 7) {
-//             $q->orWhere('quantity', '>', 0);
-//         }
-//     }
-// });
-// break;

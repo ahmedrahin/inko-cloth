@@ -14,14 +14,15 @@
    https://github.com/woodroots/infiniteslidev2
    */
 
-(function($) {
-    $(window).on("load", function() {
+(function ($) {
+    $(window).on("load", function () {
         window.loaded = true;
     });
-    $(function() {
-        $.fn.infiniteslide = function(options) {
+    $(function () {
+        $.fn.infiniteslide = function (options) {
             //option
-            var settings = $.extend({
+            var settings = $.extend(
+                {
                     speed: 100, //速さ　単位はpx/秒です。
                     direction: "left", //up/down/left/rightから選択
                     pauseonhover: true, //マウスオーバーでストップ
@@ -31,7 +32,7 @@
                 options
             );
 
-            var setCss = function(obj, direction) {
+            var setCss = function (obj, direction) {
                 $(obj)
                     .wrap('<div class="infiniteslide_wrap"></div>')
                     .parent()
@@ -60,7 +61,7 @@
                     });
             };
 
-            var setClone = function(obj, clone) {
+            var setClone = function (obj, clone) {
                 var $clone = $(obj)
                     .children()
                     .clone(true)
@@ -72,29 +73,29 @@
                 }
             };
 
-            var getWidth = function(obj) {
+            var getWidth = function (obj) {
                 w = 0;
                 $(obj)
                     .children(":not(.infiniteslide_clone)")
-                    .each(function(key, value) {
+                    .each(function (key, value) {
                         w = w + $(this).outerWidth(true);
                     });
                 return w;
             };
-            var getHeight = function(obj) {
+            var getHeight = function (obj) {
                 h = 0;
                 $(obj)
                     .children(":not(.infiniteslide_clone)")
-                    .each(function(key, value) {
+                    .each(function (key, value) {
                         h = h + $(this).outerHeight(true);
                     });
                 return h;
             };
 
-            var getSpeed = function(l, s) {
+            var getSpeed = function (l, s) {
                 return l / s;
             };
-            var getNum = function(obj, direction) {
+            var getNum = function (obj, direction) {
                 if (direction == "up" || direction == "down") {
                     var num = getHeight(obj);
                 } else {
@@ -103,7 +104,7 @@
                 return num;
             };
 
-            var getTranslate = function(num, direction) {
+            var getTranslate = function (num, direction) {
                 if (direction == "up" || direction == "down") {
                     var i = "0,-" + num + "px,0";
                 } else {
@@ -112,7 +113,7 @@
                 return i;
             };
 
-            var setAnim = function(obj, id, direction, speed) {
+            var setAnim = function (obj, id, direction, speed) {
                 var num = getNum(obj, direction);
                 if (direction == "up" || direction == "down") {
                     $(obj)
@@ -146,7 +147,8 @@
                 }
 
                 $(obj).css({
-                    animation: "infiniteslide" +
+                    animation:
+                        "infiniteslide" +
                         id +
                         " " +
                         getSpeed(num, speed) +
@@ -154,40 +156,40 @@
                         reverse,
                 });
             };
-            var setStop = function(obj) {
+            var setStop = function (obj) {
                 $(obj)
-                    .on("mouseenter", function() {
+                    .on("mouseenter", function () {
                         $(this).css({
                             animationPlayState: "paused",
                         });
                     })
-                    .on("mouseleave", function() {
+                    .on("mouseleave", function () {
                         $(this).css({
                             animationPlayState: "running",
                         });
                     });
             };
 
-            var setResponsive = function(obj, direction) {
+            var setResponsive = function (obj, direction) {
                 var num = getNum(obj, direction);
                 var i = getTranslate(num, direction);
                 return i;
             };
 
-            return this.each(function(key, value) {
+            return this.each(function (key, value) {
                 var $this = $(this);
                 var num =
                     Date.now() + Math.floor(10000 * Math.random()).toString(16);
                 if (settings.pauseonhover == true) {
                     setStop($this);
                 }
-                var _onload = function() {
+                var _onload = function () {
                     setCss($this, settings.direction);
                     setClone($this, settings.clone);
                     setAnim($this, num, settings.direction, settings.speed);
 
                     if (settings.responsive) {
-                        $(window).on("resize", function() {
+                        $(window).on("resize", function () {
                             var i = setResponsive($this, settings.direction);
                             var styleid = $this.attr("data-style");
                             var stylehtml = $("#" + styleid + "_style").html();

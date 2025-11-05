@@ -30,7 +30,7 @@
   --bs-gray-800: #252F4A;
   --bs-gray-900: #071437;
   --bs-light: #F9F9F9;
-  --bs-primary: #15914b !important;
+  --bs-primary: #3E97FF;
   --bs-secondary: #DBDFE9;
   --bs-success: #50cd89;
   --bs-info: #7239ea;
@@ -38,7 +38,7 @@
   --bs-danger: #f1416c;
   --bs-dark: #071437;
   --bs-light-rgb: 249, 249, 249;
-  --bs-primary-rgb: 8, 181, 84 !important;
+  --bs-primary-rgb: 62, 151, 255;
   --bs-secondary-rgb: 219, 223, 233;
   --bs-success-rgb: 80, 205, 137;
   --bs-info-rgb: 114, 57, 234;
@@ -94,10 +94,10 @@
   --bs-tertiary-bg-rgb: 249, 249, 249;
   --bs-heading-color: #071437;
   --bs-link-color: #3E97FF;
-  --bs-link-color-rgb: 8, 181, 84;
+  --bs-link-color-rgb: 62, 151, 255;
   --bs-link-decoration: none;
   --bs-link-hover-color: #0095e8;
-  --bs-link-hover-color-rgb: #15914b!important;
+  --bs-link-hover-color-rgb: 0, 149, 232;
   --bs-link-hover-decoration: none;
   --bs-code-color: #b93993;
   --bs-highlight-bg: #fff3cd;

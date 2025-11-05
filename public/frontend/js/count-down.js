@@ -1,14 +1,13 @@
 "use strict";
-
 function Util() {}
-Util.setAttributes = function(el, attrs) {
+Util.setAttributes = function (el, attrs) {
     for (var key in attrs) {
         el.setAttribute(key, attrs[key]);
     }
 };
 
-(function() {
-    var CountDown = function(element) {
+(function () {
+    var CountDown = function (element) {
         this.element = element;
         this.labels = this.element.getAttribute("data-labels") ? this.element.getAttribute("data-labels").split(",") : [];
         this.intervalId;
@@ -26,14 +25,14 @@ Util.setAttributes = function(el, attrs) {
         this.initCountDown();
     };
 
-    CountDown.prototype.setVisibleLabels = function() {
+    CountDown.prototype.setVisibleLabels = function () {
         this.visibleLabels = this.element.getAttribute("data-visible-labels") ? this.element.getAttribute("data-visible-labels").split(",") : [];
-        this.visibleLabels = this.visibleLabels.map(function(label) {
+        this.visibleLabels = this.visibleLabels.map(function (label) {
             return label.trim();
         });
     };
 
-    CountDown.prototype.createCountDown = function() {
+    CountDown.prototype.createCountDown = function () {
         var wrapper = document.createElement("div");
         Util.setAttributes(wrapper, {
             "aria-hidden": "true",
@@ -84,17 +83,17 @@ Util.setAttributes = function(el, attrs) {
         this.element.insertBefore(wrapper, this.element.firstChild);
     };
 
-    CountDown.prototype.getEndTime = function() {
+    CountDown.prototype.getEndTime = function () {
         // get number of remaining seconds
         if (this.element.getAttribute("data-timer")) return Number(this.element.getAttribute("data-timer")) * 1000 + new Date().getTime();
         else if (this.element.getAttribute("data-countdown")) return Number(new Date(this.element.getAttribute("data-countdown")).getTime());
     };
 
-    CountDown.prototype.initCountDown = function() {
+    CountDown.prototype.initCountDown = function () {
         this.updateCountDown();
     };
 
-    CountDown.prototype.updateCountDown = function(bool) {
+    CountDown.prototype.updateCountDown = function (bool) {
         var time = Math.floor((this.endTime - new Date().getTime()) / 1000),
             days = 0,
             hours = 0,
@@ -161,7 +160,7 @@ Util.setAttributes = function(el, attrs) {
         setTimeout(() => this.updateCountDown(false), 1000);
     };
 
-    CountDown.prototype.getTimeFormat = function(time, isDay = false) {
+    CountDown.prototype.getTimeFormat = function (time, isDay = false) {
         const pad = this.element.classList.contains("cd-has-zero");
 
         if (isDay && pad && time === 0) {
@@ -171,19 +170,19 @@ Util.setAttributes = function(el, attrs) {
         return pad && time < 10 ? "0" + time : time.toString();
     };
 
-    CountDown.prototype.emitEndEvent = function(time) {
+    CountDown.prototype.emitEndEvent = function (time) {
         var event = new CustomEvent("countDownFinished");
         this.element.dispatchEvent(event);
     };
 
     // Functions calling
-    window.addEventListener("load", function() {
+    window.addEventListener("load", function () {
         //initialize the CountDown objects
         /*        window.setTimeout(() => {*/
         var countDown = document.getElementsByClassName("js-countdown");
         if (countDown.length > 0) {
             for (var i = 0; i < countDown.length; i++) {
-                (function(i) {
+                (function (i) {
                     new CountDown(countDown[i]);
                 })(i);
             }

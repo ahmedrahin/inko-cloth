@@ -20,7 +20,6 @@ class ShopProduct extends Component
     ];
 
 
-
     public function mount($productId)
     {
         $this->productId = $productId;

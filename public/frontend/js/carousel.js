@@ -1,5 +1,5 @@
-$(window).on("load", function() {
-    $(".tf-swiper").each(function(index, element) {
+$(window).on("load", function () {
+    $(".tf-swiper").each(function (index, element) {
         var $this = $(element);
         var laptop = $this.data("laptop") || 1;
         var preview = $this.data("preview") || 1;
@@ -30,15 +30,15 @@ $(window).on("load", function() {
         var perGroupMd = $this.data("pagination-md") || 1;
         var perGroupLg = $this.data("pagination-lg") || 1;
         var gridRows = $this.data("grid") || 1;
-        var cursorType = $this.data("cursor") ? ? false;
-        var loop = $this.data("loop") ? ? false;
-        var loopMd = $this.data("loop-md") ? ? false;
+        var cursorType = $this.data("cursor") ?? false;
+        var loop = $this.data("loop") ?? false;
+        var loopMd = $this.data("loop-md") ?? false;
         var effect = $this.data("effect") || "slide";
         var atPlay = $this.data("auto"); // True || False
         var speed = $this.data("speed") || 800;
         var delay = $this.data("delay") || 1000;
         var direction = $this.data("direction") || "horizontal";
-        var centered = $this.data("center") ? ? false;
+        var centered = $this.data("center") ?? false;
         var init = $this.data("init") || 0;
 
         var swiperT = new Swiper($this[0], {
@@ -52,13 +52,13 @@ $(window).on("load", function() {
             loop: loop,
             effect: effect,
             initialSlide: init,
-            autoplay: atPlay ?
-                {
-                    delay: delay,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                } :
-                false,
+            autoplay: atPlay
+                ? {
+                      delay: delay,
+                      disableOnInteraction: false,
+                      pauseOnMouseEnter: true,
+                  }
+                : false,
             grid: {
                 rows: gridRows,
                 fill: "row",
@@ -119,17 +119,17 @@ $(window).on("load", function() {
             },
         });
         $(".swiper-button")
-            .on("mouseenter", function() {
+            .on("mouseenter", function () {
                 var slideIndex = $(this).data("slide");
                 swiperT.slideTo(slideIndex, 500, false);
 
                 $(".tf-swiper .card_product--V01.style_2").removeClass("active");
                 $(".tf-swiper .card_product--V01.style_2").eq(slideIndex).addClass("active");
             })
-            .on("mouseleave", function() {
+            .on("mouseleave", function () {
                 $(".tf-swiper .card_product--V01.style_2").removeClass("active");
             })
-            .on("click", function() {
+            .on("click", function () {
                 var slideIndex = $(this).data("slide");
                 $(".tf-swiper .card_product--V01.style_2").eq(slideIndex).toggleClass("clicked");
             });
@@ -170,7 +170,7 @@ if ($(".modal-quick-view").length > 0) {
     function scrollToModalSlide(type, value, color) {
         if (!value || !color) return;
 
-        var matchingSlides = $modalRoot.find(".tf-single-slide .swiper-slide").filter(function() {
+        var matchingSlides = $modalRoot.find(".tf-single-slide .swiper-slide").filter(function () {
             return $(this).attr(`data-${type}`) === value && $(this).attr("data-color") === color;
         });
 
@@ -178,7 +178,7 @@ if ($(".modal-quick-view").length > 0) {
             var firstIndex = matchingSlides.first().index();
             mainQV.slideTo(firstIndex, 1000, false);
         } else {
-            var fallbackSlides = $modalRoot.find(".tf-single-slide .swiper-slide").filter(function() {
+            var fallbackSlides = $modalRoot.find(".tf-single-slide .swiper-slide").filter(function () {
                 return $(this).attr(`data-${type}`) === value;
             });
 
@@ -190,7 +190,7 @@ if ($(".modal-quick-view").length > 0) {
     }
 
     function setupModalVariantButtons(type) {
-        $modalRoot.find(`.${type}-btn`).on("click", function(e) {
+        $modalRoot.find(`.${type}-btn`).on("click", function (e) {
             var value = $(this).data(type);
             var color = $modalRoot.find(".value-currentColor").text();
 
@@ -206,7 +206,7 @@ if ($(".modal-quick-view").length > 0) {
     }
 
     ["color"].forEach((type) => {
-        mainQV.on("slideChange", function() {
+        mainQV.on("slideChange", function () {
             updateModalActiveButton(type, this.activeIndex);
         });
         setupModalVariantButtons(type);
@@ -246,7 +246,7 @@ if ($(".slider-thumb-wrap").length > 0) {
         grabCursor: true,
         speed: 800,
         on: {
-            slideChange: function() {
+            slideChange: function () {
                 const activeIndex = this.realIndex;
                 $(".btn-thumbs").removeClass("active");
                 $(".btn-thumbs").eq(activeIndex).addClass("active");
@@ -254,7 +254,7 @@ if ($(".slider-thumb-wrap").length > 0) {
         },
     });
 
-    $(".btn-thumbs").on("click", function() {
+    $(".btn-thumbs").on("click", function () {
         const index = $(this).index();
         $(".btn-thumbs").removeClass("active");
         $(this).addClass("active");
@@ -309,7 +309,7 @@ if ($(".tf-sw-lookbook").length > 0) {
         },
     });
 
-    $(".swiper-button").click(function() {
+    $(".swiper-button").click(function () {
         var slideIndex = $(this).data("slide");
         swiperLb.slideTo(slideIndex, 500, false);
     });

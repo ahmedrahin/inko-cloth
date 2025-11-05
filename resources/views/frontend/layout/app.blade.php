@@ -8,17 +8,20 @@
 </head>
 
 <body>
-    @include('frontend.includes.menu')
 
-    <!-- body content -->
-    @yield('body-content')
+    <main id="wrapper">
+        @include('frontend.includes.menu')
 
-    @include('frontend.includes.footer')
+        @yield('body-content')
+        
+        @include('frontend.includes.footer')
+    </main>   
+    
     @include('frontend.includes.cart-sidebar')
 
 
-    @include('frontend.includes.script')
 
+    @include('frontend.includes.script')
     @livewireScripts
 </body>
 

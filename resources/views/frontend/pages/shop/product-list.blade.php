@@ -101,7 +101,7 @@
       
     @else
         <div class="empty-content text-center py-5">
-            <h5>Sorry! No Product Found</h5>
+            <h5 class="text-danger">Sorry! No Product Found</h5>
             <p>Please try searching for something else</p>
         </div>
     @endif

@@ -47,15 +47,12 @@ Route::get('pc-builder', function(){
 // shop page
 Route::controller(ShopController::class)->group(function () {
     Route::get('shop', 'allProducts')->name('shop');
-    Route::get('category/{parent_slug}/{slug}', 'subcategoryProduct')->name('subcategory.product');
-    Route::get('category/{parent_slug}/{parentsub_slug}/{slug}', 'subsubcategoryProduct')->name('subsubcategory.product');
-    Route::get('category/{slug}', 'categoryProduct')->name('category.product');
+    Route::get('category/{slug1?}/{slug2?}/{slug3?}', [ShopController::class, 'categoryProducts'])->name('category.products');
     Route::get('/search', 'searchProducts')->name('search.products');
     Route::get('/wishlist', 'wishlist')->name('wishlist');
     Route::get('/compare', 'compare')->name('compare');
     Route::get('/compare/full', 'fullCompare')->name('full.compare');
     Route::get('/compare/remove/{id}', 'removeCompare')->name('compare.remove');
-
 });
 
 // checkout page

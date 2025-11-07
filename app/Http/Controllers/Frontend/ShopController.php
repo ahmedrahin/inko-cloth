@@ -48,7 +48,11 @@ class ShopController extends Controller
             $allowedColumns = ['offer_price', 'created_at', 'id'];
             $allowedDirections = ['ASC', 'DESC'];
 
-            if (in_array($column, $allowedColumns) && in_array(strtoupper($direction), $allowedDirections)) {
+            if ($column === 'best_selling') {
+                $query->withCount('orderItems')
+                    ->orderBy('order_items_count', 'DESC');
+            }
+            elseif (in_array($column, $allowedColumns) && in_array($direction, $allowedDirections)) {
                 $query->orderBy($column, $direction);
             }
         } else {
@@ -80,79 +84,53 @@ class ShopController extends Controller
         }
 
         // Paginate
-        $products = $query->orderBy('is_featured', 'asc')->orderBy('id', 'desc')->paginate($perPage)->appends($request->except('page'));
+        $products = $query->paginate($perPage)->appends($request->except('page'));
 
         return [$products, $perPage, $from, $to];
     }
 
-    public function categoryProduct(Request $request, string $slug)
+    public function categoryProducts(Request $request, ...$slugs)
     {
-        $category = Category::where('slug', $slug)->where('status', 1)->firstOrFail();
+        $slugCount = count($slugs);
 
-        $query = Product::activeProducts()->where('category_id', $category->id);
+        if ($slugCount === 1) {
+            // 🟢 Category
+            $category = Category::where('slug', $slugs[0])->where('status', 1)->firstOrFail();
+            $query = Product::activeProducts()->where('category_id', $category->id);
+            $filters = FilterOption::whereHas('categories', fn($q) => $q->where('categories.id', $category->id))
+                ->orWhereDoesntHave('categories')
+                ->with('categories')
+                ->get();
+        } elseif ($slugCount === 2) {
+            // 🟢 Subcategory
+            $parent = Category::where('slug', $slugs[0])->where('status', 1)->firstOrFail();
+            $category = Subcategory::where('slug', $slugs[1])->where('category_id', $parent->id)->where('status', 1)->firstOrFail();
+            $query = Product::activeProducts()->where('subcategory_id', $category->id);
+            $filters = FilterOption::whereHas('categories', fn($q) => $q->where('categories.id', $parent->id))
+                ->orWhereDoesntHave('categories')
+                ->with('categories')
+                ->get();
+        } elseif ($slugCount === 3) {
+            // 🟢 SubSubcategory
+            $parent = Category::where('slug', $slugs[0])->where('status', 1)->firstOrFail();
+            $parentSub = Subcategory::where('slug', $slugs[1])->where('status', 1)->firstOrFail();
+            $category = SubSubcategory::where('slug', $slugs[2])->where('subcategory_id', $parentSub->id)->where('status', 1)->firstOrFail();
+            $query = Product::activeProducts()->where('subsubcategory_id', $category->id);
+            $filters = FilterOption::whereHas('categories', fn($q) => $q->where('categories.id', $parent->id))
+                ->orWhereDoesntHave('categories')
+                ->with('categories')
+                ->get();
+        }
 
         [$products, $perPage, $from, $to] = $this->getFilteredProducts($request, $query);
-
-        $filters = FilterOption::whereHas('categories', function ($q) use ($category) {
-            $q->where('categories.id', $category->id);
-        })
-            ->orWhereDoesntHave('categories')
-            ->with('categories')
-            ->get();
 
         if ($request->ajax()) {
             return view('frontend.pages.shop.product-list', compact('products'))->render();
         }
 
-        return view('frontend.pages.shop.category-product', compact('category', 'slug', 'products', 'perPage', 'from', 'to', 'filters'));
+        return view('frontend.pages.shop.category-product', compact('category', 'products', 'perPage', 'from', 'to', 'filters'));
     }
 
-    public function subcategoryProduct(Request $request, string $parent_slug, string $slug)
-    {
-        $parentCategory = Category::where('slug', $parent_slug)->where('status', 1)->firstOrFail();
-        $category = Subcategory::where('slug', $slug)->where('category_id', $parentCategory->id)->where('status', 1)->firstOrFail();
-
-        $query = Product::activeProducts()->where('subcategory_id', $category->id);
-
-        [$products, $perPage, $from, $to] = $this->getFilteredProducts($request, $query);
-
-        $filters = FilterOption::whereHas('categories', function ($q) use ($parentCategory) {
-            $q->where('categories.id', $parentCategory->id);
-        })
-            ->orWhereDoesntHave('categories')
-            ->with('categories')
-            ->get();
-
-        if ($request->ajax()) {
-            return view('frontend.pages.shop.product-list', compact('products'))->render();
-        }
-
-        return view('frontend.pages.shop.subcategory-product', compact('category', 'slug', 'products', 'perPage', 'from', 'to', 'parentCategory', 'filters'));
-    }
-
-    public function subsubcategoryProduct(Request $request, string $parent_slug, string $parentsub_slug, string $slug)
-    {
-        $parentCategory = Category::where('slug', $parent_slug)->where('status', 1)->firstOrFail();
-        $parentSubCategory = Subcategory::where('slug', $parentsub_slug)->where('status', 1)->firstOrFail();
-        $category = SubSubcategory::where('slug', $slug)->where('subcategory_id', $parentSubCategory->id)->where('status', 1)->firstOrFail();
-
-        $query = Product::activeProducts()->where('subsubcategory_id', $category->id);
-
-        [$products, $perPage, $from, $to] = $this->getFilteredProducts($request, $query);
-
-        $filters = FilterOption::whereHas('categories', function ($q) use ($parentCategory) {
-            $q->where('categories.id', $parentCategory->id);
-        })
-            ->orWhereDoesntHave('categories')
-            ->with('categories')
-            ->get();
-
-        if ($request->ajax()) {
-            return view('frontend.pages.shop.product-list', compact('products'))->render();
-        }
-
-        return view('frontend.pages.shop.subsubcategory-product', compact('category', 'slug', 'products', 'perPage', 'from', 'to', 'parentCategory', 'filters'));
-    }
 
     public function searchProducts(Request $request)
     {

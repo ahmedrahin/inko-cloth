@@ -91,13 +91,11 @@
                                 <div class="custom-select">
                                     <select id="input-sort">
                                         <option value="" {{ request('sort') == '' ? 'selected' : '' }}>Sorting..</option>
-                                        <option value="best_selling"
-                                            {{ request('sort') == 'best_selling' ? 'selected' : '' }}>Best Selling</option>
-                                        <option value="offer_price"
-                                            {{ request('sort') == 'offer_price' ? 'selected' : '' }}>Price, low to high</option>
-                                        <option value="offer_price_desc"
-                                            {{ request('sort') == 'offer_price_desc' ? 'selected' : '' }}>Price, high to low</option>
+                                        <option value="best_selling" {{ request('sort') == 'best_selling' ? 'selected' : '' }}>Best Selling</option>
+                                        <option value="offer_price" {{ request('sort') == 'offer_price' ? 'selected' : '' }}>Price, low to high</option>
+                                        <option value="offer_price_desc" {{ request('sort') == 'offer_price_desc' ? 'selected' : '' }}>Price, high to low</option>
                                     </select>
+
                                 </div>
                             </div>
                         </div>

@@ -47,11 +47,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $brands             = Brand::orderBy('name')->where('status', 1)->get();
-        $attributes         = Attribute::orderBy('attr_name')->where('status', 1)->get();
-        $attribute_values   = AttributeValue::orderBy('attr_value')->get();
-        $categories         = Category::orderBy('name')->where('status', 1)->get();
-        $tags               = Tag::distinct()->pluck('name')->toArray();
+        $brands = Brand::orderBy('name')->where('status', 1)->get();
+        $attributes = Attribute::orderBy('attr_name')->where('status', 1)->get();
+        $attribute_values = AttributeValue::orderBy('attr_value')->get();
+        $categories = Category::orderBy('name')->where('status', 1)->get();
+        $tags = Tag::distinct()->pluck('name')->toArray();
 
         $filters = FilterOption::orWhereDoesntHave('categories')
             ->with('values')
@@ -73,22 +73,22 @@ class ProductController extends Controller
         // dd($request->all());
         // Define the validation rules
         $rules = [
-            'name'                      => 'required|string|unique:products,name',
-            'brand_id'                  => 'nullable|exists:brands,id',
-            'category_id'               => 'required|exists:categories,id',
-            'sku_code'                  => 'nullable|string|max:255',
-            'quantity'                  => 'required|integer|min:1',
-            'status'                    => 'required|boolean',
-            'base_price'                => 'required|numeric',
-            'wholesale_price'                => 'required|numeric',
-            'thumb_image'               => 'nullable|image',
-            'back_image'                => 'nullable|image',
-            'discount_option'           => 'nullable|in:1,2,3',
+            'name' => 'required|string',
+            'brand_id' => 'nullable|exists:brands,id',
+            'category_id' => 'required|exists:categories,id',
+            'sku_code' => 'nullable|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'status' => 'required|boolean',
+            'base_price' => 'required|numeric',
+            //'wholesale_price' => 'required|numeric',
+            'thumb_image' => 'nullable|image',
+            'back_image' => 'nullable|image',
+            'discount_option' => 'nullable|in:1,2,3',
             'discount_percentage_or_flat_amount' => 'nullable|numeric|min:0',
-            'status'                    => 'required|in:1,2,3,0',
-            'publish_at'                => 'nullable|date',
-            'expire_date'               => 'nullable|date|after_or_equal:now',
-            'thumb_image'               => 'required'
+            'status' => 'required|in:1,2,3,0',
+            'publish_at' => 'nullable|date',
+            'expire_date' => 'nullable|date|after_or_equal:now',
+            'thumb_image' => 'required'
         ];
 
         // Conditionally require the discount_percentage_or_flat_amount field
@@ -108,7 +108,7 @@ class ProductController extends Controller
             'publish_at.required' => 'The publish date is required when scheduling the product.',
             'publish_at.date' => 'The publish date must be a valid date.',
             'publish_at.after_or_equal' => 'The publish date must be a current or future time.',
-            'expire_date.after_or_equal'  => 'The expiry date must be a current or future time.',
+            'expire_date.after_or_equal' => 'The expiry date must be a current or future time.',
             'thumb_image.required' => 'Select a thumbnail image'
         ];
 
@@ -143,50 +143,27 @@ class ProductController extends Controller
         $this->storeTags($request, $product);
 
         $attributes = $request->input('attributes', []);
-        $option_qty = $request->input('variations', []);
+        $hasValidVariation = false;
 
-        // Filter attributes: Ensure that attribute values are not null or empty
-        $filteredAttributes = array_filter($attributes, function ($attributeGroup) {
-            foreach ($attributeGroup as $attribute) {
-                if (!empty($attribute['attribute_value']) && $attribute['attribute_value'] !== null) {
-                    return true;
+        // check if any variation actually has attribute values
+        foreach ($attributes as $attributeGroup) {
+            foreach ($attributeGroup as $attr) {
+                if (!empty($attr['attribute_value'])) {
+                    $hasValidVariation = true;
+                    break 2;
                 }
-            }
-            return false;
-        });
-
-        // Filter variations: Allow variations with empty `option_quantity`
-        $filteredVariations = array_filter($option_qty, function ($variation) {
-            return isset($variation['option_quantity']) || $variation['option_quantity'] === null;
-        });
-
-
-        // Handle combinations of attributes and variations
-        $combinedFilteredData = [];
-
-        foreach ($filteredVariations as $variationIndex => $variation) {
-            $quantity = !empty($variation['option_quantity']) ? $variation['option_quantity'] : $product->quantity;
-
-            $validAttributes = array_filter($filteredAttributes[$variationIndex] ?? [], function ($attribute) {
-                return isset($attribute['attribute_value']) && !empty($attribute['attribute_value']);
-            });
-
-            if (!empty($validAttributes)) {
-                $combinedFilteredData[] = [
-                    'quantity' => $quantity,
-                    'attributes' => $validAttributes,
-                ];
             }
         }
 
-        if (!empty($combinedFilteredData)) {
-            $this->storeProductOptions($combinedFilteredData, $product);
+        if ($hasValidVariation) {
+            $this->storeProductVariations($request, $product);
         }
 
         // Save specifications if provided
         if ($request->filled('spec_group')) {
             foreach ($request->spec_group as $gIndex => $groupName) {
-                if (empty($groupName)) continue;
+                if (empty($groupName))
+                    continue;
 
                 if (!empty($request->spec_name[$gIndex])) {
                     foreach ($request->spec_name[$gIndex] as $i => $specName) {
@@ -195,9 +172,9 @@ class ProductController extends Controller
                         if ($specName || $specValue) {
                             ProductSpecification::create([
                                 'product_id' => $product->id,
-                                'group'      => $groupName,
-                                'name'       => $specName,
-                                'value'      => $specValue,
+                                'group' => $groupName,
+                                'name' => $specName,
+                                'value' => $specValue,
                             ]);
                         }
                     }
@@ -210,9 +187,9 @@ class ProductController extends Controller
             $wholesale_price = $request->wholesale_price ?? $request->base_price;
             \App\Models\ProductStockManage::create([
                 'product_id' => $product->id,
-                'stock'      => 'stock_in',
-                'quantity'   => $request->quantity,
-                'wholesale_price'   => $wholesale_price,
+                'stock' => 'stock_in',
+                'quantity' => $request->quantity,
+                'wholesale_price' => $wholesale_price,
                 'stocked_at' => now(),
                 'total_amount' => $wholesale_price * $request->quantity
             ]);
@@ -265,28 +242,28 @@ class ProductController extends Controller
         $discountDetails = $this->calculateDiscount($request, $validated['base_price']);
         $sku_code = rand(1000, 9999);
         return [
-            'name'              => $validated['name'],
-            'brand_id'          => $validated['brand_id'],
-            'category_id'       => $validated['category_id'],
-            'subcategory_id'    => $request->subcategory_id,
+            'name' => $validated['name'],
+            'brand_id' => $validated['brand_id'],
+            'category_id' => $validated['category_id'],
+            'subcategory_id' => $request->subcategory_id,
             'subsubcategory_id' => $request->subsubcategory_id,
             'short_description' => $request->short_description,
-            'long_description'  => $request->long_description,
-            'key_features'  => $request->key_features,
-            'base_price'        => $validated['base_price'],
-            'wholesale_price'   => $request->wholesale_price,
-            'quantity'          => $validated['quantity'],
-            'sku_code'          => $request->sku_code ?? $sku_code,
-            'video_link'        => $request->video_link,
-            'status'            => $request->status,
-            'publish_at'        => $request->publish_at,
-            'free_shipping'    => $request->free_shipping ?? 'no',
-            'is_new'           => $request->is_new ?? 2,
-            'is_featured'      => $request->is_featured ?? 2,
-            'pre_order'        => $request->preorder ?? 2,
-            'model'            => $request->model,
-            'user_id'          => Auth::id(),
-            'expire_date'      => $request->expire_date,
+            'long_description' => $request->long_description,
+            'key_features' => $request->key_features,
+            'base_price' => $validated['base_price'],
+            'wholesale_price' => $request->wholesale_price,
+            'quantity' => $validated['quantity'],
+            'sku_code' => $request->sku_code ?? $sku_code,
+            'video_link' => $request->video_link,
+            'status' => $request->status,
+            'publish_at' => $request->publish_at,
+            'free_shipping' => $request->free_shipping ?? 'no',
+            'is_new' => $request->is_new ?? 2,
+            'is_featured' => $request->is_featured ?? 2,
+            'pre_order' => $request->preorder ?? 2,
+            'model' => $request->model,
+            'user_id' => Auth::id(),
+            'expire_date' => $request->expire_date,
             ...$discountDetails,
         ];
     }
@@ -327,29 +304,54 @@ class ProductController extends Controller
         }
     }
 
-    public function storeProductOptions(array $options, Product $product): void
+    protected function storeProductVariations(Request $request, Product $product)
     {
-        foreach ($options as $option) {
-            // If quantity is not set in the option, fallback to product's quantity
-            $productStock = $product->productStock()->create([
-                'sku_code' => $product->sku_code,
-                'quantity' => $option['quantity'] ?? $product->quantity,
+        $variations = $request->input('variations', []);
+        $attributes = $request->input('attributes', []);
+        $variationFiles = $request->file('variations', []);
+        foreach ($variations as $index => $variation) {
+            
+             $imageFile = $variationFiles[$index]['image'] ?? null;
+
+            $imagePath = null;
+            if ($imageFile instanceof \Illuminate\Http\UploadedFile) {
+                $imagePath = $this->uploadVariationImage($imageFile);
+            }
+
+            $stock = $product->productStock()->create([
+                'sku_code' => $variation['sku_code'] ?? null,
+                'quantity' => $variation['quantity'] ?? 0,
+                'price' => $variation['price'] ?? $product->base_price,
+                'image'    => $imagePath,
             ]);
 
-            // Here, send the attribute option data
-            foreach ($option['attributes'] as $attribute) {
-                $productStock->attributeOptions()->create([
-                    'attribute_id' => $attribute['attribute'] ?? null,
-                    'attribute_value_id' => $attribute['attribute_value'] ?? null,
-                ]);
+            if (!empty($attributes[$index])) {
+                foreach ($attributes[$index] as $attr) {
+                    if (!empty($attr['attribute_value'])) {
+                        $stock->attributeOptions()->create([
+                            'attribute_id' => $attr['attribute'],
+                            'attribute_value_id' => $attr['attribute_value'],
+                        ]);
+                    }
+                }
             }
         }
     }
 
-    /**
-     * Display the product details.
-     */
-   public function show(string $id)
+    private function uploadVariationImage($imageFile)
+    {
+        $folderPath = public_path('uploads/product_images/variations');
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true);
+        }
+        $fileName = time() . '_' . $imageFile->getClientOriginalName();
+        $imageFile->move($folderPath, $fileName);
+
+        return 'uploads/product_images/variations/' . $fileName;
+    }
+
+    
+    public function show(string $id)
     {
         $data = $this->productService->getProductDetails($id);
 

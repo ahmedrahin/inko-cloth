@@ -14,13 +14,15 @@ return new class extends Migration
         Schema::create('product_stocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->text('sku_code')->nullable();
+            $table->string('sku_code')->nullable();
+            $table->integer('price')->nullable();
             $table->integer('quantity')->nullable();
+            $table->string('image')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      */

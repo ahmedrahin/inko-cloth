@@ -11734,7 +11734,7 @@ input[type=number]::-webkit-outer-spin-button {
   align-items: center;
   gap: 24px;
   flex-wrap: wrap;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
 }
 .tf-product-info-wrap .tf-product-extra-link .product-extra-icon {
   display: flex;

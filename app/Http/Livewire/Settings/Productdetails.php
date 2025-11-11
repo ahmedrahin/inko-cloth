@@ -19,7 +19,7 @@ class Productdetails extends Component
         // Load existing settings or defaults
         $settings = WebsiteSetting::first();
         $this->product_info = $settings->product_info ?? true;
-        $this->show_expire = $settings->show_expire ?? 20;
+        $this->show_expire = $settings->show_expire ?? 0;
         $this->share = $settings->share ?? true;
 
         $this->ask_qustion = $settings->ask_qustion ?? true;
@@ -30,9 +30,6 @@ class Productdetails extends Component
 
     public function update()
     {
-        // Validate inputs
-        
-
         WebsiteSetting::updateOrCreate(
             ['id' => 1],
             [
@@ -41,6 +38,7 @@ class Productdetails extends Component
                 'ask_qustion' => $this->ask_qustion,
                 'share' => $this->share,
                 'product_info' => $this->product_info,
+                'show_expire' => $this->show_expire ?? 0
             ]
         );
 

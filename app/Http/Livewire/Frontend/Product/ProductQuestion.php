@@ -32,7 +32,7 @@ class ProductQuestion extends Component
     {
         if (!auth()->check()) {
             return;
-        }
+        }   
 
         $this->validate([
             'question' => 'required'
@@ -51,7 +51,7 @@ class ProductQuestion extends Component
 
         $this->emit('success', __('Your question has been submitted.'));
         $this->resetForm();
-        $this->resetPage(); // <-- reset to first page after submitting
+        $this->resetPage(); 
     }
 
     private function resetForm()

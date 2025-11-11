@@ -143,9 +143,9 @@
                         // Redirect or perform other actions upon success
                         toastr.success('Product updated successfully')
                         let url = '{{ route("product-management.index") }}';
-                        // setTimeout(() => {
-                        //     window.location.href = url;
-                        // }, 300);
+                        setTimeout(() => {
+                            window.location.href = url;
+                        }, 300);
                     },
                     error: function(xhr) {
                         $('#add_product_submit .indicator-progress').hide();

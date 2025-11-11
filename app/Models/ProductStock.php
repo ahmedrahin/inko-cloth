@@ -10,7 +10,7 @@ class ProductStock extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['product_id', 'sku_code', 'quantity'];
+    protected $guarded = [];
 
     public function product()
     {

@@ -107,26 +107,6 @@ class ProductEditController extends Controller
 
             // Custom validation for variations' quantity based on attributes
             $errors = [];
-            $variations = $request->input('variations', []);
-            $attributesData = $request->input('attributes', []);
-
-            foreach ($variations as $index => $variation) {
-                $selectedAttributes = $attributesData[$index] ?? [];
-                $optionQuantity = $variation['option_quantity'] ?? null;
-
-                // Check if any attributes are checked (not empty) for this variation
-                $hasCheckedAttributes = collect($selectedAttributes)->contains(function ($attribute) {
-                    return !empty($attribute['attribute']);
-                });
-
-                // If attributes are checked, validate the quantity
-                if ($hasCheckedAttributes) {
-                    // Check if quantity is valid (required and greater than 0)
-                    if (is_null($optionQuantity) || !is_numeric($optionQuantity) || $optionQuantity <= 0) {
-                        $errors["variations.$index.option_quantity"] = ['The quantity is required and must be a positive number when attributes are selected.'];
-                    }
-                }
-            }
 
             if (!empty($errors)) {
                 return response()->json(['errors' => $errors], 422);
@@ -143,91 +123,6 @@ class ProductEditController extends Controller
 
             // Handle tags if provided
             $this->storeTags($request, $product);
-
-            /// Update product options
-            $attributes = $request->input('attributes', []);
-            $option_qty = $request->input('variations', []);
-
-            // Check if product has existing stock/variations
-            if ($product->productStock()->count() > 0 && $attributes) {
-                // Filter attributes: Ensure that attribute values are not null or empty
-                $filteredAttributes = array_filter($attributes, function ($attributeGroup) {
-                    foreach ($attributeGroup as $attribute) {
-                        if (!empty($attribute['attribute_value']) && $attribute['attribute_value'] !== null) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-
-                // Filter variations: Only variations with quantity > 0
-                $filteredVariations = array_filter($option_qty, function ($variation) {
-                    return isset($variation['option_quantity']) && $variation['option_quantity'] > 0;
-                });
-
-                // Handle combinations of attributes and variations
-                $combinedFilteredData = [];
-
-                foreach ($filteredVariations as $variationIndex => $variation) {
-                    $quantity = $variation['option_quantity'] ?? 0;
-
-                    $validAttributes = array_filter($filteredAttributes[$variationIndex] ?? [], function ($attribute) {
-                        return isset($attribute['attribute_value']) && !empty($attribute['attribute_value']);
-                    });
-
-                    if (!empty($validAttributes)) {
-                        $combinedFilteredData[] = [
-                            'quantity' => $quantity,
-                            'attributes' => $validAttributes,
-                            'id' => $variation['id'] ?? null, // If it exists
-                        ];
-                    }
-                }
-
-                if (!empty($combinedFilteredData)) {
-                    // Pass the product and combinedFilteredData to the update function
-                    $this->updateProductOptions($combinedFilteredData, $product);
-                }
-            } elseif ($request->has('deleteAllOption')) {
-                $this->deleteAllOption($product);
-            } else {
-                // Filter attributes: Ensure that attribute values are not null or empty
-                $filteredAttributes = array_filter($attributes, function ($attributeGroup) {
-                    foreach ($attributeGroup as $attribute) {
-                        if (!empty($attribute['attribute_value']) && $attribute['attribute_value'] !== null) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-
-                // Filter variations: Only variations with quantity > 0
-                $filteredVariations = array_filter($option_qty, function ($variation) {
-                    return isset($variation['option_quantity']) && $variation['option_quantity'] > 0;
-                });
-
-                // Handle combinations of attributes and variations
-                $combinedFilteredData = [];
-
-                foreach ($filteredVariations as $variationIndex => $variation) {
-                    $quantity = $variation['option_quantity'] ?? 0;
-
-                    $validAttributes = array_filter($filteredAttributes[$variationIndex] ?? [], function ($attribute) {
-                        return isset($attribute['attribute_value']) && !empty($attribute['attribute_value']);
-                    });
-
-                    if (!empty($validAttributes)) {
-                        $combinedFilteredData[] = [
-                            'quantity' => $quantity,
-                            'attributes' => $validAttributes,
-                        ];
-                    }
-                }
-
-                if (!empty($combinedFilteredData)) {
-                    $this->storeProductOptions($combinedFilteredData, $product);
-                }
-            }
 
             // In your update controller
             $existingSpecIds = ProductSpecification::where('product_id', $product->id)->pluck('id')->toArray();
@@ -287,6 +182,9 @@ class ProductEditController extends Controller
             }
             $product->filterValues()->sync($syncData);
 
+            // variation handle
+            $this->updateProductVariations($request, $product);
+
             session::flash('success', 'The product updated successfully');
             return response()->json([
                 'message' => 'Product updated successfully!',
@@ -295,111 +193,131 @@ class ProductEditController extends Controller
         }
     }
 
-    // Update existing product options and stock
-    public function updateProductOptions(array $options, Product $product): void
+    protected function updateProductVariations(Request $request, Product $product)
     {
-        // Get existing product stock IDs
-        $existingStockIds = $product->productStock()->pluck('id')->toArray();
+        $variations = $request->input('variations', []);
+        $attributes = $request->input('attributes', []);
+        $variationFiles = $request->file('variations', []);
 
-        foreach ($options as $option) {
-            if (!empty($option['id'])) {
-                // Update existing stock
-                $productStock = $product->productStock()->find($option['id']);
-                if ($productStock) {
-                    $productStock->update([
-                        'quantity' => $option['quantity'],
-                    ]);
+        // Get deleted variations from hidden field
+        $deletedVariations = $request->input('deleted_variations', '');
+        $deletedVariationIds = $deletedVariations ? explode(',', $deletedVariations) : [];
 
-                    // Update attribute options for the stock
-                    $this->updateOrCreateAttributeOptions($productStock, $option['attributes']);
-                    // Remove updated stock from the list of existing IDs
-                    $existingStockIds = array_diff($existingStockIds, [$option['id']]);
+        // Filter out deleted variations from the variations array
+        $filteredVariations = [];
+        $filteredAttributes = [];
+        $filteredFiles = [];
+        $newIndex = 0;
+
+        foreach ($variations as $index => $variation) {
+            $variationId = $variation['id'] ?? null;
+
+            // Only keep variations that are NOT in the deleted list
+            if (!$variationId || !in_array($variationId, $deletedVariationIds)) {
+                $filteredVariations[$newIndex] = $variation;
+                $filteredAttributes[$newIndex] = $attributes[$index] ?? [];
+                $filteredFiles[$newIndex] = $variationFiles[$index] ?? [];
+                $newIndex++;
+            }
+        }
+
+        // Delete variations that were removed
+        if (!empty($deletedVariationIds)) {
+            foreach ($deletedVariationIds as $deleteId) {
+                $stockToDelete = $product->productStock()->find($deleteId);
+                if ($stockToDelete) {
+                    if ($stockToDelete->image && file_exists(public_path($stockToDelete->image))) {
+                        unlink(public_path($stockToDelete->image));
+                    }
+                    // Delete attribute options
+                    $stockToDelete->attributeOptions()->delete();
+                    // Delete the variation
+                    $stockToDelete->delete();
                 }
+            }
+        }
+
+        // Update or create variations using FILTERED data
+        foreach ($filteredVariations as $index => $variation) {
+            $variationId = $variation['id'] ?? null;
+
+            // Handle image upload
+            $imageFile = $filteredFiles[$index]['image'] ?? null;
+            $imagePath = $variation['existing_image'] ?? null;
+
+            if ($imageFile instanceof \Illuminate\Http\UploadedFile) {
+                $imagePath = $this->uploadVariationImage($imageFile);
+
+                // Delete old image if new one is uploaded
+                if ($variationId && !empty($variation['existing_image'])) {
+                    $oldImagePath = public_path($variation['existing_image']);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+            }
+
+            if ($variationId && $stock = $product->productStock()->find($variationId)) {
+                $stockData = [
+                    'quantity' => $variation['quantity'] ?? 0,
+                    'price' => $variation['price'] ?? $product->base_price,
+                ];
+
+                if ($imagePath) {
+                    $stockData['image'] = $imagePath;
+                }
+
+                $stock->update($stockData);
+
+                // Update attribute options
+                if (!empty($filteredAttributes[$index])) {
+                    // Delete existing attribute options
+                    $stock->attributeOptions()->delete();
+
+                    // Create new attribute options
+                    foreach ($filteredAttributes[$index] as $attr) {
+                        if (!empty($attr['attribute']) && !empty($attr['attribute_value'])) {
+                            $stock->attributeOptions()->create([
+                                'attribute_id' => $attr['attribute'],
+                                'attribute_value_id' => $attr['attribute_value'],
+                            ]);
+                        }
+                    }
+                }
+
             } else {
-                // Create new stock if no existing stock ID
-                $productStock = $product->productStock()->create([
-                    'quantity' => $option['quantity'],
+
+                $stock = $product->productStock()->create([
+                    'quantity' => $variation['quantity'] ?? 0,
+                    'price' => $variation['price'] ?? $product->base_price,
+                    'image' => $imagePath,
                 ]);
 
-                // Create attribute options for the new stock
-                $this->updateOrCreateAttributeOptions($productStock, $option['attributes']);
-            }
-        }
-
-        // Delete any remaining stock that was not updated
-        if (!empty($existingStockIds)) {
-            $product->productStock()->whereIn('id', $existingStockIds)->delete();
-        }
-    }
-
-    // Method to update or create attribute options
-    private function updateOrCreateAttributeOptions(ProductStock $productStock, array $attributes): void
-    {
-        // Get existing attribute options for this stock
-        $existingOptions = $productStock->attributeOptions()
-            ->select('id', 'attribute_id', 'attribute_value_id')
-            ->get()
-            ->toArray();
-
-        foreach ($attributes as $attribute) {
-            // Check if this attribute combination already exists
-            $existingOption = collect($existingOptions)->firstWhere(function ($existingOption) use ($attribute) {
-                return $existingOption['attribute_id'] == $attribute['attribute']
-                    && $existingOption['attribute_value_id'] == $attribute['attribute_value'];
-            });
-
-            if ($existingOption) {
-                // Update existing attribute option
-                $productStock->attributeOptions()->where('id', $existingOption['id'])->update([
-                    'attribute_id' => $attribute['attribute'],
-                    'attribute_value_id' => $attribute['attribute_value'],
-                ]);
-
-                // Remove updated option from existing options
-                $existingOptions = array_filter($existingOptions, function ($option) use ($existingOption) {
-                    return $option['id'] !== $existingOption['id'];
-                });
-            } else {
-                // Create new attribute option if it doesn't exist
-                $productStock->attributeOptions()->create([
-                    'attribute_id' => $attribute['attribute'],
-                    'attribute_value_id' => $attribute['attribute_value'],
-                ]);
-            }
-        }
-
-        // Delete any attribute options that were not updated (remaining in $existingOptions)
-        if (!empty($existingOptions)) {
-            $remainingOptionIds = array_column($existingOptions, 'id');
-            $productStock->attributeOptions()->whereIn('id', $remainingOptionIds)->delete();
-        }
-    }
-
-    // create new product option and stock
-    public function storeProductOptions(array $options, Product $product): void
-    {
-        foreach ($options as $option) {
-            $productStock = $product->productStock()->create([
-                'sku_code' => $product->sku_code,
-                'quantity' => $option['quantity'],
-            ]);
-
-            // here sent the attribute option data
-            foreach ($option['attributes'] as $attribute) {
-                $productStock->attributeOptions()->create([
-                    'attribute_id' => $attribute['attribute'] ?? null,
-                    'attribute_value_id' => $attribute['attribute_value'] ?? null,
-                ]);
+                // Create attribute options for new variation
+                if (!empty($filteredAttributes[$index])) {
+                    foreach ($filteredAttributes[$index] as $attr) {
+                        if (!empty($attr['attribute']) && !empty($attr['attribute_value'])) {
+                            $stock->attributeOptions()->create([
+                                'attribute_id' => $attr['attribute'],
+                                'attribute_value_id' => $attr['attribute_value'],
+                            ]);
+                        }
+                    }
+                }
             }
         }
     }
 
-
-    //product attribute update and delete
-    private function deleteAllOption(Product $product): void
+    private function uploadVariationImage($imageFile)
     {
-        // Delete existing options
-        $product->productStock()->delete();
+        $folderPath = public_path('uploads/product_images/variations');
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true);
+        }
+        $fileName = time() . '_' . uniqid() . '_' . $imageFile->getClientOriginalName();
+        $imageFile->move($folderPath, $fileName);
+
+        return 'uploads/product_images/variations/' . $fileName;
     }
 
     // Handle file uploads

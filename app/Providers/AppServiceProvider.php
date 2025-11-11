@@ -59,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
                 config(['website_settings.allow_guest_reviews' => $settings->allow_guest_review ?? 1]);
                 config(['website_settings.show_wishlist' => $settings->show_wishlist ?? 1]);
                 config(['website_settings.show_expire_date' => $settings->show_expire_date ?? 1]);
-                config(['website_settings.allow_review' => $settings->allow_review ?? 1]);
+                config(['website_settings.allow_review' => $settings->allow_review ?? 0]);
                 config(['website_settings.buy_now_button' => $settings->buy_now_button ?? 1]);
 
                 // for customer
@@ -68,7 +68,7 @@ class AppServiceProvider extends ServiceProvider
                 config(['website_settings.cart_session' => $settings->guest_checkout ?? 1]);
                 config(['website_settings.login_attemp' => $settings->login_attemp ?? 1]);
 
-                // order details
+                // product details
                 config(['website_settings.show_order_count' => $settings->show_order_count ?? 1]);
                 config(['website_settings.show_size_chart' => $settings->show_size_chart ?? 1]);
                 config(['website_settings.ask_qustion' => $settings->ask_qustion ?? 1]);

@@ -9,7 +9,8 @@
             <div class="card-body pt-0 pb-2">
                 <div class="fv-row">
                     <label class="form-label">SKU</label>
-                    <input type="text" name="sku_code" class="form-control mb-2" placeholder="SKU Number" value="" />
+                    <input type="text" name="sku_code" class="form-control mb-2" placeholder="SKU Number"
+                        value="" />
                     <span id="sku_code" class="text-danger"></span>
                 </div>
                 <div class=" fv-row">
@@ -39,31 +40,49 @@
                 <div id="product-options-container">
                     <div class="product_options mb-6">
                         <div class="row mb-4">
-                            @foreach($attributes ?? [] as $attribute)
-                            <div class="col-md-6 mb-1">
-                                <label class="form-label">{{ $attribute->attr_name }}</label>
-                                <div class="d-flex align-items-center gap-1">
-                                    <div>
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input attribute_id_item"
-                                                name="attributes[0][{{$loop->index}}][attribute]"
-                                                value="{{ $attribute->id }}" />
+                            @foreach ($attributes ?? [] as $attribute)
+                                <div class="col-md-6 mb-1">
+                                    <label class="form-label">{{ $attribute->attr_name }}</label>
+                                    <div class="d-flex align-items-center gap-1">
+                                        <div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input attribute_id_item"
+                                                    name="attributes[0][{{ $loop->index }}][attribute]"
+                                                    value="{{ $attribute->id }}" />
+                                            </div>
+                                        </div>
+                                        <div class="attribute_value" style="width: 85%">
+                                            <select class="form-select value_id_item"
+                                                name="attributes[0][{{ $loop->index }}][attribute_value]"
+                                                data-placeholder="Select a value"
+                                                data-kt-ecommerce-catalog-add-product="product_option">
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="attribute_value" style="width: 85%">
-                                        <select class="form-select value_id_item"
-                                            name="attributes[0][{{$loop->index}}][attribute_value]"
-                                            data-placeholder="Select a value"
-                                            data-kt-ecommerce-catalog-add-product="product_option">
-                                        </select>
-                                    </div>
                                 </div>
-                            </div>
                             @endforeach
                         </div>
-                        <div class="d-flex align-items-center gap-4">
-                            <input type="number" class="form-control mw-100 w-200px"
-                                name="variations[0][option_quantity]" placeholder="Quantity" hidden />
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Price</label>
+                                <input type="number" step="0.01" min="0" class="form-control"
+                                    name="variations[0][price]" placeholder="Enter price" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Quantity</label>
+                                <input type="number" min="0" class="form-control" name="variations[0][quantity]"
+                                    placeholder="Enter quantity" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Image</label>
+                                <input type="file" name="variations[0][image]" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-4 mt-2">
                             <button type="button" data-repeater-delete="" class="btn btn-sm btn-icon btn-light-danger">
                                 <i class="ki-duotone ki-cross fs-1">
                                     <span class="path1"></span>
@@ -73,6 +92,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div>
                     <div class="form-group">
                         <button type="button" class="btn btn-sm btn-light-primary" id="addAttr">
@@ -140,11 +160,13 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-sm btn-light-success mt-2" onclick="addSpecification(this)">+ Add More Row</button>
+                        <button type="button" class="btn btn-sm btn-light-success mt-2"
+                            onclick="addSpecification(this)">+ Add More Row</button>
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-light-primary btn-sm mt-3" onclick="addGroup()">+ Add New Group</button>
+                <button type="button" class="btn btn-light-primary btn-sm mt-3" onclick="addGroup()">+ Add New
+                    Group</button>
             </div>
         </div>
     </div>
@@ -153,14 +175,15 @@
 </div>
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-            var KTAppEcommerceSaveProduct = function () {
+    <script>
+        $(document).ready(function() {
+            var KTAppEcommerceSaveProduct = function() {
 
                 // Init condition select2
                 const initConditionsSelect2 = () => {
                     // Initialize all repeating condition types
-                    const allConditionTypes = document.querySelectorAll('[data-kt-ecommerce-catalog-add-product="product_option"]');
+                    const allConditionTypes = document.querySelectorAll(
+                        '[data-kt-ecommerce-catalog-add-product="product_option"]');
                     allConditionTypes.forEach(type => {
                         if ($(type).hasClass("select2-hidden-accessible")) {
                             return;
@@ -174,14 +197,14 @@
 
                 // Public methods
                 return {
-                    init: function () {
+                    init: function() {
                         initConditionsSelect2();
                     }
                 };
             }();
 
             // Initialize select2 on document ready
-            KTUtil.onDOMContentLoaded(function () {
+            KTUtil.onDOMContentLoaded(function() {
                 KTAppEcommerceSaveProduct.init();
             });
 
@@ -208,16 +231,21 @@
                                     if (data.length === 0) {
                                         // Uncheck the checkbox and show a toastr notification
                                         $checkbox.prop('checked', false);
-                                        toastr.warning('No value exists for the selected attribute.');
+                                        toastr.warning(
+                                            'No value exists for the selected attribute.');
                                     } else {
                                         // Populate the select box with attribute values
                                         $.each(data, function(key, value) {
-                                            $selectBox.append('<option value="' + value.id + '">' + value.attr_value + '</option>');
+                                            $selectBox.append('<option value="' + value
+                                                .id + '">' + value.attr_value +
+                                                '</option>');
                                         });
                                     }
                                 },
                                 error: function() {
-                                    toastr.error('An error occurred while fetching attribute values.');
+                                    toastr.error(
+                                        'An error occurred while fetching attribute values.'
+                                    );
                                 }
                             });
                         }
@@ -241,22 +269,22 @@
             // Generate new product option HTML
             function generateNewOptionHtml(counter, qtyCounter) {
                 return `
-                    <div class="product_options mb-6" style="padding-top: 20px;border-top: 1px solid #eee;">
+                    <div class="product_options mb-6" style="padding-top: 20px; border-top: 1px solid #eee;">
                         <div class="row mb-4">
-                            @foreach($attributes ?? [] as $attribute)
-                                <div class="col-md-6 mb-1">
+                            @foreach ($attributes ?? [] as $attribute)
+                                <div class="col-md-6 mb-3">
                                     <label class="form-label">{{ $attribute->attr_name }}</label>
                                     <div class="d-flex align-items-center gap-3">
                                         <div>
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input attribute_id_item"
-                                                    name="attributes[${counter}][{{$loop->index}}][attribute]"
+                                                    name="attributes[${counter}][{{ $loop->index }}][attribute]"
                                                     value="{{ $attribute->id }}" />
                                             </div>
                                         </div>
                                         <div class="attribute_value" style="width: 85%">
                                             <select class="form-select value_id_item"
-                                                    name="attributes[${counter}][{{$loop->index}}][attribute_value]"
+                                                    name="attributes[${counter}][{{ $loop->index }}][attribute_value]"
                                                     data-placeholder="Select a variation"
                                                     data-kt-ecommerce-catalog-add-product="product_option">
                                             </select>
@@ -265,12 +293,32 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div class="d-flex align-items-center gap-4">
-                            <input type="number" class="form-control mw-100 w-200px"
-                                name="variations[${qtyCounter}][option_quantity]"
-                                placeholder="Quantity"  hidden />
+
+                        <div class="row mb-3">
+                            <div class="col-md-4" >
+                                <label class="form-label fw-semibold">Price</label>
+                                <input type="number" step="0.01" min="0" class="form-control"
+                                    name="variations[${counter}][price]"
+                                    placeholder="Enter price" />
+                            </div>
+
+                            <div class="col-md-4" >
+                                <label class="form-label fw-semibold">Quantity</label>
+                                <input type="number" min="0" class="form-control"
+                                    name="variations[${counter}][quantity]"
+                                    placeholder="Enter quantity" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Image</label>
+                                <input type="file" class="form-control"
+                                    name="variations[${counter}][image]" accept="image/*" />
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-4 mt-2">
                             <button type="button" data-repeater-delete=""
-                                    class="btn btn-sm btn-icon btn-light-danger">
+                                class="btn btn-sm btn-icon btn-light-danger">
                                 <i class="ki-duotone ki-cross fs-1">
                                     <span class="path1"></span>
                                     <span class="path2"></span>
@@ -279,6 +327,7 @@
                         </div>
                     </div>`;
             }
+
 
             // Initially attach events to existing product options
             attachEvents($("#product-options-container"));
@@ -295,20 +344,19 @@
                 KTAppEcommerceSaveProduct.init(); // Re-initialize select2 for new select elements
             });
         });
+    </script>
 
-</script>
+    <script>
+        (function() {
+            let groupIndex = Array.from(document.querySelectorAll('.specification-group'))
+                .reduce((max, g) => Math.max(max, parseInt(g.dataset.groupIndex || '-1', 10)), -1);
 
-<script>
-    (function () {
-        let groupIndex = Array.from(document.querySelectorAll('.specification-group'))
-            .reduce((max, g) => Math.max(max, parseInt(g.dataset.groupIndex || '-1', 10)), -1);
+            // Add a new specification group
+            window.addGroup = function() {
+                const idx = ++groupIndex;
+                const wrapper = document.getElementById('specification-wrapper');
 
-        // Add a new specification group
-        window.addGroup = function () {
-            const idx = ++groupIndex;
-            const wrapper = document.getElementById('specification-wrapper');
-
-            const html = `
+                const html = `
                 <div class="specification-group mb-4 border p-3 rounded" data-group-index="${idx}">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <input type="text" name="spec_group[]" class="form-control w-50" placeholder="Group (e.g. Display)">
@@ -338,16 +386,16 @@
                 </div>
             `;
 
-            wrapper.insertAdjacentHTML('beforeend', html);
-        };
+                wrapper.insertAdjacentHTML('beforeend', html);
+            };
 
-        // Add a new row inside a group
-        window.addSpecification = function (button) {
-            const group = button.closest('.specification-group');
-            const idx = group.dataset.groupIndex; // reliable index from dataset
-            const items = group.querySelector('.specification-items');
+            // Add a new row inside a group
+            window.addSpecification = function(button) {
+                const group = button.closest('.specification-group');
+                const idx = group.dataset.groupIndex; // reliable index from dataset
+                const items = group.querySelector('.specification-items');
 
-            const row = `
+                const row = `
                 <div class="row g-3 mb-2 specification-item">
                     <div class="col-md-5">
                         <input type="text" name="spec_name[${idx}][]" class="form-control" placeholder="Specification Name">
@@ -365,19 +413,18 @@
                     </div>
                 </div>
             `;
-            items.insertAdjacentHTML('beforeend', row);
-        };
+                items.insertAdjacentHTML('beforeend', row);
+            };
 
-        // Remove a row
-        window.removeSpecification = function (button) {
-            button.closest('.specification-item').remove();
-        };
+            // Remove a row
+            window.removeSpecification = function(button) {
+                button.closest('.specification-item').remove();
+            };
 
-        // Remove a whole group
-        window.removeGroup = function (button) {
-            button.closest('.specification-group').remove();
-        };
-    })();
-</script>
-
+            // Remove a whole group
+            window.removeGroup = function(button) {
+                button.closest('.specification-group').remove();
+            };
+        })();
+    </script>
 @endpush

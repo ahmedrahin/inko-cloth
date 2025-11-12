@@ -757,7 +757,7 @@
     /* Coupon Copy
     -------------------------------------------------------------------------*/
     var textCopy = function () {
-        $(".coupon-copy-wrap,.btn-coppy-text").on("click", function () {
+        $(".coupon-copy-wrap").on("click", function () {
             const couponCode = $(this).closest(".discount-bot,.wrap-code").find(".coupon-code,.coppyText").text().trim();
 
             if (navigator.clipboard) {

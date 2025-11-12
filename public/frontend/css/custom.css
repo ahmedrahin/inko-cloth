@@ -46,8 +46,8 @@ input:focus, select:focus, textarea:focus{
 
 .formloader {
     display: inline-block;
-    width: 23px;
-    height: 23px;
+    width: 24px;
+    height: 24px;
     border: 2px solid #fff;
     border-top: 2px solid transparent;
     border-radius: 50%;
@@ -66,4 +66,11 @@ input:focus, select:focus, textarea:focus{
 }
 .error_border{
     border: 1px solid #dc3545 !important;
+}
+.alert-danger {
+    background: #d61e3c;
+    color: white;
+}
+.alert-danger a {
+    color: white;
 }

@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('name');
             $table->string('slug')->nullable();
             $table->string('model')->nullable();
-            $table->unsignedBigInteger('brand_id')->nullable()->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('category_id')->nullable()->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('subcategory_id')->nullable()->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('subsubcategory_id')->nullable()->constrained()->onDelete('cascade');
+
+            $table->foreignId('brand_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('subcategory_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('subsubcategory_id')->nullable()->constrained()->onDelete('set null');
+
             $table->text('short_description')->nullable();
             $table->text('long_description')->nullable();
             $table->decimal('base_price', 8, 0)->default(0);

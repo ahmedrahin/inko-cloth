@@ -1,59 +1,81 @@
 @extends('frontend.layout.app')
 
 @section('page-title')
-Reset Password | {{ config('app.name') }}
+    Reset Password
 @endsection
 
 @section('page-css')
-<link href="{{ asset('frontend/style/accounts.min.12.css') }}" type="text/css" rel="stylesheet" media="screen" />
-<style>
-    .mb-3 {
-        margin-bottom: 10px;
-    }
-
-    form label {
-        padding-bottom: 10px;
-        display: inline-block;
-    }
-</style>
+    <style>
+        .form-login {
+            gap: 22px !important;
+        }
+    </style>
 @endsection
 
 @section('body-content')
 
-
-<div class="container ac-layout before-login">
-    <div class="panel m-auto">
-        <div class="p-head">
-            <h2 class="text-center">Reset Your Password</h2>
+    <section class="s-page-title">
+        <div class="container">
+            <div class="content">
+                <h1 class="title-page">@yield('page-title')</h1>
+                <ul class="breadcrumbs-page">
+                    <li><a href="{{ url('/') }}" class="h6 link">Home</a></li>
+                    <li class="d-flex"><i class="icon icon-caret-right"></i></li>
+                    <li>
+                        <h6 class="current-page fw-normal">@yield('page-title')</h6>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="p-body">
-            <form method="post" action="{{ route('password.update') }}">
-                @csrf
-                <input type="hidden" name="token" value="{{ $request->token }}">
-                <input type="hidden" name="email" value="{{ old('email', $request->email) }}">
+    </section>
 
-                <div class="mb-3 required">
-                    <label class="control-label" for="input-password">Password</label>
-                    <input type="password" name="password" placeholder="******" class="form-control @error('password') error-border @enderror " id="password" />
-                    @error('password')
-                        <div class="text-danger mt-2">{{ $message }}</div>
-                    @enderror
+    <section class="flat-spacing">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 offset-md-4">
+                    <h2 class="heading" style="margin-bottom: 20px;">Reset Your Password</h2>
+
+                    <form method="POST" action="{{ route('password.update') }}" class="form-login">
+                        @csrf
+                        <input type="hidden" name="token" value="{{ $request->token }}">
+                        <input type="hidden" name="email" value="{{ old('email', $request->email) }}">
+
+                        <div class="list-ver">
+                            <fieldset class="password-wrapper">
+                                <input class="password-field @error('password') error_border @enderror"
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    placeholder="Enter new password *"
+                                    >
+                                <span class="toggle-pass icon-show-password"></span>
+                                @error('password')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </fieldset>
+
+                            <fieldset class="password-wrapper">
+                                <input class="password-field"
+                                    id="password_confirmation"
+                                    type="password"
+                                    name="password_confirmation"
+                                    placeholder="Confirm new password *"
+                                    >
+                                <span class="toggle-pass icon-show-password"></span>
+                            </fieldset>
+                        </div>
+
+                        <button type="submit" class="tf-btn animate-btn w-100">
+                            Confirm
+                        </button>
+
+                        <div class="text-center mt-4">
+                            <a href="{{ route('user.login') }}" class="link">← Back to Login</a>
+                        </div>
+                    </form>
                 </div>
-
-                 <div class="required mb-0">
-                    <label for="input-telephone">Confirm Password</label>
-                    <input type="password" name="password_confirmation" placeholder="******" class="form-control" id="password_confirmation" />
-                </div>
-
-                <div style="text-align: right;padding:4px 0;">
-                    <a class="forgot-password" href="{{ route('user.login') }}">Back to login</a>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Confirm</button>
-
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+    </section>
 
 @endsection

@@ -44,7 +44,7 @@ class PasswordResetLinkController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->where('status',1)->first();
         if (!$user) {
             return response()->json(['errors' => ['email' => 'User not found.']], 404);
         }

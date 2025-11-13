@@ -5,79 +5,94 @@
 @endsection
 
 @section('page-css')
-    <link href="{{ asset('frontend/style/accounts.min.12.css') }}" type="text/css" rel="stylesheet" media="screen" />
     <style>
-        .mb-3 {
-            margin-bottom: 10px;
-        }
-        form label {
-            padding-bottom: 10px;
-            display: inline-block;
+        .form-login {
+            gap: 22px !important;
         }
     </style>
 @endsection
 
 @section('body-content')
 
-    <section class="after-header p-tb-10">
+    <section class="s-page-title">
         <div class="container">
-            <ul class="breadcrumb">
-                <li><a href="{{ url('/') }}"><i class="material-icons" title="Home">home</i></a></li>
-                <li><a href="{{ route('user.dashboard') }}">Account</a></li>
-                <li><a href="{{ route('register') }}">Register</a></li>
-            </ul>
+            <div class="content">
+                <h1 class="title-page">Register</h1>
+                <ul class="breadcrumbs-page">
+                    <li><a href="{{ url('/') }}" class="h6 link">Home</a></li>
+                    <li class="d-flex"><i class="icon icon-caret-right"></i></li>
+                    <li>
+                        <h6 class="current-page fw-normal">Register</h6>
+                    </li>
+                </ul>
+            </div>
         </div>
     </section>
+   
+    <section class="flat-spacing">
+        <div class="container">
+            <div class="s-log">
+                <div class="col-left">
+                    <h2 class="heading">Register</h2>
 
-     <div class="container ac-layout before-login">
-        <div class="panel m-auto">
-            <div class="p-head">
-                <h2 class="text-center">Register Account</h2>
-            </div>
-            <div class="p-body">
-                <form  method="post" id="registerForm" >
-                    @csrf
-                     <div class="required mb-3">
-                        <label for="input-firstname">Name</label>
-                        <input type="text" name="firstname" placeholder="Your Name" class="form-control" id="name" />
-                        <div class="text-danger mt-2" id="nameError"></div>
-                    </div>
+                    <form id="registerForm" class="form-login">
+                        @csrf
+                        <div class="list-ver">
 
-                    <div class="required mb-3">
-                        <label for="input-email">E-Mail</label>
-                        <input type="text" name="email" placeholder="E-Mail" id="email" class="form-control" />
-                        <div class="text-danger mt-2" id="emailError"></div>
-                    </div>
+                            <fieldset>
+                                <input type="text" id="name" name="firstname" placeholder="Enter your name *">
+                                <div class="text-danger mt-2" id="nameError"></div>
+                            </fieldset>
 
-                    <div class="required mb-3">
-                        <label for="input-telephone">Your Password</label>
-                        <input type="password" name="password" placeholder="******" class="form-control" id="password" />
-                        <div class="text-danger mt-2" id="passwordError"></div>
-                    </div>
+                            <fieldset>
+                                <input type="text" id="email" name="email" placeholder="Enter your email address *">
+                                <div class="text-danger mt-2" id="emailError"></div>
+                            </fieldset>
 
-                    <div class="required mb-0">
-                        <label for="input-telephone">Confirm Password</label>
-                        <input type="password" name="password_confirmation" placeholder="******" class="form-control" id="password_confirmation" />
-                        <div class="text-danger mt-2" id="passwordConfirmationError"></div>
-                    </div>
+                            <fieldset class="password-wrapper">
+                                <input class="password-field" id="password" name="password" type="password" placeholder="Password *">
+                                <span class="toggle-pass icon-show-password"></span>
+                                <div class="text-danger mt-2" id="passwordError"></div>
+                            </fieldset>
 
-                    <button type="submit" class="btn btn-primary">
-                        <div class="text">Register</div>
-                        <span class="formloader" style="display: none;"></span>
-                    </button>
+                            <fieldset class="password-wrapper">
+                                <input class="password-field" id="password_confirmation" name="password_confirmation" type="password" placeholder="Confirm password *">
+                                <span class="toggle-pass icon-show-password"></span>
+                                <div class="text-danger mt-2" id="passwordConfirmationError"></div>
+                            </fieldset>
 
+                            <div class="check-bottom">
+                                <div class="checkbox-wrap">
+                                    <input id="remember" type="checkbox" class="tf-check">
+                                    <label for="remember" class="h6">Keep me signed in</label>
+                                </div>
+                            </div>
 
-                    <p class="no-account-text"><span>Already have an account?</span></p>
-                    <p>If you already have an account with us, please login at the <a href="{{ route('user.login') }}">login page</a>.</p>
-                </form>
+                        </div>
+
+                        <button type="submit" id="registerButton" class="tf-btn animate-btn w-100">
+                            <span class="text">Register</span>
+                            <span class="formloader" style="display: none;"></span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="col-right">
+                    <h2 class="heading">Have An Account</h2>
+                    <p class="h6 text-sub">
+                        Welcome back, log in to your account to enhance your shopping experience, receive coupons, and the best discount codes.
+                    </p>
+                    <a href="{{ route('user.login') }}" class="btn_log tf-btn animate-btn">
+                        Login
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
 @endsection
 
 @section('page-script')
-
     <script>
 
         jQuery(function($) {
@@ -86,7 +101,7 @@
 
                 // Clear previous errors
                 $(".text-danger").text("");
-                $("#name, #email, #password, #password_confirmation").removeClass("error-border");
+                $("#name, #email, #password, #password_confirmation").removeClass("error_border");
 
                 let formData = {
                     name: $("#name").val(),
@@ -123,19 +138,19 @@
 
                             if (errors.name || errors.firstname) {
                                 $("#nameError").text(errors.name ? errors.name[0] : errors.firstname[0]);
-                                $("#name").addClass("error-border");
+                                $("#name").addClass("error_border");
                             }
                             if (errors.email) {
                                 $("#emailError").text(errors.email[0]);
-                                $("#email").addClass("error-border");
+                                $("#email").addClass("error_border");
                             }
                             if (errors.password) {
                                 $("#passwordError").text(errors.password[0]);
-                                $("#password").addClass("error-border");
+                                $("#password").addClass("error_border");
                             }
                             if (errors.password_confirmation) {
                                 $("#passwordConfirmationError").text(errors.password_confirmation[0]);
-                                $("#password_confirmation").addClass("error-border");
+                                $("#password_confirmation").addClass("error_border");
                             }
                         }
                     }
@@ -144,7 +159,7 @@
 
             // Remove error border on input
             $("#name, #email, #password, #password_confirmation").on("input", function () {
-                $(this).removeClass("error-border");
+                $(this).removeClass("error_border");
             });
         });
 

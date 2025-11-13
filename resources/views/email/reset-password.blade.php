@@ -12,6 +12,11 @@
                 <table width="600" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 40px;">
                     <tr>
                         <td style="text-align: center; padding-bottom: 20px;">
+                            <img src="{{ asset(config('app.logo')) }}" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding-bottom: 20px;">
                             <h2 style="color: #333333; margin: 0;">🔐 Password Reset Request</h2>
                         </td>
                     </tr>
@@ -35,12 +40,12 @@
                             </div>
 
                             <p>If you didn’t request this, you can safely ignore this email.</p>
-                            <p>Stay secure,<br><strong>Your Company Team</strong></p>
+                            <p>Stay secure,<br><strong>{{ config('app.name') }} Team</strong></p>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding-top: 30px; font-size: 12px; color: #888888; text-align: center;">
-                            &copy; {{ date('Y') }} Your Company. All rights reserved.
+                            &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
                         </td>
                     </tr>
                 </table>

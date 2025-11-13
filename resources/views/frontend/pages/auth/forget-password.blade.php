@@ -5,56 +5,60 @@
 @endsection
 
 @section('page-css')
-    <link href="{{ asset('frontend/style/accounts.min.12.css') }}" type="text/css" rel="stylesheet" media="screen" />
     <style>
-        .mb-3 {
-            margin-bottom: 10px;
-        }
-
-        form label {
-            padding-bottom: 10px;
-            display: inline-block;
+        .form-login {
+            gap: 22px !important;
         }
     </style>
 @endsection
 
 @section('body-content')
-    <section class="after-header p-tb-10">
+
+    <section class="s-page-title">
         <div class="container">
-            <ul class="breadcrumb">
-                <li><a href="{{ url('/') }}"><i class="material-icons" title="Home">home</i></a></li>
-                <li><a href="{{ route('user.login') }}">Login</a></li>
-                <li><a href="{{ route('password.request') }}">Forgot Password</a></li>
-            </ul>
+            <div class="content">
+                <h1 class="title-page">@yield('page-title')</h1>
+                <ul class="breadcrumbs-page">
+                    <li><a href="{{ url('/') }}" class="h6 link">Home</a></li>
+                    <li class="d-flex"><i class="icon icon-caret-right"></i></li>
+                    <li>
+                        <h6 class="current-page fw-normal">@yield('page-title')</h6>
+                    </li>
+                </ul>
+            </div>
         </div>
     </section>
 
-    <div class="container ac-layout before-login">
-        <div class="panel m-auto">
-            <div class="p-head">
-                <h2 class="text-center">Forgot Your Password?</h2>
-            </div>
-            <div class="p-body">
-                <form method="post" id="otpForm">
-                    @csrf
-                    <div class="mb-3 required">
-                        <label class="control-label" for="email">E-Mail Address</label>
-                        <input type="text" name="email" placeholder="E-Mail Address" id="email"
-                            class="form-control" />
-                        <div class="text-danger mt-2" id="emailError"></div>
-                    </div>
-                    <div style="text-align: right;padding:4px 0;">
-                        <a class="forgot-password" href="{{ route('user.login') }}">Back to login</a>
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                        <div class="text">Continue</div>
-                        <span class="formloader" style="display: none;"></span>
-                    </button>
+    <section class="flat-spacing">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 offset-md-4">
+                    <h2 class="heading" style="margin-bottom:20px;">Forgot Your Password?</h2>
 
-                </form>
+                    <form id="otpForm" class="form-login">
+                        @csrf
+                        <div class="list-ver">
+                            <fieldset>
+                                <input type="text" id="email" name="email" placeholder="Enter your email address *">
+                                <div class="text-danger mt-2" id="emailError"></div>
+                            </fieldset>
+                        </div>
+
+                        <button type="submit" id="otpButton" class="tf-btn animate-btn w-100">
+                            <span class="text">Continue</span>
+                            <span class="formloader" style="display: none;"></span>
+                        </button>
+
+                        <div class="text-center mt-4">
+                            <a href="{{ route('user.login') }}" class="link">← Back to Login</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+
 @endsection
 
 @section('page-script')
@@ -68,7 +72,7 @@
 
                 // Show spinner and disable button
                 $(".text-danger").text("");
-                $("#email, #password").removeClass("error-border");
+                $("#email, #password").removeClass("error_border");
 
                 $(".formloader").css("display", "inline-block");
                 $(".text").css("display", "none");
@@ -89,6 +93,9 @@
                         $(".formloader").css("display", "none");
                         $(".text").css("display", "block");
                         $("#loginButton").prop("disabled", false);
+                         $('#otpForm')[0].reset();
+
+                         $("#loginButton").prop("disabled", false);
 
                         message('success', 'Password reset link sent to your email!');
                     },
@@ -100,7 +107,7 @@
                         let errors = xhr.responseJSON.errors;
                         if (errors.email) {
                             $("#emailError").text(errors.email);
-                            $("#email").addClass("error-border");
+                            $("#email").addClass("error_border");
                         }
                     },
                     complete: function() {

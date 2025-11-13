@@ -19,8 +19,6 @@
     
     @include('frontend.includes.cart-sidebar')
 
-
-
     @include('frontend.includes.script')
     @livewireScripts
 </body>

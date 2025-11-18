@@ -18,7 +18,7 @@
                             <a href="javascript:void(0)" class="item-link">HOME</a>
                         </li>
                         <li class="menu-item">
-                            <a href="javascript:void(0)" class="item-link">SHOP</a>
+                            <a href="{{ route('shop') }}" class="item-link">SHOP</a>
                         </li>
                         <li class="menu-item">
                             <a href="javascript:void(0)" class="item-link">PRODUCT</a>

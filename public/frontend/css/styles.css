@@ -5614,9 +5614,9 @@ input[type=number]::-webkit-outer-spin-button {
   width: 24px;
   height: 24px;
   content: "";
-  -webkit-mask: url("../../icon/start.svg") no-repeat center;
+  -webkit-mask: url("public/frontend/icon/start.svg") no-repeat center;
   -webkit-mask-size: contain;
-  mask: url("../../icon/start.svg") no-repeat center;
+  mask: url("public/frontend/icon/start.svg") no-repeat center;
   background: #EF9122;
   mask-size: contain;
 }

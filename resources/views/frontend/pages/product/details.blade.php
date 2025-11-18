@@ -18,6 +18,36 @@
             justify-content: center !important;
             gap: 10px !important;
         }
+        .selectrating {
+            border: none;
+            display: inline-flex;
+            flex-direction: row-reverse; 
+            margin-top: 10px;
+        }
+
+    .selectrating > input {
+        display: none;
+    }
+
+    .selectrating > label:before {
+      margin: 5px;
+      font-size: 24px;
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f005";
+    }
+
+    .selectrating > label {
+        color: #ddd;
+        cursor: pointer;
+    }
+
+    /* Highlight stars on hover and selection */
+    .selectrating > input:checked ~ label,
+    .selectrating > label:hover,
+    .selectrating > label:hover ~ label {
+        color: #EF9122;
+    }
     </style>
 @endsection
 
@@ -349,34 +379,8 @@
     </section>
     <!-- /Product Main -->
     
-    <section class="flat-spacing-3" style="padding-top: 0px;padding-bottom:50px;">
-        <div class="container">
-            <div class="flat-animate-tab tab-style-1">
-                <ul class="menu-tab menu-tab-1" role="tablist">
-                    <li class="nav-tab-item" role="presentation">
-                        <a href="#descriptions" class="tab-link active" data-bs-toggle="tab">Descriptions</a>
-                    </li>
-                    
-                    <li class="nav-tab-item" role="presentation">
-                        <a href="#reviews" class="tab-link" data-bs-toggle="tab">Customer Reviews</a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane wd-product-descriptions active show" id="descriptions" role="tabpanel">
-                        <div class="tab-descriptions">
-                             @if (!is_null($product->long_description) && $product->long_description != '<p><br></p>')
-                                 {!! $product->long_description !!}
-                            @endif
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane wd-product-descriptions" id="reviews" role="tabpanel">
-                        <livewire:frontend.product.product-review :productId="$product->id" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    
+    <livewire:frontend.product.product-review :productId="$product->id" />
 
     <!-- Size Guide -->
     <div class="modal modalCentered fade modal-size-guide" id="size-guide">
@@ -532,6 +536,7 @@
         });
     </script>
 
+    {{-- modals --}}
     <script>
 
         let modals = document.querySelectorAll('#ReviewsModal, #askQuestion');

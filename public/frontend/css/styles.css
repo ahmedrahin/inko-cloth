@@ -2193,17 +2193,17 @@ header.header-sticky {
   margin-right: 12px;
 }
 .nav-icon-list .count {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   display: block;
   border-radius: 50%;
   background: var(--primary);
   position: absolute;
-  top: -12px;
-  right: -12px;
+  top: -10px;
+  right: -9px;
   font-weight: 700;
   font-size: 12px;
-  line-height: 16px;
+  line-height: 15px;
   color: var(--white);
   display: flex;
   align-items: center;
@@ -7170,7 +7170,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 @media (min-width: 576px) {
   .popup-shopping-cart {
-    max-width: 794px;
+    max-width: 444px;
     width: 100% !important;
   }
 }

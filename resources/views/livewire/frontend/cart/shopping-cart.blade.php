@@ -1,85 +1,76 @@
-<div class="drawer m-cart" id="m-cart" wire:ignore.self>
-    <div class="title">
-        <p>YOUR CART</p>
-        <span class="mc-toggler loaded close"><i class="material-icons">close</i></span>
-    </div>
-    <div class="content">
-        @if (!empty($cart))
-            @foreach ($cart as $cartKey => $item)
-                <div class="item">
-                    <div class="image">
-                        <a href="{{ route('product-details', $item['slug']) }}">
-                            <img src="{{ asset($item['image_url']) }}" width="47" height="47">
-                        </a>
-                    </div>
-                    <div class="info">
-                        <div class="name">
-                            <a href="{{ route('product-details', $item['slug']) }}" style="color:#081621;">
-                                {{ $item['name'] }}
-                            </a>
-                        </div>
-
-                        {{-- Show attributes if available --}}
-                        @if (!empty($item['attributes_info']))
-                            <div class="cart-attributes" style="font-size: 13px; color: #666;">
-                                @foreach ($item['attributes_info'] as $attr)
-                                    <div><strong>{{ $attr['name'] }}:</strong> {{ $attr['value'] }}</div>
-                                @endforeach
+<div class="offcanvas offcanvas-end popup-shopping-cart" id="shoppingCart">
+    <div class="canvas-wrapper">
+        <div class="popup-header">
+            <span class="title fw-semibold h4">Shopping cart</span>
+            <span class="icon-close icon-close-popup" data-bs-dismiss="offcanvas"></span>
+        </div>
+        <div class="wrap">
+            <div class="tf-mini-cart-wrap list-file-delete wrap-empty_text">
+                <div class="tf-mini-cart-main">
+                    <div class="tf-mini-cart-sroll">
+                        <div class="tf-mini-cart-items list-empty">
+                            <div class="box-text_empty type-shop_cart">
+                                <div class="shop-empty_top">
+                                    <span class="icon">
+                                        <i class="icon-shopping-cart-simple"></i>
+                                    </span>
+                                    <h3 class="text-emp fw-normal">Your cart is empty</h3>
+                                    <p class="h6 text-main">Your cart is currently empty. Let us assist you in finding
+                                        the right product</p>
+                                </div>
+                                <div class="shop-empty_bot">
+                                    <a href="shop-default.html" class="tf-btn animate-btn"> Shopping </a>
+                                    <a href="index.html" class="tf-btn style-line"> Back to home </a>
+                                </div>
                             </div>
-                        @endif
-
-                        <span class="amount">{{ format_price($item['offer_price'], 0) }}৳</span>
-                        <i class="material-icons">clear</i>
-                        <span>{{ $item['quantity'] }}</span>
-                        <span class="eq">=</span>
-                        <span class="total"
-                            style="color:#08b554;">{{ format_price($item['offer_price'] * $item['quantity']) }}৳</span>
-                    </div>
-
-                    <div class="remove" wire:click="removeItem('{{ $cartKey }}')" title="Remove">
-                        <i class="material-icons" aria-hidden="true">delete</i>
+                            <div class="tf-mini-cart-item file-delete">
+                                <div class="tf-mini-cart-image">
+                                    <img class="lazyload" data-src="images/products/product-1.jpg"
+                                        src="images/products/product-1.jpg" alt="img-product">
+                                </div>
+                                <div class="tf-mini-cart-info">
+                                    <div class="text-small text-main-2 sub">T-shirt</div>
+                                    <h6 class="title">
+                                        <a href="product-detail.html" class="link text-line-clamp-1">Queen fashion long
+                                            sleeve shirt, basic
+                                            t-shirt</a>
+                                    </h6>
+                                    <div class="size">
+                                        <div class="text-small text-main-2 sub">Size: XS</div>
+                                        <div class="text-small text-main-2 sub">Color:</div>
+                                        <div class="dot-color bg-caramel"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="h6 fw-semibold">
+                                            <span class="number">1x</span>
+                                            <span class="price text-primary tf-mini-card-price">$20.00</span>
+                                        </div>
+                                        <i class="icon link icon-close remove"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            @endforeach
-        @else
-            <div class="no-cart">
-                <img src="{{ asset('frontend/image/no-shopping-cart.png') }}" alt="">
-                <h4>Your Cart is Empty</h4>
-            </div>
-        @endif
-    </div>
-
-    @if (!empty($cart))
-        <div class="footer">
-
-            <div class="total ">
-                <div class="title" style="text-align: start;padding-left:5px;">Total Quantity</div>
-                <div class="amount">{{ array_sum(array_column($cart, 'quantity')) }}</div>
-            </div>
-            <div class="total" style="padding-bottom: 55px;">
-                <div class="title" style="text-align: start;padding-left:5px;">Total</div>
-                <div class="amount">{{ number_format($this->getTotalAmount(), 0) }}৳</div>
-            </div>
-
-            <div class="checkout-btn">
-                <a href="{{ route('cart') }}">
-                    <button class="btn submit" style="background:var(--s-secondary);">View Cart</button>
-                </a>
-                @if (config('website_settings.guest_checkout') == 1 && Auth::check())
-                    <a href="{{ route('checkout') }}">
-                        <button class="btn submit">Checkout</button>
-                    </a>
-                @elseif(config('website_settings.guest_checkout') == 0 && !Auth::check())
-                    <a href="javascript:;">
-                        <button class="btn submit"
-                        onclick="message('warning', 'Please log in at first to checkout')">Checkout</button>
-                    </a>
-                @else
-                    <a href="{{ route('checkout') }}">
-                        <button class="btn submit">Checkout</button>
-                    </a>
-                @endif
+                <div class="tf-mini-cart-bottom box-empty_clear">
+                    <div class="tf-mini-cart-threshold">
+                        <div class="text">
+                            <h6 class="subtotal">Subtotal (<span class="prd-count">3</span> item)</h6>
+                            <h4 class="text-primary total-price tf-totals-total-value">$60.00</h4>
+                        </div>
+                    </div>
+                    <div class="tf-mini-cart-bottom-wrap">
+                        <div class="tf-mini-cart-view-checkout">
+                            <a href="view-cart.html" class="tf-btn btn-white animate-btn animate-dark line">View
+                                cart</a>
+                            <a href="checkout.html"
+                                class="tf-btn animate-btn d-inline-flex bg-dark-2 w-100 justify-content-center"><span>Check
+                                    out</span></a>
+                        </div>
+                    </div>
+                </div>
+               
             </div>
         </div>
-    @endif
+    </div>
 </div>

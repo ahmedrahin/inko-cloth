@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('price')->nullable();
             $table->integer('quantity')->nullable();
             $table->string('image')->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -199,6 +199,10 @@ class ProductEditController extends Controller
         $attributes = $request->input('attributes', []);
         $variationFiles = $request->file('variations', []);
 
+        if (empty($variations)) {
+            return;
+        }
+
         // Get deleted variations from hidden field
         $deletedVariations = $request->input('deleted_variations', '');
         $deletedVariationIds = $deletedVariations ? explode(',', $deletedVariations) : [];
@@ -210,6 +214,23 @@ class ProductEditController extends Controller
         $newIndex = 0;
 
         foreach ($variations as $index => $variation) {
+             // raw attributes
+            $rawAttributes = $attributes[$index] ?? [];
+
+            // check if user actually selected at least one attribute
+            $hasAttribute = false;
+
+            foreach ($rawAttributes as $attr) {
+                if (!empty($attr['attribute']) && !empty($attr['attribute_value'])) {
+                    $hasAttribute = true;
+                    break;
+                }
+            }
+
+            if (!$hasAttribute) {
+                continue;
+            }
+                
             $variationId = $variation['id'] ?? null;
 
             // Only keep variations that are NOT in the deleted list

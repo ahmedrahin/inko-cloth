@@ -25,30 +25,47 @@
             margin-top: 10px;
         }
 
-    .selectrating > input {
-        display: none;
-    }
+        .selectrating > input {
+            display: none;
+        }
 
-    .selectrating > label:before {
-      margin: 5px;
-      font-size: 24px;
-        font-family: FontAwesome;
-        display: inline-block;
-        content: "\f005";
-    }
+        .selectrating > label:before {
+        margin: 5px;
+        font-size: 24px;
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f005";
+        }
 
-    .selectrating > label {
-        color: #ddd;
-        cursor: pointer;
-    }
+        .selectrating > label {
+            color: #ddd;
+            cursor: pointer;
+        }
 
-    /* Highlight stars on hover and selection */
-    .selectrating > input:checked ~ label,
-    .selectrating > label:hover,
-    .selectrating > label:hover ~ label {
-        color: #EF9122;
-    }
+        /* Highlight stars on hover and selection */
+        .selectrating > input:checked ~ label,
+        .selectrating > label:hover,
+        .selectrating > label:hover ~ label {
+            color: #EF9122;
+        }
     </style>
+    <style>
+        .btn-quantity .icon {
+            pointer-events: none;
+        }
+
+        /* Visual for disabled buttons */
+        .btn-quantity:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .btn-quantity {
+            cursor: pointer;
+        }
+    </style>
+
 @endsection
 
 
@@ -254,81 +271,9 @@
                                             </div>
                                         </div>
                                     @endif
-                                </div>
-                                
-                                <div class="tf-product-variant">
-                                    <div class="variant-picker-item variant-size">
-                                        <div class="variant-picker-label">
-                                            <div class="h4 fw-semibold">
-                                                Size
-                                                <span class="variant-picker-label-value value-currentSize">medium</span>
-                                            </div>
-                                            <a href="#size-guide" data-bs-toggle="modal" class="size-guide link h6 fw-medium">
-                                                <i class="icon icon-ruler"></i>
-                                                Size Guide
-                                            </a>
-                                        </div>
-                                        <div class="variant-picker-values">
-                                            <span class="size-btn" data-size="XS">XS</span>
-                                            <span class="size-btn" data-size="S">S</span>
-                                            <span class="size-btn" data-size="M">M</span>
-                                            <span class="size-btn" data-size="L">L</span>
-                                        </div>
-                                    </div>
-                                    <div class="variant-picker-item variant-color">
-                                        <div class="variant-picker-label">
-                                            <div class="h4 fw-semibold">
-                                                Colors
-                                                <span class="variant-picker-label-value value-currentColor">orange</span>
-                                            </div>
-                                        </div>
-                                        <div class="variant-picker-values">
-                                            <div class="hover-tooltip tooltip-bot color-btn active" data-color="blue">
-                                                <span class="check-color bg-blue-1"></span>
-                                                <span class="tooltip">Blue</span>
-                                            </div>
-                                            <div class="hover-tooltip tooltip-bot color-btn" data-color="gray">
-                                                <span class="check-color bg-caramel"></span>
-                                                <span class="tooltip">Gray</span>
-                                            </div>
-                                            <div class="hover-tooltip tooltip-bot color-btn" data-color="pink">
-                                                <span class="check-color bg-hot-pink"></span>
-                                                <span class="tooltip">Pink</span>
-                                            </div>
-                                            <div class="hover-tooltip tooltip-bot color-btn" data-color="green">
-                                                <span class="check-color bg-dark-jade"></span>
-                                                <span class="tooltip">Green</span>
-                                            </div>
-                                            <div class="hover-tooltip tooltip-bot color-btn" data-color="white">
-                                                <span class="check-color bg-white"></span>
-                                                <span class="tooltip">White</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                </div>                               
 
-                                <div class="tf-product-total-quantity">
-                                    <div class="group-btn">
-                                        <div class="wg-quantity">
-                                            <button class="btn-quantity btn-decrease">
-                                                <i class="icon icon-minus"></i>
-                                            </button>
-                                            <input class="quantity-product" type="text" name="number" value="1">
-                                            <button class="btn-quantity btn-increase">
-                                                <i class="icon icon-plus"></i>
-                                            </button>
-                                        </div>
-                                        <a href="#shoppingCart" data-bs-toggle="offcanvas" class="tf-btn animate-btn btn-add-to-cart">
-                                            ADD TO CART
-                                            <i class="icon icon-shopping-cart-simple"></i>
-                                        </a>
-                                        <button type="button" class="hover-tooltip box-icon btn-add-wishlist">
-                                            <span class="icon icon-heart"></span>
-                                            <span class="tooltip">Add to Wishlist</span>
-                                        </button>
-                                    </div>
-                                    <a href="checkout.html" class="tf-btn btn-primary w-100">BUY IT NOW</a>
-                                </div>
+                                <livewire:frontend.cart.add-cart :productId="$product->id" />
 
                                 <div class="tf-product-extra-link">
                                     @if(config('website_settings.ask_qustion') == true)
@@ -378,7 +323,6 @@
         </div> 
     </section>
     <!-- /Product Main -->
-    
     
     <livewire:frontend.product.product-review :productId="$product->id" />
 
@@ -538,7 +482,6 @@
 
     {{-- modals --}}
     <script>
-
         let modals = document.querySelectorAll('#ReviewsModal, #askQuestion');
         modals.forEach((modal) => {
             modal.addEventListener('show.bs.modal', (e) => {

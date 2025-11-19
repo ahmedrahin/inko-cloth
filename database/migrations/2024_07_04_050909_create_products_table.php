@@ -43,6 +43,7 @@ return new class extends Migration
             $table->boolean('is_new')->default(2)->comment('1=yes or 2=no');
             $table->boolean('is_featured')->default(2)->comment('1=Yes, 2=No');
             $table->boolean('pre_order')->default(2)->comment('1=Yes, 2=No');
+            $table->boolean('stock_out')->default(0)->comment('1=Yes, 0=No');
             $table->longText('key_features')->nullable();
             $table->softDeletes();
             $table->timestamps();

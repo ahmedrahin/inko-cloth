@@ -53,10 +53,12 @@
                         <a class="nav-icon-item link" href="#shoppingCart" data-bs-toggle="offcanvas">
                             <i class="icon icon-shopping-cart-simple"></i>
                         </a>
-                        <span class="count">24</span>
+                        <livewire:frontend.cart.btn-cart />
                     </li>
                 </ul>
             </div>
         </div>
     </div>
 </header>
+
+<livewire:frontend.cart.shopping-cart />

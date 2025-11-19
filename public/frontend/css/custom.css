@@ -74,3 +74,19 @@ input:focus, select:focus, textarea:focus{
 .alert-danger a {
     color: white;
 }
+.for-dekstop{
+    display: block;
+}
+.for-mobile{
+    display: none;
+}
+
+@media screen and (max-width: 800px) {
+
+    .for-dekstop{
+        display: none;
+    }
+    .for-mobile{
+        display: block;
+    }
+}

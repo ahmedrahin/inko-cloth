@@ -250,23 +250,6 @@
 
                     <div class="your-rating mb-3">
                         <div class="h4 fw-4 text-black">Your rating:</div>
-                        {{-- <div class="list-rating-check selectrating">
-                            <input type="radio" id="star5" name="rating" value="5" wire:model="rating">
-                            <label for="star5" title="5 stars"></label>
-
-                            <input type="radio" id="star4" name="rating" value="4" wire:model="rating">
-                            <label for="star4" title="4 stars"></label>
-
-                            <input type="radio" id="star3" name="rating" value="3" wire:model="rating">
-                            <label for="star3" title="3 stars"></label>
-
-                            <input type="radio" id="star2" name="rating" value="2" wire:model="rating">
-                            <label for="star2" title="2 stars"></label>
-
-                            <input type="radio" id="star1" name="rating" value="1" wire:model="rating">
-                            <label for="star1" title="1 star"></label>
-                        </div> --}}
-
                         <div class="selectrating" id="star-rating">
                           <input type="radio" id="star5" name="rating" value="5" wire:model="rating">
                             <label for="star5" title="5 stars"></label>
@@ -282,7 +265,7 @@
 
                             <input type="radio" id="star1" name="rating" value="1" wire:model="rating">
                             <label for="star1" title="1 star"></label>
-                      </div>
+                        </div>
 
                         @error('rating')
                         <div class="text-danger mt-1">{{ $message }}</div>

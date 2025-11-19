@@ -1,169 +1,152 @@
 <div>
-    @php
-        $productStocks = $product->productStock ?? collect();
-        $attributesList = $attributes->keyBy('id');
-        $attributesValuesList = $attributesValues->keyBy('id');
-        $groupedAttributes = [];
-
-        $singleVariationStocks = $productStocks->filter(function ($productStock) {
-            return $productStock->attributeOptions->count() === 1;
-        });
-
-        // Group values by attribute
-        foreach ($singleVariationStocks as $productStock) {
-            foreach ($productStock->attributeOptions as $option) {
-                $groupedAttributes[$option->attribute_id][$option->id] =
-                    $attributesValuesList[$option->attribute_value_id] ?? null;
-            }
-        }
-    @endphp
-
-    @if (!empty($groupedAttributes))
-        @foreach ($groupedAttributes as $attribute_id => $values)
-            @php
-                $attribute = $attributesList[$attribute_id] ?? null;
-                $attributeName = $attribute->attr_name ?? 'Option';
-                $selectedValue = $selectedAttributes[$attributeName] ?? null;
-            @endphp
-
-            @if ($attribute && !empty($values))
-                <div class="p-opt-wrap">
-                    <div class="p-opt required">
-                        <div class="p-opt-lbl">{{ $attributeName }}: <b></b></div>
-                        <div class="p-opt-vals">
-                            @foreach ($values as $optionId => $value)
-                                @if ($value)
-                                    <label>
-                                        <input class="hide" type="radio" name="attribute[{{ $attribute_id }}]"
-                                            value="{{ $optionId }}" title="{{ $value->attr_value }}"
-                                            wire:click="$emit('selectAttribute', '{{ $attributeName }}', '{{ $value->attr_value }}')"
-                                            {{ $selectedValue === $value->attr_value ? 'checked' : '' }}>
-                                        <span class="{{ $selectedValue === $value->attr_value ? 'active' : '' }}">
-                                            {{ $value->attr_value }}
-                                        </span>
-                                    </label>
-                                @endif
-                            @endforeach
-                        </div>
-
-                        {{-- Validation Error --}}
-                        @if (!empty($attributeErrors[$attributeName]))
-                            <div class="text-danger mt-1">
-                                {{ $attributeErrors[$attributeName] }}
-                            </div>
-                        @endif
-                    </div>
+    <div class="tf-product-variant">
+        <div class="variant-picker-item variant-size">
+            <div class="variant-picker-label">
+                <div class="h4 fw-semibold">
+                    Size
+                    <span class="variant-picker-label-value value-currentSize">medium</span>
                 </div>
+                <a href="#size-guide" data-bs-toggle="modal" class="size-guide link h6 fw-medium">
+                    <i class="icon icon-ruler"></i>
+                    Size Guide
+                </a>
+            </div>
+            <div class="variant-picker-values">
+                <span class="size-btn" data-size="XS">XS</span>
+                <span class="size-btn" data-size="S">S</span>
+                <span class="size-btn" data-size="M">M</span>
+                <span class="size-btn" data-size="L">L</span>
+            </div>
+        </div>
+        <div class="variant-picker-item variant-color">
+            <div class="variant-picker-label">
+                <div class="h4 fw-semibold">
+                    Colors
+                    <span class="variant-picker-label-value value-currentColor">orange</span>
+                </div>
+            </div>
+            <div class="variant-picker-values">
+                <div class="hover-tooltip tooltip-bot color-btn active" data-color="blue">
+                    <span class="check-color bg-blue-1"></span>
+                    <span class="tooltip">Blue</span>
+                </div>
+                <div class="hover-tooltip tooltip-bot color-btn" data-color="gray">
+                    <span class="check-color bg-caramel"></span>
+                    <span class="tooltip">Gray</span>
+                </div>
+                <div class="hover-tooltip tooltip-bot color-btn" data-color="pink">
+                    <span class="check-color bg-hot-pink"></span>
+                    <span class="tooltip">Pink</span>
+                </div>
+                <div class="hover-tooltip tooltip-bot color-btn" data-color="green">
+                    <span class="check-color bg-dark-jade"></span>
+                    <span class="tooltip">Green</span>
+                </div>
+                <div class="hover-tooltip tooltip-bot color-btn" data-color="white">
+                    <span class="check-color bg-white"></span>
+                    <span class="tooltip">White</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tf-product-total-quantity">
+        <div class="group-btn">
+            <div class="wg-quantity">
+                <button type="button" class="btn-quantity btn-decrease" aria-label="Decrease quantity">
+                    <i class="icon icon-minus"></i>
+                </button>
+
+                <input
+                    class="quantity-product"
+                    type="text"
+                    name="number"
+                    value="1"
+                    data-quantity="{{ $product->quantity }}"  
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                    />
+
+                <button type="button" class="btn-quantity btn-increase" aria-label="Increase quantity">
+                    <i class="icon icon-plus"></i>
+                </button>
+            </div>
+
+            @if($product->stock_out == 1 || $product->quantity == 0)
+                <button class="tf-btn btn-add-to-cart" style="background: #626262;" disabled>
+                    Out Of Stock
+                </button>
+            @elseif ($product->pre_order == 1)
+                <button class="tf-btn btn-add-to-cart" style="background: #626262;" disabled>
+                    Up Coming
+                </button>
+            @else
+                <button class="tf-btn animate-btn btn-add-to-cart" wire:click="addToCart">
+                    <span wire:loading.remove wire:target="addToCart">ADD TO CART</span>
+                    <span wire:loading wire:target="addToCart" class="formloader"></span>
+                </button>
             @endif
-        @endforeach
 
-    @endif
-
-
-    <div class="cart-option">
-        <label class="quantity">
-            <span class="ctl minus"><i class="material-icons">remove</i></span>
-            <span class="qty">
-                <input class="quntity-filed form-control" type="text" wire:model="quantity" min="1"
-                    data-quantity="{{ $product->quantity }}" value="1">
-            </span>
-            <span class="ctl plus"><i class="material-icons">add</i></span>
-        </label>
-
-        @if ($product->quantity > 0)
-            <button id="button-cart" class="btn submit-btn" wire:click="addToCart">
-                <span wire:loading.remove wire:target="addToCart">Buy Now</span>
-                <span wire:loading wire:target="addToCart" class="formloader"></span>
+            <button type="button" class="hover-tooltip box-icon btn-add-wishlist">
+                <span class="icon icon-heart"></span>
+                <span class="tooltip">Add to Wishlist</span>
             </button>
-        @else
-            <button class="btn submit-btn"
-                style="background: #8080806b;border-color:#8080806b;box-shadow:rgba(0, 0, 0, 0.2) 0px 50px inset;"
-                disabled>Out of stock!</button>
-        @endif
+        </div>
+
+        <a href="" class="tf-btn btn-primary w-100">BUY IT NOW</a>
     </div>
 
 
     @section('addcart-js')
+        {{-- qty increse & decrease --}}
         <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const plusMinusWrappers = document.querySelectorAll('.quantity');
+            function initQuantityButtons() {
+                document.querySelectorAll('.wg-quantity').forEach(wrapper => {
 
-                plusMinusWrappers.forEach((wrapper) => {
-                    const addButton = wrapper.querySelector('.plus');
-                    const subButton = wrapper.querySelector('.minus');
-                    const inputEl = wrapper.querySelector('.quntity-filed');
+                    const inc = wrapper.querySelector('.btn-increase');
+                    const dec = wrapper.querySelector('.btn-decrease');
+                    const input = wrapper.querySelector('.quantity-product');
 
-                    if (inputEl && inputEl.dataset.quantity) {
-                        const maxQuantity = parseInt(inputEl.dataset.quantity);
+                    if (!inc || !dec || !input) return;
 
-                        addButton?.addEventListener('click', function() {
-                            let currentValue = Number(inputEl.value);
-                            if (currentValue < maxQuantity) {
-                                inputEl.value = currentValue + 1;
-                                inputEl.dispatchEvent(new Event('input'));
-                            }
+                    const max = parseInt(input.dataset.quantity) || null;
+                    const min = 1;
 
-                            addButton.disabled = (inputEl.value >= maxQuantity);
-                            subButton.disabled = false;
-                        });
+                    const updateState = () => {
+                        let val = parseInt(input.value) || min;
+                        if (val < min) val = min;
+                        if (max !== null && val > max) val = max;
+                        input.value = val;
 
-                        subButton?.addEventListener('click', function() {
-                            let currentValue = Number(inputEl.value);
-                            if (currentValue > 1) {
-                                inputEl.value = currentValue - 1;
-                                inputEl.dispatchEvent(new Event('input'));
-                            }
+                        dec.disabled = val <= min;
+                        inc.disabled = (max !== null && val >= max);
+                    };
 
-                            subButton.disabled = (inputEl.value <= 1);
-                        });
+                    inc.onclick = () => {
+                        let val = parseInt(input.value) || min;
+                        if (max === null || val < max) {
+                            input.value = val + 1;
+                            input.dispatchEvent(new Event('input'));
+                        }
+                        updateState();
+                    };
 
-                        // Optional: Initial button state on page load
-                        addButton.disabled = (inputEl.value >= maxQuantity);
-                        subButton.disabled = (inputEl.value <= 1);
-                    }
+                    dec.onclick = () => {
+                        let val = parseInt(input.value) || min;
+                        if (val > min) {
+                            input.value = val - 1;
+                            input.dispatchEvent(new Event('input'));
+                        }
+                        updateState();
+                    };
+
+                    updateState();
                 });
-            });
-        </script>
+            }
 
-        {{-- product qty and variaiton js --}}
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Size swatches (new theme selector: .product-variations .size)
-                var sizeItems = document.querySelectorAll('.product-variations .size');
-                sizeItems.forEach(function(item) {
-                    item.addEventListener('click', function() {
-                        sizeItems.forEach(function(sizeItem) {
-                            sizeItem.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        var selectedSize = this.getAttribute('data-size');
-                        Livewire.emit('selectSize', selectedSize);
-                    });
-                });
-
-                // Color swatches (new theme selector: .product-variations .color)
-                var colorItems = document.querySelectorAll('.product-variations .color');
-                colorItems.forEach(function(item) {
-                    item.addEventListener('click', function() {
-                        colorItems.forEach(function(colorItem) {
-                            colorItem.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        var selectedColor = this.getAttribute('data-color');
-                        Livewire.emit('selectColor', selectedColor);
-                    });
-                });
-
-                // Clean All button (optional)
-                var clearBtn = document.querySelector('.product-variation-clean');
-                if (clearBtn) {
-                    clearBtn.addEventListener('click', function() {
-                        sizeItems.forEach(item => item.classList.remove('active'));
-                        colorItems.forEach(item => item.classList.remove('active'));
-                        Livewire.emit('clearSelections');
-                    });
-                }
-            });
+            document.addEventListener("DOMContentLoaded", initQuantityButtons);
+            document.addEventListener("livewire:navigated", initQuantityButtons);
+            document.addEventListener("livewire:update", initQuantityButtons);
         </script>
     @endsection
 </div>

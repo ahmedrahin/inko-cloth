@@ -286,22 +286,22 @@
 </div>
 
 @push('scripts')
-   <script>
+    <script>
         $(document).ready(function() {
             var KTAppEcommerceSaveProduct = function() {
                 const initConditionsSelect2 = () => {
                     const allConditionTypes = document.querySelectorAll(
                         '[data-kt-ecommerce-catalog-add-product="product_option"]');
-                    allConditionTypes.forEach(type => {
-                        if ($(type).hasClass("select2-hidden-accessible")) {
-                            return;
-                        } else {
-                            $(type).select2({
-                                minimumResultsForSearch: -1
+                            allConditionTypes.forEach(type => {
+                                if ($(type).hasClass("select2-hidden-accessible")) {
+                                    return;
+                                } else {
+                                    $(type).select2({
+                                        minimumResultsForSearch: -1
+                                    });
+                                }
                             });
                         }
-                    });
-                }
 
                 return {
                     init: function() {

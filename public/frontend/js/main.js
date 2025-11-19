@@ -425,46 +425,6 @@
         });
     };
 
-    /* Total Price Variant
-    -------------------------------------------------------------------------*/
-    var totalPriceVariant = function () {
-        $(".tf-product-info-list,.tf-cart-item").each(function () {
-            var productItem = $(this);
-            var basePrice =
-                parseFloat(productItem.find(".price-on-sale").data("base-price")) ||
-                parseFloat(productItem.find(".price-on-sale").text().replace("$", "").replace(/,/g, ""));
-            var quantityInput = productItem.find(".quantity-product");
-            var personSale = parseFloat(productItem.find(".number-sale").data("person-sale") || 5);
-            var compareAtPrice = basePrice * (1 + personSale / 100);
-
-            productItem.find(".compare-at-price").text(`$${compareAtPrice.toLocaleString("en-US", { minimumFractionDigits: 2 })}`);
-            productItem.find(".color-btn, .size-btn").on("click", function () {
-                quantityInput.val(1);
-            });
-
-            productItem.find(".btn-increase").on("click", function () {
-                var currentQuantity = parseInt(quantityInput.val(), 10);
-                quantityInput.val(currentQuantity + 1);
-                updateTotalPrice(null, productItem);
-            });
-
-            productItem.find(".btn-decrease").on("click", function () {
-                var currentQuantity = parseInt(quantityInput.val(), 10);
-                if (currentQuantity > 1) {
-                    quantityInput.val(currentQuantity - 1);
-                    updateTotalPrice(null, productItem);
-                }
-            });
-
-            function updateTotalPrice(price, scope) {
-                var currentPrice = price || parseFloat(scope.find(".price-on-sale").text().replace("$", "").replace(/,/g, ""));
-                var quantity = parseInt(scope.find(".quantity-product").val(), 10);
-                var totalPrice = currentPrice * quantity;
-
-                scope.find(".price-add").text(`$${totalPrice.toLocaleString("en-US", { minimumFractionDigits: 2 })}`);
-            }
-        });
-    };
 
     /* Scroll Grid Product
     -------------------------------------------------------------------------*/
@@ -1408,7 +1368,6 @@
         staggerWrap();
         clickModalSecond();
         autoPopup();
-        totalPriceVariant();
         scrollGridProduct();
         handleProgress();
         handleFooter();

@@ -24,6 +24,8 @@ class Checkout extends Component
     public $email;
     public $phone;
     public $shipping_address;
+    public $zip_code;
+    public $city;
     public $district_id;
     public $note;
     public $payment_type;
@@ -226,7 +228,7 @@ class Checkout extends Component
             'email' => 'nullable|email',
             'phone' => 'required|numeric',
             'shipping_address' => 'required',
-            'district_id' => 'required',
+            'city' => 'required',
         ];
 
         $message = [
@@ -266,6 +268,8 @@ class Checkout extends Component
                 'email' => $this->email,
                 'phone' => $this->phone,
                 'shipping_address' => $this->shipping_address,
+                'zip_code' => $this->zip_code,
+                'city' => $this->city,
                 'district_id' => $this->district_id,
                 'payment_type' => 'cod',
                 'shipping_method' => $this->selectedShippingMethodId,

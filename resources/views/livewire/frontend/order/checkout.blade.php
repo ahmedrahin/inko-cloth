@@ -34,33 +34,33 @@
                                 <div class="cols tf-grid-layout sm-col-2">
                                     <fieldset>
                                         <input type="text" placeholder="Full Name*" wire:model="name" 
-                                               class="@error('name') error-border @enderror">
+                                               class="@error('name') error_border @enderror">
                                         @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </fieldset>
                                     <fieldset>
                                         <input type="text" placeholder="Phone*" wire:model="phone"
-                                               class="@error('phone') error-border @enderror">
+                                               class="@error('phone') error_border @enderror">
                                         @error('phone') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </fieldset>
                                 </div>
                                 <div class="cols tf-grid-layout sm-col-2">
                                     <fieldset>
                                         <input type="email" placeholder="Email*" wire:model="email"
-                                               class="@error('email') error-border @enderror">
+                                               class="@error('email') error_border @enderror">
                                         @error('email') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </fieldset>
                                     <fieldset>
                                         <input type="text" placeholder="Address*" wire:model="shipping_address"
-                                               class="@error('shipping_address') error-border @enderror">
+                                               class="@error('shipping_address') error_border @enderror">
                                         @error('shipping_address') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </fieldset>
                                 </div>
 
                                 <div class="cols tf-grid-layout sm-col-2">
-                                    <fieldset>
+                                    {{-- <fieldset>
                                         <div class="tf-select">
                                             <select wire:model="district_id" 
-                                                    class="@error('district_id') error-border @enderror">
+                                                    class="@error('district_id') error_border @enderror">
                                                 <option value="">Select City</option>
                                                 @foreach ($districts as $district)
                                                     <option value="{{ $district->id }}">
@@ -70,13 +70,18 @@
                                             </select>
                                             @error('district_id') <div class="text-danger small">{{ $message }}</div> @enderror
                                         </div>
+                                    </fieldset> --}}
+
+                                    <fieldset>
+                                        <input type="text" placeholder="City/state" wire:model="city" class="@error('city') error_border @enderror">
+                                        @error('city') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </fieldset>
                                     <fieldset>
-                                        <input type="text" placeholder="Postal code">
+                                        <input type="text" placeholder="Postal code" wire:model="zip_code">
                                     </fieldset>
                                 </div>
-                                <textarea placeholder="Note about your order" style="height: 180px;" 
-                                          wire:model="note"></textarea>
+                                
+                                <textarea placeholder="Note about your order" style="height: 180px;" wire:model="note"></textarea>
                             </div>
                         </div>
 
@@ -95,7 +100,7 @@
                         </div>
 
                         <!-- Shipping Method -->
-                        <div class="box-ip-shipping">
+                        <div class="box-ip-shipping" style="margin-bottom: 35px;">
                             <h2 class="title type-semibold">Shipping Method</h2>
                             @foreach ($shippingMethods as $method)
                                 <label for="shipping-{{ $method->id }}" class="check-ship mb-12">
@@ -104,15 +109,10 @@
                                            wire:model="selectedShippingMethodId" value="{{ $method->id }}">
                                     <span class="text h6">
                                         <span class="">{{ $method->provider_name }}</span>
-                                        <span class="price">৳{{ $method->provider_charge }}</span>
+                                        <span class="price">${{ $method->provider_charge }}</span>
                                     </span>
                                 </label>
                             @endforeach
-                            @if ($selectedShippingCharge)
-                                <div class="mt-2">
-                                    <strong>Shipping Charge: ৳{{ $selectedShippingCharge }}</strong>
-                                </div>
-                            @endif
                         </div>
 
                         <!-- Terms & Submit -->
@@ -130,7 +130,7 @@
                         <div class="button_submit">
                             <button type="submit" class="tf-btn animate-btn w-100">
                                 <span wire:loading.remove wire:target="order">Confirm Order</span>
-                                <span wire:loading wire:target="order" class="formloader">Processing...</span>
+                                <span wire:loading wire:target="order" class="formloader"></span>
                             </button>
                         </div>
                     </form>
@@ -166,7 +166,7 @@
                                         <div class="quantity">Qty: {{ $item['quantity'] }}</div>
                                     </div>
                                     <p class="price-prd h6">
-                                        ৳{{ format_price($item['offer_price'] * $item['quantity']) }}
+                                        ${{ format_price($item['offer_price'] * $item['quantity']) }}
                                     </p>
                                 </li>
                             @endforeach
@@ -174,26 +174,26 @@
                         <ul class="list-total">
                             <li class="total-item h6">
                                 <span class="fw-bold text-black">Subtotal</span>
-                                <span>৳{{ format_price($this->getTotalAmount(), 0) }}</span>
+                                <span>${{ format_price($this->getTotalAmount(), 0) }}</span>
                             </li>
                             
                             @if (!empty($appliedCoupon))
                                 <li class="total-item h6">
                                     <span class="fw-bold text-black">Coupon Discount</span>
-                                    <span style="color:#ef4a23;">-৳{{ $appliedCoupon['discount'] }}</span>
+                                    <span style="color:#ef4a23;">-${{ format_price($appliedCoupon['discount']) }}</span>
                                 </li>
                             @endif
 
                             @if ($selectedShippingCharge)
                                 <li class="total-item h6">
                                     <span class="fw-bold text-black">Shipping</span>
-                                    <span>৳{{ $selectedShippingCharge }}</span>
+                                    <span>${{ format_price($selectedShippingCharge) }}</span>
                                 </li>
                             @endif
                         </ul>
                         <div class="last-total h5 fw-medium text-black">
                             <span>Total</span>
-                            <span>৳{{ number_format($this->grandTotal(), 0) }}</span>
+                            <span>${{ number_format($this->grandTotal(), 0) }}</span>
                         </div>
                     </div>
                 </div>

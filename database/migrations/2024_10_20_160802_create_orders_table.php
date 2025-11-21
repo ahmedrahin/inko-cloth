@@ -20,9 +20,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('shipping_address');
-            $table->string('address')->nullable();
             $table->string('city')->nullable();
-            $table->string('state')->nullable();
             $table->string('country')->nullable();
             $table->string('zip_code')->nullable();
             $table->double('grand_total', 20, 2)->nullable();

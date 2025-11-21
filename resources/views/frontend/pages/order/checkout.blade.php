@@ -15,7 +15,7 @@
             <div class="content">
                 <h1 class="title-page">Checkout</h1>
                 <ul class="breadcrumbs-page">
-                    <li><a href="index.html" class="h6 link">Home</a></li>
+                    <li><a href="{{ route('homepage') }}" class="h6 link">Home</a></li>
                     <li class="d-flex"><i class="icon icon-caret-right"></i></li>
                     <li>
                         <h6 class="current-page fw-normal">Checkout</h6>

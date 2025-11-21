@@ -85,6 +85,9 @@ input:focus, select:focus, textarea:focus{
     border-top: 1px solid var(--line);
     padding-top: 20px;
 }
+.text-danger{
+    margin-top: 0.25rem !important;
+}
 
 @media screen and (max-width: 800px) {
 

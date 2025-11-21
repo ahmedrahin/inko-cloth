@@ -449,7 +449,7 @@
                         <h3 class="section-title">Shipping Information</h3>
                         <div class="shipping-address">
                             <p>{{ $order->shipping_address }}</p>
-                            <p>{{ $order->district->name }}</p>
+                            <p>{{ $order->district->name ?? '' }}</p>
                             <span class="order-date">
                                 <i class="far fa-clock"></i> Ordered on {{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y - h:i A') }}
                             </span>

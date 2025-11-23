@@ -1,78 +1,83 @@
 @extends('frontend.layout.app')
 
 @section('page-title')
-My Account
+    My Dashboard
 @endsection
 
-
-@section('page-css')
-<link href="{{ asset('frontend/style/accounts.min.12.css') }}" type="text/css" rel="stylesheet" media="screen" />
-@endsection
 
 @section('body-content')
 
-    <section class="after-header p-tb-10">
+    <section class="s-page-title">
         <div class="container">
-            <ul class="breadcrumb">
-                <li><a href="{{ url('/') }}"><i class="material-icons" title="Home">home</i></a></li>
-                <li><a href="">Account</a></li>
-            </ul>
+            <div class="content">
+                <h1 class="title-page">@yield('page-title')</h1>
+                <ul class="breadcrumbs-page">
+                    <li><a href="{{ route('homepage') }}" class="h6 link">Home</a></li>
+                    <li class="d-flex"><i class="icon icon-caret-right"></i></li>
+                    <li>
+                        <h6 class="current-page fw-normal">@yield('page-title')</h6>
+                    </li>
+                </ul>
+            </div>
         </div>
     </section>
 
-    <div class="container ac-layout">
-        <div class="ac-header">
-            <div class="left">
-                <span class="avatar">
-                    <img src="{{ auth()->user()->avatar ? asset(auth()->user()->avatar) : asset('frontend/image/user.png') }}"
-                        width="80" height="80" alt="Ra"></span>
-                <div class="name">
-                    <p>Hello,</p>
-                    <p class="user">{{ auth()->user()->name }}</p>
+    <section class="flat-spacing">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 d-none d-xl-block">
+                    @include('frontend.pages.user.user-menu')
+                </div>
+
+                <div class="col-xl-9">
+                    <div class="my-account-content">
+                        <div class="acount-order_stats">
+                            <div dir="ltr" class="swiper tf-swiper" data-preview="3" data-tablet="3" data-mobile-sm="2" data-mobile="1"
+                                data-space-lg="48" data-space-md="16" data-space="12" data-pagination="1" data-pagination-sm="2"
+                                data-pagination-md="3" data-pagination-lg="3">
+                                <div class="swiper-wrapper">
+                                    <!-- item 1 -->
+                                    <div class="swiper-slide">
+                                        <div class="order-box">
+                                            <div class="order_icon">
+                                                <i class="icon icon-package-thin"></i>
+                                            </div>
+                                            <div class="order_info">
+                                                <p class="info_label h6">Wait for confirmation</p>
+                                                <h2 class="info_count type-semibold">{{$user->orders->where('delivery_status', 'pending')->count()}}</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="swiper-slide">
+                                        <div class="order-box">
+                                            <div class="order_icon">
+                                                <i class="icon icon-box-arrow-up"></i>
+                                            </div>
+                                            <div class="order_info">
+                                                <p class="info_label h6">Total order</p>
+                                                <h2 class="info_count type-semibold">{{$user->orders->count()}}</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="order-box">
+                                            <div class="order_icon">
+                                                <i class="icon icon-box-arrow-up"></i>
+                                            </div>
+                                            <div class="order_info">
+                                                <p class="info_label h6">Total Buying</p>
+                                                <h2 class="info_count type-semibold">${{format_price($user->orders->sum('grand_total'))}}</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sw-dot-default tf-sw-pagination"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-
-        <div class="ac-menus">
-            <div class="ac-menu-item">
-                <a href="{{ route('user.orders') }}" class="ico-btn">
-                    <span class="material-icons">chrome_reader_mode</span><span>Orders</span>
-                </a>
-            </div>
-
-            <div class="ac-menu-item">
-                <a href="{{ route('user.edit.profile') }}" class="ico-btn"><span
-                        class="material-icons">person</span><span>Edit Profile</span></a>
-            </div>
-            <div class="ac-menu-item">
-                <a href="{{ route('user.edit.password') }}" class="ico-btn"><span
-                        class="material-icons">lock</span><span>Change Password</span></a>
-            </div>
-
-            <div class="ac-menu-item">
-                <a href="{{ route('user.wishlist') }}" class="ico-btn"><span
-                        class="material-icons">favorite_border</span><span>Wish List</span></a>
-            </div>
-
-
-            {{-- <div class="ac-menu-item">
-                <a href="" class="ico-btn"><span
-                        class="material-icons">account_balance_wallet</span><span>Your Transactions</span></a>
-            </div> --}}
-            {{-- <div class="ac-menu-item ">
-                <a href="" class="ico-btn"><span
-                        class="material-icons">delete</span><span>Delete Account</span></a>
-            </div> --}}
-            <div class="ac-menu-item">
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="ico-btn">
-                    <span class="material-icons">input</span><span>Logout</span>
-                </a>
-            </div>
-        </div>
-    </div>
-
-     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
+    </section>
 @endsection

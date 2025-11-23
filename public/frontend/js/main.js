@@ -986,26 +986,7 @@
             }
         });
     };
-
-    /* Change Image Dashboard 
-    -------------------------------------------------------------------------*/
-    var changeImageDash = function () {
-        $(".changeImgDash").on("click", function () {
-            $(".fileInputDash").click();
-        });
-
-        $(".fileInputDash").on("change", function (e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    $(".imgDash").attr("src", e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    };
-
+    
     /* No Action Link
     -------------------------------------------------------------------------*/
     const preventDefault = () => {
@@ -1187,7 +1168,6 @@
         writeReview();
         videoWrap();
         showPassword();
-        changeImageDash();
         preventDefault();
         notifyForm();
         customSelect();

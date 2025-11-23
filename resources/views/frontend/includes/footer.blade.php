@@ -13,46 +13,72 @@
                                 <li>
                                     <i class="icon icon-map-pin"></i>
                                     <span class="br-line"></span>
-                                    <a href="https://www.google.com/maps?q=8500+Lorem+Street+Chicago,+IL+55030+Dolor+sit+amet"
+                                    <a href="https://www.google.com/maps?q={{ config('app.address') }}"
                                         target="_blank" class="h6 link">
-                                        8500 Lorem Street Chicago, IL 55030 <br class="d-none d-lg-block"> Dolor sit
-                                        amet
+                                        {{ config('app.address') }}
                                     </a>
                                 </li>
                                 <li>
                                     <i class="icon icon-phone"></i>
                                     <span class="br-line"></span>
-                                    <a href="tel:+88001234567" class="h6 link">+8(800) 123 4567</a>
+                                    <a href="tel:{{ config('app.phone') }}" class="h6 link">{{ config('app.phone') }}</a>
                                 </li>
                                 <li>
                                     <i class="icon icon-envelope-simple"></i>
                                     <span class="br-line"></span>
-                                    <a href="mailto:themesflat@support.com" class="h6 link">themesflat@support.com</a>
+                                    <a href="mailto:{{ config('app.email') }}" class="h6 link">{{ config('app.email') }}</a>
                                 </li>
                             </ul>
                             <div class="social-wrap">
                                 <ul class="tf-social-icon">
-                                    <li>
-                                        <a href="https://www.facebook.com/" target="_blank" class="social-facebook">
-                                            <span class="icon"><i class="icon-fb"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://www.instagram.com/" target="_blank" class="social-instagram">
-                                            <span class="icon"><i class="icon-instagram-logo"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://x.com/" target="_blank" class="social-x">
-                                            <span class="icon"><i class="icon-x"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://www.tiktok.com/" target="_blank" class="social-tiktok">
-                                            <span class="icon"><i class="icon-tiktok"></i></span>
-                                        </a>
-                                    </li>
+                                    @if (!empty(config('app.facebook')))
+                                        <li>
+                                            <a href="{{ config('app.facebook') }}" target="_blank" class="social-facebook">
+                                                <span class="icon"><i class="icon-fb"></i></span>
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (!empty(config('app.instra')))
+                                        <li>
+                                            <a href="{{ config('app.instra') }}" target="_blank" class="social-instagram">
+                                                <span class="icon"><i class="icon-instagram-logo"></i></span>
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (!empty(config('app.twitter')))
+                                        <li>
+                                            <a href="{{ config('app.twitter') }}" target="_blank" class="social-x">
+                                                <span class="icon"><i class="icon-x"></i></span>
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (!empty(config('app.tiktok')))
+                                        <li>
+                                            <a href="{{ config('app.tiktok') }}" target="_blank" class="social-tiktok">
+                                                <span class="icon"><i class="icon-tiktok"></i></span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if (!empty(config('app.whatsapp')))
+                                        <li>
+                                            <a href="{{ config('app.whatsapp') }}" target="_blank" class="social-whatsapp">
+                                                <span class="icon"><i class="fab fa-whatsapp"></i></span>
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    @if (!empty(config('app.youtube')))
+                                        <li>
+                                            <a href="{{ config('app.youtube') }}" target="_blank" class="social-youtube">
+                                                <span class="icon"><i class="icon-youtube"></i></span>
+                                            </a>
+                                        </li>
+                                    @endif
                                 </ul>
+
                             </div>
                         </div>
                     </div>
@@ -77,12 +103,11 @@
                         <p class="footer-heading footer-heading-mobile">Information</p>
                         <div class="tf-collapse-content">
                             <ul class="footer-menu-list">
-                                <li><a href="about-us.html" class="link h6">About Us</a></li>
-                                <li><a href="faq.html" class="link h6">Term & Policy</a></li>
-                                <li><a href="faq.html" class="link h6">Help Center</a></li>
-                                <li><a href="blog-grid.html" class="link h6">News & Blog</a></li>
-                                <li><a href="faq.html" class="link h6">Refunds</a></li>
-                                <li><a href="faq.html" class="link h6">Careers</a></li>
+                                <li><a href="{{ route('about') }}" class="link h6">About Us</a></li>
+                                <li><a href="{{ route('privacy.policy') }}" class="link h6">Privacy & Policy</a></li>
+                                <li><a href="{{ route('terms') }}" class="link h6">Term & Condition</a></li>
+                                <li><a href="{{ route('refund.policy') }}" class="link h6">Refund & Return Policy</a></li>
+                                <li><a href="{{ route('contact') }}" class="link h6">Contact Us</a></li>
                             </ul>
                         </div>
                     </div>
@@ -96,30 +121,7 @@
                                     Enter your email below to be the first to know about new collections and product
                                     launches.
                                 </p>
-                                <form class="form_sub has_check" id="subscribe-form">
-                                    <div class="f-content" id="subscribe-content">
-                                        <fieldset class="col">
-                                            <input class="style-stroke" id="subscribe-email" type="email"
-                                                name="email-form" placeholder="Enter your email" required>
-                                        </fieldset>
-                                        <button id="subscribe-button" type="button"
-                                            class="tf-btn animate-btn type-small-2">
-                                            Subscribe
-                                            <i class="icon icon-arrow-right"></i>
-                                        </button>
-                                    </div>
-                                    <div class="checkbox-wrap">
-                                        <input id="remember" type="checkbox" class="tf-check style-3">
-                                        <label for="remember" class="h6">
-                                            By clicking subcribe, you agree to the
-                                            <a href="faq.html" class="text-decoration-underline link">Terms
-                                                of Service</a> and <a href="faq.html"
-                                                class="text-decoration-underline link">
-                                                Privacy Policy</a>.
-                                        </label>
-                                    </div>
-                                    <div id="subscribe-msg"></div>
-                                </form>
+                                @livewire('frontend.subscription')
                             </div>
                         </div>
                     </div>
@@ -127,44 +129,15 @@
             </div>
         </div>
     </div>
+    
     <div class="footer-bottom">
         <div class="container">
             <div class="inner-bottom">
-                <ul class="list-hor">
-                    <li>
-                        <a href="#" class="h6 link">Help & FAQs</a>
-                    </li>
-                    <li class="br-line type-vertical"></li>
-                    <li>
-                        <a href="#" class="h6 link">Factory</a>
-                    </li>
-                </ul>
-                <div class="list-hor flex-wrap">
-                    <span class="h6">Payment:</span>
-                    <ul class="payment-method-list">
-                        <li><img src="images/payment/visa.png" alt="Payment"></li>
-                        <li><img src="images/payment/master-card.png" alt="Payment"></li>
-                        <li><img src="images/payment/amex.png" alt="Payment"></li>
-                        <li><img src="images/payment/discover.png" alt="Payment"></li>
-                        <li><img src="images/payment/paypal.png" alt="Payment"></li>
-                    </ul>
+                <div class="copyright-info">
+                    <p>© {{ date('Y') }} {{ config('app.name') }} | All rights reserved</p>
                 </div>
-                <div class="list-hor">
-                    <div class="tf-currencies">
-                        <select class="tf-dropdown-select style-default type-currencies">
-                            <option selected data-thumbnail="images/country/us.png">USD</option>
-                            <option data-thumbnail="images/country/vie.png">VND</option>
-                        </select>
-                    </div>
-                    <span class="br-line type-vertical"></span>
-                    <div class="tf-languages">
-                        <select class="tf-dropdown-select style-default type-languages">
-                            <option>English</option>
-                            <option>العربية</option>
-                            <option>简体中文</option>
-                            <option>اردو</option>
-                        </select>
-                    </div>
+                <div class="text-end powered-by">
+                    <p>Powered By: {{ config('app.name') }}</p>
                 </div>
             </div>
         </div>
@@ -736,168 +709,6 @@
     </div>
 </div> --}}
 <!-- /New Letter -->
-
-<!-- Demo -->
-<div class="modal fade modalDemo" id="modalDemo">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="header">
-                <h3 class="demo-title">Ultimate HTML Theme</h3>
-                <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
-            </div>
-            <div class="mega-menu">
-                <div class="row-demo">
-                    <div class="demo-item">
-                        <a href="index.html" class="demo-img"><img src="images/demo/home-fashion-1.jpg" alt="Demo"></a>
-                        <a href="index.html" class="demo-name">Home Fashion 1</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-fashion-2.html" class="demo-img"><img src="images/demo/home-fashion-2.jpg"
-                                alt="Demo"></a>
-                        <a href="home-fashion-2.html" class="demo-name">Home Fashion 2</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-fashion-3.html" class="demo-img"><img src="images/demo/home-fashion-3.jpg"
-                                alt="Demo"></a>
-                        <a href="home-fashion-3.html" class="demo-name">Home Fashion 3</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-fashion-4.html" class="demo-img"><img src="images/demo/home-fashion-4.jpg"
-                                alt="Demo"></a>
-                        <a href="home-fashion-4.html" class="demo-name">Home Fashion 4</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-cosmetic.html" class="demo-img"><img src="images/demo/home-cosmetic.jpg"
-                                alt="Demo"></a>
-                        <a href="home-cosmetic.html" class="demo-name">Home Cosmetic</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-skin-care.html" class="demo-img"><img src="images/demo/home-skin-care.jpg"
-                                alt="Demo"></a>
-                        <a href="home-skin-care.html" class="demo-name">Home Skincare</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-decor.html" class="demo-img"><img src="images/demo/home-decor.jpg" alt="Demo"></a>
-                        <a href="home-decor.html" class="demo-name">Home Decor</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-jewelry.html" class="demo-img"><img src="images/demo/home-jewelry.jpg"
-                                alt="Demo"></a>
-                        <a href="home-jewelry.html" class="demo-name">Home Jewelry</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-electronic-market.html" class="demo-img"><img
-                                src="images/demo/home-electronic-market.jpg" alt="Demo"></a>
-                        <a href="home-electronic-market.html" class="demo-name">Home
-                            Electric Market</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-pet-store.html" class="demo-img"><img src="images/demo/home-pet-store.jpg"
-                                alt="Demo"></a>
-                        <a href="home-pet-store.html" class="demo-name">Home Pet Store</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-sneaker.html" class="demo-img"><img src="images/demo/home-sneaker.jpg"
-                                alt="Demo"></a>
-                        <a href="home-sneaker.html" class="demo-name">Home Sneaker</a>
-                    </div>
-                    <!-- New -->
-                    <div class="demo-item">
-                        <a href="home-book.html" class="demo-img">
-                            <img class="lazyload" src="images/demo/home-book.jpg" data-src="images/demo/home-book.jpg"
-                                alt="Demo">
-                            <div class="demo-label">
-                                <span>New</span>
-                            </div>
-                        </a>
-                        <a href="home-book.html" class="demo-name link">Home Book</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-organic.html" class="demo-img">
-                            <img class="lazyload" src="images/demo/home-organic.jpg"
-                                data-src="images/demo/home-organic.jpg" alt="Demo">
-                            <div class="demo-label">
-                                <span>New</span>
-                            </div>
-                        </a>
-                        <a href="home-organic.html" class="demo-name link">Home Organic</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-medical.html" class="demo-img">
-                            <img class="lazyload" src="images/demo/home-medical.jpg"
-                                data-src="images/demo/home-medical.jpg" alt="Demo">
-                            <div class="demo-label">
-                                <span>New</span>
-                            </div>
-                        </a>
-                        <a href="home-medical.html" class="demo-name link">Home Medical</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-gym.html" class="demo-img">
-                            <img class="lazyload" src="images/demo/home-gym.jpg" data-src="images/demo/home-gym.jpg"
-                                alt="Demo">
-                            <div class="demo-label">
-                                <span>New</span>
-                            </div>
-                        </a>
-                        <a href="home-gym.html" class="demo-name link">Home Gym</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-art.html" class="demo-img">
-                            <img class="lazyload" src="images/demo/home-art.jpg" data-src="images/demo/home-art.jpg"
-                                alt="Demo">
-                            <div class="demo-label">
-                                <span>New</span>
-                            </div>
-                        </a>
-                        <a href="home-art.html" class="demo-name link">Home Art</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-accessories.html" class="demo-img">
-                            <img class="lazyload" src="images/demo/home-accessories.jpg"
-                                data-src="images/demo/home-accessories.jpg" alt="Demo">
-                            <div class="demo-label">
-                                <span>New</span>
-                            </div>
-                        </a>
-                        <a href="home-accessories.html" class="demo-name link">Home Accessories</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-car-auto.html" class="demo-img">
-                            <img class="lazyload" src="images/demo/home-car-auto.jpg"
-                                data-src="images/demo/home-car-auto.jpg" alt="Demo">
-                            <div class="demo-label">
-                                <span>New</span>
-                            </div>
-                        </a>
-                        <a href="home-car-auto.html" class="demo-name link">Home Car Auto</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-travel.html" class="demo-img">
-                            <img class="lazyload" src="images/demo/home-travel.jpg"
-                                data-src="images/demo/home-travel.jpg" alt="Demo">
-                            <div class="demo-label">
-                                <span>New</span>
-                            </div>
-                        </a>
-                        <a href="home-travel.html" class="demo-name link">Home Travel</a>
-                    </div>
-                    <div class="demo-item">
-                        <a href="home-watch.html" class="demo-img">
-                            <img class="lazyload" src="images/demo/home-watch.jpg" data-src="images/demo/home-watch.jpg"
-                                alt="Demo">
-                            <div class="demo-label">
-                                <span>New</span>
-                            </div>
-                        </a>
-                        <a href="home-watch.html" class="demo-name link">Home Watch</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /Demo -->
 
 <!-- Scroll Top -->
 <button id="goTop">

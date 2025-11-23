@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserDashboardController extends Controller
 {
@@ -44,5 +45,42 @@ class UserDashboardController extends Controller
         return view('frontend.pages.user.my-wishlist', compact('user'));
     }
 
+    public function uploadAvatar(Request $request)
+    {
+        $request->validate([
+            'profilePhoto' => 'required|image'
+        ]);
+
+        $user = auth()->user();
+
+        if ($user->avatar) {
+            Storage::disk('real_public')->delete($user->avatar);
+        }
+
+        // Save new image
+        $path = $request->file('profilePhoto')->store('uploads/user', 'real_public');
+
+        $user->update(['avatar' => $path]);
+
+        return response()->json([
+            'status' => 'success',
+            'html' => view('frontend.pages.user.profile-img', compact('user'))->render(),
+        ]);
+    }
+
+    public function removeAvatar()
+    {
+        $user = auth()->user();
+
+        if ($user->avatar) {
+            Storage::disk('real_public')->delete($user->avatar);
+            $user->update(['avatar' => null]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'html' => view('frontend.pages.user.profile-img', compact('user'))->render(),
+        ]);
+    }
 
 }

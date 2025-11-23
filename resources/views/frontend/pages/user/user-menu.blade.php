@@ -1,31 +1,39 @@
-<ul class="navbar-nav ac-navbar">
-    <li class="nav-item">
-        <a href="{{ route('user.dashboard') }}" class="nav-link">
-            <span class="material-icons arrow-icons">arrow_back</span> Back to Dashboard
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="{{ route('user.orders') }}" class="nav-link {{ request()->routeIs('user.orders') ? 'activeTab' : '' }} ">
-            <span class="material-icons">chrome_reader_mode</span>Orders
-        </a>
-    </li>
+<div class="sidebar-account sidebar-content-wrap sticky-top">
 
-    <li class="nav-item">
-        <a href="{{ route('user.edit.profile') }}" class="nav-link {{ request()->routeIs('user.edit.profile') ? 'activeTab' : '' }} ">
-            <span class="material-icons">person</span>Edit
-            Account
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="{{ route('user.edit.password') }}" class="nav-link {{ request()->routeIs('user.edit.password') ? 'activeTab' : '' }} ">
-            <span class="material-icons">lock</span>Password
-        </a>
-    </li>
+    <div id="profile_img">
+        @include('frontend.pages.user.profile-img')
+    </div>
 
-    <li class="nav-item">
-        <a href="{{ route('user.wishlist') }}" class="nav-link {{ request()->routeIs('user.wishlist') ? 'activeTab' : '' }}">
-            <span class="material-icons">favorite_border</span>
-        Saved List</a>
-    </li>
+    <ul class="my-account-nav">
+        <li>
+            <a href="{{ route('user.dashboard') }}"
+                class="my-account-nav_item h5 {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
+                <i class="icon icon-circle-four"></i>
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('user.orders') }}"
+                class="my-account-nav_item h5 {{ request()->routeIs('user.orders') ? 'active' : '' }}">
+                <i class="icon icon-box-arrow-down"></i>
+                Oders
+            </a>
+        </li>
+        <li>
+            <a href="account-setting.html" class="my-account-nav_item h5">
+                <i class="icon icon-setting"></i>
+                Setting
+            </a>
+        </li>
+        <li>
+            <a onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  class="my-account-nav_item h5">
+                <i class="icon icon-sign-out"></i>
+                Log out
+            </a>
+        </li>
+    </ul>
+</div>
 
-</ul>
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>

@@ -78,6 +78,8 @@ Route::controller(UserDashboardController::class)->middleware('auth')->group(fun
     Route::get('/account/edit-profile', 'editProfile')->name('user.edit.profile');
     Route::get('/account/update-password', 'updatePassword')->name('user.edit.password');
     Route::get('/account/my-wishlist', 'wishlist')->name('user.wishlist');
+    Route::post('avatar/upload', 'uploadAvatar')->name('user.avatar.upload');
+    Route::post('avatar/remove', 'removeAvatar')->name('user.avatar.remove');
 });
 
 Route::controller(OfferController::class)->group(function () {

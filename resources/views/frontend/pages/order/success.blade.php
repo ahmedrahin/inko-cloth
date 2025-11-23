@@ -75,7 +75,7 @@
                         <p class="invoice_value h6 ">{{ $payment }}</p>
                     </div>
                     <div class="invoice-info_item invoice-info_date">
-                        <h5 class="invoice_label fw-semibold">Total:</h5>
+                        <h5 class="invoice_label fw-semibold">Total Amount:</h5>
                         <p class="invoice_value h6 ">${{ format_price($order->grand_total) }}</p>
                     </div>
                     <div class="invoice-info_item" style="min-width: 300px;">
@@ -130,7 +130,7 @@
                                 <td class="h6 invoice__total text-end">-${{ format_price($order->coupon_discount, 2) }}</td>
                             </tr>
                             <tr>
-                                <td class="h6 invoice__desc fw-semibold">Total Due</td>
+                                <td class="h6 invoice__desc fw-semibold">Total</td>
                                 <td></td>
                                 <td></td>
                                 <td class="h6 invoice__amount fw-semibold text-primary text-end">${{ format_price($order->grand_total, 2) }}</td>

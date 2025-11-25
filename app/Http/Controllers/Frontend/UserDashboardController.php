@@ -18,7 +18,9 @@ class UserDashboardController extends Controller
 
     public function orders(){
         $user = User::findOrFail(Auth::id());
-        return view('frontend.pages.user.order', compact('user'));
+        $orders = $user->orders()->orderBy('id', 'desc')->paginate(5);
+        
+        return view('frontend.pages.user.order', compact('user', 'orders'));
     }
 
     public function invoice($user_id, $order_id){

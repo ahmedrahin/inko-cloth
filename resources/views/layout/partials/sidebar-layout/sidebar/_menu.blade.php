@@ -349,13 +349,13 @@
                         </a>
 
                         <!--begin:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('order-management.order.create*') ? 'active' : '' }}"
+                        {{-- <a class="menu-link {{ request()->routeIs('order-management.order.create*') ? 'active' : '' }}"
                             href="{{ route('order-management.order.create') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
                             <span class="menu-title">Add New Order</span>
-                        </a>
+                        </a> --}}
                         <!--end:Menu link-->
 
                         <a class="menu-link {{ request()->routeIs('order-management.order.trash*') ? 'active' : '' }}"
@@ -497,15 +497,15 @@
             </div>
             <!--end:Menu item-->
 
-            <div class="menu-item pt-5">
+            {{-- <div class="menu-item pt-5">
                 <!--begin:Menu content-->
                 <div class="menu-content">
                     <span class="menu-heading fw-bold text-uppercase fs-7">Reports</span>
                 </div>
                 <!--end:Menu content-->
-            </div>
+            </div> --}}
 
-             <div data-kt-menu-trigger="click"
+             {{-- <div data-kt-menu-trigger="click"
                 class="menu-item menu-accordion {{ request()->routeIs('report.*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
@@ -544,7 +544,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!--settings:Menu item-->
             <div class="menu-item pt-5">

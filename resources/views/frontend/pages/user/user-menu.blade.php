@@ -14,13 +14,13 @@
         </li>
         <li>
             <a href="{{ route('user.orders') }}"
-                class="my-account-nav_item h5 {{ request()->routeIs('user.orders') ? 'active' : '' }}">
+                class="my-account-nav_item h5 {{ request()->routeIs('user.orders') || request()->routeIs('order.invoice') ? 'active' : '' }}">
                 <i class="icon icon-box-arrow-down"></i>
-                Oders
+                Orders
             </a>
         </li>
         <li>
-            <a href="account-setting.html" class="my-account-nav_item h5">
+            <a href="{{ route('user.edit.profile') }}" class="my-account-nav_item h5 {{ request()->routeIs('user.edit.profile') ? 'active' : '' }}">
                 <i class="icon icon-setting"></i>
                 Setting
             </a>

@@ -1,79 +1,123 @@
-<div class="ht-item search" id="search" wire:ignore.self>
-    <input
-        type="text"
-        wire:model.debounce.300ms="searchQuery"
-        placeholder="Search products..."
-        autocomplete="off"
-        wire:keydown.enter="performSearch"
-    />
-
-    @if(!empty($searchQuery))
-        <div class="dropdown-menu" id="searchDropdown" style="display: block;">
-            <div class="search-details">
-                <ul class="nav nav-tabs">
-                    <li
-                        wire:click="setActiveTab('products')"
-                        class="{{ $activeTab === 'products' ? 'active' : '' }}"
-                    >
-                        Products ({{ count($products) }})
-                    </li>
-                    <li
-                        wire:click="setActiveTab('categories')"
-                        class="{{ $activeTab === 'categories' ? 'active' : '' }}"
-                    >
-                        Categories ({{ count($filteredCategories) }})
-                    </li>
-                </ul>
-
-                @if($activeTab === 'products')
-                    <div id="tab-prod" class="search-results" style="display: block;">
-                        @forelse($products as $product)
-                            <div class="search-item">
-                                <a href="{{ route('product-details', $product['slug']) }}">
-                                    <div class="image">
-                                        <img src="{{ asset($product['thumb_image']) }}" alt="{{ $product['name'] }}">
-                                    </div>
-                                    <div class="name">{{ $product['name'] }}</div>
-                                    <div class="price">
-                                        {{ format_price($product['offer_price']) }}৳
-                                        @if (isset($product['discount_option']) && $product['discount_option'] != 1)
-                                            <del class="price-old">{{ format_price($product['base_price']) }}৳</del>
-                                        @endif
-                                    </div>
-                                </a>
-                            </div>
-                        @empty
-                            <div class="no-results">No products found</div>
-                        @endforelse
-
-                       @if(count($products) > 7)
-                            <div class="search-item remainder-count">
-                                <a href="{{ route('search.products', ['query' => $searchQuery]) }}">
-                                    See all results
-                                </a>
-                            </div>
-                        @endif
-                    </div>
-                @else
-                    <div id="tab-cat" class="search-results" style="display: block;">
-                        @forelse($filteredCategories as $category)
-                        <div class="search-item category">
-                            <a href="{{ route('category.product',$category->slug) }}">
-                                <div class="image">
-                                    <img  src="{{ $category->image ? asset($category->image) : asset('frontend/image/blank-image.svg') }}" >
-                                </div>
-                                <div class="name" style="margin-left:62px;">{{ $category->name }}</div>
-                                <div class="product-count">{{ $category->product_count }} products</div>
-                            </a>
-                        </div>
-                        @empty
-                        <div class="no-results">No categories found</div>
-                        @endforelse
-                    </div>
-                @endif
+<div class="modal modalCentered fade modal-search" id="search" wire:ignore.self>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
+            <div>
+                <form class="form-search style-2" wire:submit.prevent="performSearch">
+                    <fieldset>
+                        <input type="text" 
+                               placeholder="Search products..." 
+                               class="style-stroke" 
+                               wire:model.debounce.300ms="searchQuery"
+                               autocomplete="off"
+                               required>
+                    </fieldset>
+                    <button type="submit" class="link">
+                        <i class="icon icon-magnifying-glass"></i>
+                    </button>
+                </form>
             </div>
-        </div>
-    @endif
 
-    <button wire:click="performSearch" class="material-icons">search</button>
+            @if(!empty($searchQuery))
+                <div class="account-order_tab">
+                    <ul class="tab-order_detail" role="tablist">
+                        <li class="nav-tab-item" role="presentation">
+                            <a href="#order-history" 
+                               data-bs-toggle="tab" 
+                               class="tf-btn-line tf-btn-tab {{ $activeTab === 'products' ? 'active' : '' }}"
+                               aria-selected="false" 
+                               role="tab" 
+                               tabindex="-1"
+                               wire:click="setActiveTab('products')">
+                                <span class="h4">
+                                    Products ({{ count($products) }})
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-tab-item" role="presentation">
+                            <a href="#item-detail" 
+                               data-bs-toggle="tab" 
+                               class="tf-btn-line tf-btn-tab {{ $activeTab === 'categories' ? 'active' : '' }}"
+                               aria-selected="false" 
+                               role="tab" 
+                               tabindex="-1"
+                               wire:click="setActiveTab('categories')">
+                                <span class="h4">
+                                    Categories ({{ count($filteredCategories) }})
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content overflow-hidden">
+                        <div class="tab-pane view-history-wrap {{ $activeTab === 'products' ? 'active show' : '' }}" id="order-history" role="tabpanel">
+                            <div class="view-history-list">
+                                @forelse($products as $product)
+                                    <a class="item text-main link h6" 
+                                       href="{{ route('product-details', $product['slug']) }}"
+                                       style="border-bottom: 1px solid #5f615e1c;padding-bottom: 10px;"
+                                       >
+                                       <div>
+                                            <span>{{ $product['name'] }}</span>
+                                            <div class="price-info" style="font-size: 14px;">
+                                                ${{ format_price($product['offer_price']) }}
+                                                @if (isset($product['discount_option']) && $product['discount_option'] != 1)
+                                                    <del class="text-danger">${{ format_price($product['base_price']) }}</del>
+                                                @endif
+                                            </div>
+                                       </div>
+                                        <i class="icon icon-arrow-top-right"></i>
+                                    </a>
+                                @empty
+                                    <div class="no-results">No products found</div>
+                                @endforelse
+
+                                @if(count($products) > 6)
+                                    <a class="item text-main link h6 see-all" 
+                                       href="{{ route('search.products', ['query' => $searchQuery]) }}">
+                                        <span>See all results</span>
+                                        <i class="icon icon-arrow-top-right"></i>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="tab-pane view-history-wrap {{ $activeTab === 'categories' ? 'active show' : '' }}" id="item-detail" role="tabpanel">
+                            <div class="view-history-list ">
+                                @forelse($filteredCategories as $category)
+                                    <a class="item text-main link h6" 
+                                       href="{{ route('category.products', $category->slug) }}">
+                                        <div>
+                                            <span>{{ $category->name }}</span>
+                                            <div class="product-count" style="font-size: 14px;">{{ $category->product_count }} products</div>
+                                        </div>
+                                        <i class="icon icon-arrow-top-right"></i>
+                                    </a>
+                                @empty
+                                    <div class="no-results">No categories found</div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @else
+                {{-- Popular searches when no query --}}
+                <div class="view-history-wrap">
+                    <h4 class="title">Popular Searches</h4>
+                    <div class="view-history-list">
+                        <a class="item text-main link h6" href="shop-default-list.html">
+                            <span>Graphic tees</span>
+                            <i class="icon icon-arrow-top-right"></i>
+                        </a>
+                        <a class="item text-main link h6" href="shop-default-list.html">
+                            <span>Summer collection</span>
+                            <i class="icon icon-arrow-top-right"></i>
+                        </a>
+                        <a class="item text-main link h6" href="shop-default-list.html">
+                            <span>Casual wear</span>
+                            <i class="icon icon-arrow-top-right"></i>
+                        </a>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
 </div>

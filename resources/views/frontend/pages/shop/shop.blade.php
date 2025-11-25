@@ -49,7 +49,7 @@
             </div>
         </section>
 
-        {{-- <div class="flat-spacing pb-0">
+        <div class="flat-spacing pb-0">
             <div class="container">
                 <div dir="ltr" class="swiper tf-swiper" data-preview="5" data-tablet="4" data-mobile-sm="3" data-mobile="2" data-space-lg="40"
                     data-space-md="24" data-space="12" data-pagination="2" data-pagination-sm="3" data-pagination-md="4" data-pagination-lg="5">
@@ -74,7 +74,7 @@
                     <div class="sw-dot-default tf-sw-pagination"></div>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
         <div class="flat-spacing-3" style="margin-bottom: 70px;">
             <div class="container">

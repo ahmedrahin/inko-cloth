@@ -7,27 +7,25 @@
                 </a>
             </div>
             <div class="col-xl-3 col-md-4 col-6 text-center text-xl-start">
-                <a href="index.html" class="logo-site justify-content-center justify-content-xl-start">
-                    <img src="images/logo/logo.svg" alt="Logo">
+                <a href="{{ url('/') }}" class="logo-site justify-content-center justify-content-xl-start">
+                    <img src="{{ config('app.logo') }}" alt="Logo">
                 </a>
             </div>
             <div class="col-xl-6 d-none d-xl-block">
                 <nav class="box-navigation">
                     <ul class="box-nav-menu">
                         <li class="menu-item">
-                            <a href="javascript:void(0)" class="item-link">HOME</a>
+                            <a href="{{ route('homepage') }}" class="item-link">HOME</a>
                         </li>
                         <li class="menu-item">
                             <a href="{{ route('shop') }}" class="item-link">SHOP</a>
                         </li>
-                        <li class="menu-item">
-                            <a href="javascript:void(0)" class="item-link">PRODUCT</a>
+                        
+                        <li class="menu-item position-relative">
+                            <a href="javascript:void(0)" class="item-link">Blog</a>
                         </li>
                         <li class="menu-item position-relative">
-                            <a href="javascript:void(0)" class="item-link">PAGE</a>
-                        </li>
-                        <li class="menu-item position-relative">
-                            <a href="javascript:void(0)" class="item-link">BLOG</a>
+                            <a href="{{ route('contact') }}" class="item-link">Contact Us</a>
                         </li>
                     </ul>
                 </nav>
@@ -63,7 +61,7 @@
 </header>
 
 <livewire:frontend.cart.shopping-cart />
-
+<livewire:frontend.shop.search-box />
 
 <!-- Mobile Menu -->
 <div class="offcanvas offcanvas-start canvas-mb" id="mobileMenu">

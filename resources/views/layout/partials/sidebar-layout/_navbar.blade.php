@@ -19,14 +19,14 @@
             </span>
         </div>
 
-        <div data-kt-menu-placement="bottom-start"
+        {{-- <div data-kt-menu-placement="bottom-start"
             class="menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
             <!--begin:Menu link-->
             <span class="menu-link">
                 <span class="menu-title"><a href="{{ route('order-management.order.create') }}">Add New Order</a></span>
                 <span class="menu-arrow d-lg-none"></span>
             </span>
-        </div>
+        </div> --}}
         <div data-kt-menu-placement="bottom-start"
             class="menu-item here menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
             <!--begin:Menu link-->

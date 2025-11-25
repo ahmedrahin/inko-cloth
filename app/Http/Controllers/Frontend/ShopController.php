@@ -33,7 +33,7 @@ class ShopController extends Controller
 
     private function getFilteredProducts(Request $request, $query)
     {
-        $perPage = $request->get('limit', 2);
+        $perPage = $request->get('limit', config('website_settings.item_per_page'));
 
         // Price range filter
         $from = $request->input('from', 0);

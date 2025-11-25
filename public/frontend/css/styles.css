@@ -1108,7 +1108,7 @@ a:focus, a:hover {
 
 .flat-spacing {
   padding-top: 90px;
-  padding-bottom: 112px;
+  padding-bottom: 90px;
 }
 @media (max-width: 1024px) {
   .flat-spacing {
@@ -8058,7 +8058,7 @@ input[type=number]::-webkit-outer-spin-button {
 .modal-search .modal-content {
   padding: 48px;
   display: grid;
-  gap: 40px;
+  gap: 10px;
 }
 @media (max-width: 991px) {
   .modal-search .modal-content {
@@ -8080,7 +8080,7 @@ input[type=number]::-webkit-outer-spin-button {
 .modal-search .view-history-wrap .view-history-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 .modal-search .view-history-wrap .view-history-list .item {
   display: flex;
@@ -19576,10 +19576,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 .table-my_order td:first-child {
   width: 155px;
 }
-.table-my_order th:nth-child(2),
-.table-my_order td:nth-child(2) {
-  width: 415px;
-}
+
 .table-my_order th:last-child,
 .table-my_order td:last-child {
   width: 130px;
@@ -19599,16 +19596,11 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 @media (min-width: 1440px) {
   .table-my_order td {
-    height: 147px;
+    height: 100px;
     vertical-align: middle;
   }
 }
-@media (max-width: 767px) {
-  .table-my_order th:nth-child(2),
-  .table-my_order td:nth-child(2) {
-    min-width: 300px;
-  }
-}
+
 
 .tb-order_product {
   display: flex;
@@ -19673,14 +19665,14 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 
 .form-change_pass {
   display: grid;
-  gap: 40px;
+  gap: 30px;
 }
 .form-change_pass .site-change {
   margin-bottom: 32px;
 }
 @media (min-width: 1200px) {
   .form-change_pass {
-    gap: 48px;
+    gap: 30px;
   }
 }
 

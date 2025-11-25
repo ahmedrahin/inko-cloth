@@ -1,292 +1,282 @@
 @extends('frontend.layout.app')
 
 @section('page-title')
-    Order Information
+Order Information
 @endsection
 
 
 @section('page-css')
-    <link href="{{ asset('frontend/style/accounts.min.12.css') }}" type="text/css" rel="stylesheet" media="screen" />
-    <style type="text/css">
-        .order-details .head {
-            text-align: center;
-            padding-bottom: 30px;
+    <style>
+        .account-order_detail .detail-content_info{
+            gap: 0 !important;
         }
-
-        .order-details p {
-            font-size: 14px;
-            line-height: 18px;
-        }
-
-        .order-details .head h1 {
-            margin: 0 0 5px;
-        }
-
-        .order-details .head p {
-            font-size: 14px;
-            line-height: 18px;
-            margin: 0;
-        }
-
-        .order-details .head .status {
-            display: inline-block;
-            padding: 3px 5px;
-            border-radius: 2px;
-            background: #27AE60;
-            color: #fff;
-            font-size: 12px;
-        }
-
-        .order-details .order-summary table {
-            width: 100%;
-        }
-
-        .order-details .order-summary table td {
-            padding: 0 0 7px;
-        }
-
-        .order-details .order-summary table .due td {
-            border-top: 1px solid #ddd;
-            padding-top: 7px;
-        }
-
-        .order-details .order-summary table .due td.text-right {
-            color: red;
-        }
-
-        .order-details .order-summary table .paid td.text-right {
-            color: #27AE60;
-        }
-
-        .order-details .table-order-products img {
-            height: 50px;
-        }
-
-        .order-details .table-order-products {
-            margin-bottom: 20px;
-        }
-
-        .order-details .table-order-products td {
-            padding-left: 0;
-        }
-        .history p {
-            font-size: 14px;
-            line-height: 20px;
-        }
-
-        .order-details .table-order-products thead td {
-            border-bottom: 1px solid #eee;
-            background: #fff;
-        }
-
-        .order-details .order-details-comment {
-            border-bottom: 1px solid #eee;
-            margin-bottom: 20px;
-        }
-
-        .order-details-history .histories {
-            border-left: 2px solid #ddd;
-            padding-left: 20px;
-            margin-left: 4px;
-        }
-
-        .order-details-history .histories .history {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .order-details-history {
-            height: 100%;
-        }
-
-        .order-details-history .histories .history:before {
-            content: "";
-            position: absolute;
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 10px;
-            border: 2px solid #EF4A23;
-            background: #fff;
-            left: -26px;
-            top: 6px;
-        }
-
-        .order-details-history .histories h5 {
-            margin-bottom: 4px;
-        }
-
-        .order-details-history .histories p {
-            margin-bottom: 0px;
-        }
-
-        .order-details-history .histories span {
-            display: inline-block;
-            margin-top: 5px;
-        }
-
-        @media (max-width: 768px) {
-            .order-details-history {
-                margin-top: 15px;
-            }
-            .col-md-6.order-summary {
-                padding-top: 20px;
-            }
-        }
-        .pending {
-            background-color: #9e9e9e !important;
-            color: white;
-        }
-        .processing {
-            background-color: #03a9f4 !important;
-            color: white;
-        }
-        .delivered {
-            background-color: #4caf50 !important;
-            color: white;
-        }
-       .completed {
-            background-color: #388e3c !important;
-            color: white;
-        }
-        .canceled {
-            background-color: #f44336 !important;
-            color: white;
-        }
-        .fake {
-            background-color: #ff9800 !important; 
-            color: white;
-            font-weight: bold;
-        }
-
     </style>
-    
 @endsection
 
 @section('body-content')
 
-    <section class="after-header p-tb-10">
-        <div class="container">
-            <ul class="breadcrumb">
-                <li><a href="{{ url('/') }}"><i class="material-icons" title="Home">home</i></a></li>
-                <li><a href="{{ route('user.dashboard') }}">Account</a></li>
-                <li><a href="{{ route('user.orders') }}">Order History</a></li>
-                <li><a href="">Order Information</a></li>
+<section class="s-page-title">
+    <div class="container">
+        <div class="content">
+            <h1 class="title-page">@yield('page-title')</h1>
+            <ul class="breadcrumbs-page">
+                <li><a href="{{ route('homepage') }}" class="h6 link">Home</a></li>
+                <li class="d-flex"><i class="icon icon-caret-right"></i></li>
+                <li><a href="{{ route('user.dashboard') }}" class="h6 link">My Dashboard</a></li>
+                <li class="d-flex"><i class="icon icon-caret-right"></i></li>
+                <li>
+                    <h6 class="current-page fw-normal">@yield('page-title')</h6>
+                </li>
             </ul>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="info-page bg-bt-gray" style="padding-top: 40px;">
-        <div class="container ac-layout p-tb-15">
-            <div class="row">
-                <div class="col-xs-12 col-md-8">
-                    <div class="ws-box content order-details">
-                        @php
-                            $status = $order->delivery_status;
-                            $labels = [
-                                'pending'    => 'Pending',
-                                'processing' => 'Processing',
-                                'delivered'  => 'Delivered',
-                                'completed'  => 'Completed',
-                                'canceled'   => 'Cancelled',
-                                'fake'       => 'Fake Order',
-                            ];
-                        @endphp
+<section class="flat-spacing">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 d-none d-xl-block">
+                @include('frontend.pages.user.user-menu')
+            </div>
 
-                        <div class="head">
-                            <h1>Order Information {{ $order->order_id }}</h1>
-                            <span class="status {{ $status }}">{{ $labels[$status] ?? ucfirst($status) }}</span>
-                        </div>
-                        <div class="g-box">
-                            <div class="row">
-                                <div class="col-md-6 address">
-                                    <h5>Shipping Address</h5>
-                                    <address>
-                                        <div style="margin-bottom: 5px;">{{ $order->name }}</div>
-                                        <div style="margin-bottom: 5px;">{{ $order->shipping_address }}</div>
-                                        <div style="margin-bottom: 5px;">{{ $order->district->name }}</div>
-                                    </address>
-                                    <div class="telephone p-tb-15"><span>Mobile: </span><span>{{ $order->phone }}</span></div>
+            <div class="col-xl-9">
+                <div class="my-account-content flat-animate-tab">
+                    <div class="account-order_detail">
+                        <div class="order-detail_content" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 30px; align-items: start;">
+                            <div class="detail-content_info">
+                                @php
+                                    $statusClasses = [
+                                        'pending' => 'bg-warning',
+                                        'processing' => 'bg-info',
+                                        'delivered' => 'bg-success',
+                                        'completed' => 'bg-success',
+                                        'canceled' => 'bg-danger',
+                                        'fake' => 'bg-secondary',
+                                    ];
+                                    
+                                    $statusLabels = [
+                                        'pending' => 'Pending',
+                                        'processing' => 'Processing',
+                                        'delivered' => 'Delivered',
+                                        'completed' => 'Completed',
+                                        'canceled' => 'Cancelled',
+                                        'fake' => 'Fake Order',
+                                    ];
+
+                                    $payment = match ($order->payment_type) {
+                                        'cod' => 'Cash On Delivery',
+                                        'sslcommerz' => 'Online Payment',
+                                        default => 'Unknown',
+                                    };
+                                @endphp
+                                
+                                <div class="detail-info_status {{ $statusClasses[$order->delivery_status] ?? 'bg-primary' }} h6" style="padding: 8px 16px; border-radius: 20px; color: white; font-weight: 500; display: inline-block; width: fit-content; background: #3a86ff;">
+                                    {{ $statusLabels[$order->delivery_status] ?? ucfirst($order->delivery_status) }}
                                 </div>
-                                <div class="col-md-6 order-summary">
-                                    <h5>Order Summary</h5>
-                                    <table class="table">
-                                        <tr>
-                                            <td class="text-left">Sub-Total</td>
-                                            <td class="text-right">{{ format_price($order->orderItems->sum(fn($i) => $i->price * $i->quantity)) }}৳</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-left">Delivery Charge</td>
-                                            <td class="text-right">{{ format_price($order->shipping_cost) }}৳</td>
-                                        </tr>
-                                        @if( $order->coupon_discount )
-                                            <tr>
-                                                <td class="text-left">Coupon Discount</td>
-                                                <td class="text-right">{{ format_price($order->coupon_discount) }}৳</td>
-                                            </tr>
-                                        @endif
-                                        <tr>
-                                            <td class="text-left">Total</td>
-                                            <td class="text-right">{{ format_price($order->grand_total) }}৳</td>
-                                        </tr>
-                                        <tr class="paid">
-                                            <td class="text-left">Paid</td>
-                                            <td class="text-right">{{ format_price($order->paid_amount ?? 0) }}৳</td>
-                                        </tr>
-                                        <tr class="due">
-                                            <td class="text-left">Due</td>
-                                            <td class="text-right">{{ format_price($order->grand_total - $order->paid_amount) }}৳</td>
-                                        </tr>
-                                    </table>
+
+                                <br>
+
+                                <div class="detail-info_item" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px;">
+                                    <p class="info-item_label" style="font-size: 14px; color: #666; font-weight: 500; margin: 0;">Order No:</p>
+                                    <p class="info-item_value" style="font-size: 16px; color: #333; font-weight: 400; margin: 0;">#{{ $order->order_id }}</p>
+                                </div>
+                                
+                                <div class="detail-info_item" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px;">
+                                    <p class="info-item_label" style="font-size: 14px; color: #666; font-weight: 500; margin: 0;">Order date</p>
+                                    <p class="info-item_value" style="font-size: 16px; color: #333; font-weight: 400; margin: 0;">{{ \Carbon\Carbon::parse($order->order_date)->format('d M Y, h:i a') }}</p>
+                                </div>
+                                
+                                <div class="detail-info_item" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px;">
+                                    <p class="info-item_label" style="font-size: 14px; color: #666; font-weight: 500; margin: 0;">Payment Method</p>
+                                    <p class="info-item_value" style="font-size: 16px; color: #333; font-weight: 400; margin: 0;">{{ $payment }}</p>
+                                </div>
+                                
+                                <div class="detail-info_item" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px;">
+                                    <p class="info-item_label" style="font-size: 14px; color: #666; font-weight: 500; margin: 0;">Address</p>
+                                    <p class="info-item_value" style="font-size: 16px; color: #333; font-weight: 400; margin: 0; line-height: 1.4;">
+                                        {{ $order->name }}<br>
+                                        {{ $order->shipping_address }}<br>
+                                        {{ $order->district->name ?? '' }}
+                                    </p>
+                                </div>
+                                
+                                <div class="detail-info_item" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px;">
+                                    <p class="info-item_label" style="font-size: 14px; color: #666; font-weight: 500; margin: 0;">Mobile</p>
+                                    <p class="info-item_value" style="font-size: 16px; color: #333; font-weight: 400; margin: 0;">{{ $order->phone }}</p>
                                 </div>
                             </div>
-                        </div>
-                        <h5 class="m-t-30">Products</h5>
-                        <table class="table table-bordered table-hover table-order-products">
-                            <thead>
-                                <tr>
-                                    <td class="text-left">Image</td>
-                                    <td class="text-left">Product Name</td>
-                                    <td class="text-center">Quantity</td>
-                                    <td class="text-right">Total</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($order->orderItems as $item)
-                                    <tr>
-                                        <td> 
-                                            <img src="{{ asset($item->product->thumb_image) }}">
-                                        </td>
-                                        <td class="text-left">
-                                            <a href="{{ route('product-details', $item->product->slug) }}">{{ $item->product->name }}</a> </td>
-                                        <td class="text-center" style="text-align: center;">{{ $item->quantity }}</td>
-                                        <td class="text-right">{{ $item->price * $item->quantity }}৳</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="text-right">
-                            <a href="{{ route('order.invoice.pdf', $order->order_id) }}" class="btn st-outline"><i class="fas fa-download"></i> Download Invoice</a>
+                            
+                            <span class="br-line" style="width: 1px; background: #e0e0e0; height: 100%; min-height: 200px;"></span>
+                            
+                            <div class="order-summary-side">
+                                <div class="summary-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
+                                    <strong class="summary-label" style="font-size: 14px; color: #666; margin: 0;">Sub-Total</strong>
+                                    <strong class="summary-value" style="font-size: 14px; font-weight: 500; color: #333; margin: 0;">${{ format_price($order->orderItems->sum(fn($i) => $i->price * $i->quantity)) }}</strong>
+                                </div>
+                                
+                                <div class="summary-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
+                                    <strong class="summary-label" style="font-size: 14px; color: #666; margin: 0;">Delivery Charge</strong>
+                                    <strong class="summary-value" style="font-size: 14px; font-weight: 500; color: #333; margin: 0;">${{ format_price($order->shipping_cost) }}</strong>
+                                </div>
+                                
+                                @if($order->coupon_discount)
+                                    <div class="summary-item discount" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
+                                        <strong class="summary-label" style="font-size: 14px; color: #666; margin: 0;">Coupon Discount</strong>
+                                        <strong class="summary-value" style="font-size: 14px; font-weight: 500; color: #28a745; margin: 0;">-${{ format_price($order->coupon_discount) }}</strong>
+                                    </div>
+                                @endif
+                                
+                                <div class="summary-item total" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0 8px 0; margin-top: 5px;">
+                                    <strong class="summary-label" style="font-size: 16px; color: #333; font-weight: 600; margin: 0;">Total</strong>
+                                    <strong class="summary-value" style="font-size: 16px; font-weight: 600; color: #333; margin: 0;">${{ format_price($order->grand_total) }}</strong>
+                                </div>
+                                
+                                
+                                <div style="margin-top: 30px;">
+                                    <a target="_blank" href="{{ route('order.invoice.pdf', $order->order_id) }}" class="tf-btn style-line">
+                                        Download Invoice
+                                        <i class="icon icon-download"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xs-12 col-md-4">
-                    <div class="ws-box content order-details-history">
-                        <h3 class="m-b-15">Order History</h3>
-                        @foreach ($order->histories as $history)
-                            <div class="histories">
-                                <div class="history">
-                                    <h5>{{ ucfirst($history->status) }}</h5>
-                                    <p>{{ $history->note }}</p>
-                                    <span class="fade"><span> {{ \Carbon\Carbon::parse($history->created_at)->format('d M, Y')}}</span>
+
+                    <div class="account-order_tab">
+                        <ul class="tab-order_detail" role="tablist">
+                            <li class="nav-tab-item" role="presentation">
+                                <a href="#order-history" data-bs-toggle="tab" class="tf-btn-line tf-btn-tab active"
+                                    aria-selected="false" role="tab" tabindex="-1">
+                                    <span class="h4">
+                                        Order history
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-tab-item" role="presentation">
+                                <a href="#item-detail" data-bs-toggle="tab" class="tf-btn-line tf-btn-tab"
+                                    aria-selected="false" role="tab" tabindex="-1">
+                                    <span class="h4">
+                                        Item details
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content overflow-hidden">
+                            <div class="tab-pane active show" id="order-history" role="tabpanel">
+                                <div class="order-timeline">
+                                    @php
+                                        $statusIcons = [
+                                            'pending' => 'bi-clock',
+                                            'processing' => 'icon-setting',
+                                            'delivered' => 'icon-truck',
+                                            'completed' => 'icon-check-1',
+                                            'canceled' => 'icon-close',
+                                            'fake' => 'bi-exclamation-triangle',
+                                        ];
+                                        
+                                        $statusTitles = [
+                                            'pending' => 'Order Pending',
+                                            'processing' => 'Processing Order',
+                                            'delivered' => 'Product Delivered',
+                                            'completed' => 'Order Completed',
+                                            'canceled' => 'Order Cancelled',
+                                            'fake' => 'Fake Order Detected',
+                                        ];
+                                    @endphp
+
+                                    @foreach ($order->histories as $index => $history)
+                                        @php
+                                            $status = strtolower($history->status);
+                                            $icon = $statusIcons[$status] ?? 'icon-check-1';
+                                            $title = $statusTitles[$status] ?? ucfirst($history->status);
+                                        @endphp
+                                        
+                                        <div class="timeline-step completed">
+                                            <div class="timeline_icon">
+                                                <span class="icon" style="{{ $status == 'fake' || $status == 'canceled' ? 'background:#C8102E;border-color:#C8102E;' : '' }}">
+                                                    <i class="{{ $icon }}"></i>
+                                                </span>
+                                            </div>
+                                            <div class="timeline_content">
+                                                <h5 class="step-title fw-semibold">{{ $title }}</h5>
+                                                <h6 class="step-date fw-normal">{{ \Carbon\Carbon::parse($history->created_at)->format('d M, Y H:i a') }}</h6>
+                                                
+                                                @if(!empty($history->note))
+                                                    <p class="step-detail h6">{{ $history->note }}</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
-                        @endforeach
+                            <div class="tab-pane" id="item-detail" role="tabpanel">
+                                <table class="table table-bordered table-hover table-order-products">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Product Details</th>
+                                            <th class="text-center">Quantity</th>
+                                            <th class="text-right">Total</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach ($order->orderItems as $item)
+                                            <tr>
+                                                {{-- Product Image --}}
+                                                <td width="100">
+                                                    <img src="{{ asset($item->product->thumb_image) }}" 
+                                                        alt="{{ $item->product->name }}" 
+                                                        style="width:70px; height:auto;">
+                                                </td>
+
+                                                {{-- Product Details --}}
+                                                <td>
+                                                    <div class="info_detail">
+                                                        <a href="{{ route('product-details', $item->product->slug) }}" 
+                                                        class="h5 d-block text-dark">
+                                                            {{ $item->product->name }}
+                                                        </a>
+
+                                                        <p class="m-0">
+                                                            Price:
+                                                            <span class="fw-semibold">
+                                                                ${{ $item->price }}
+                                                            </span>
+                                                        </p>
+
+                                                        @if ($item->orderItemVariations->count())
+                                                            <div class="item-variants">
+                                                                @foreach ($item->orderItemVariations as $variant)
+                                                                    {{ ucfirst($variant->attribute_name) }}: {{ ucfirst($variant->attribute_value) }}
+                                                                    @if (!$loop->last) - @endif
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+
+                                                {{-- Quantity --}}
+                                                <td class="text-center">
+                                                    {{ $item->quantity }}
+                                                </td>
+
+                                                {{-- Total --}}
+                                                <td class="text-right fw-bold">
+                                                    ${{ format_price($item->price * $item->quantity) }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
-    </section>
+    </div>
+</section>
 
 @endsection
-

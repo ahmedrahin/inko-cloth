@@ -462,8 +462,7 @@
                             <!--begin::Card body-->
                             <div class="card-body pt-0" style="font-size: 16px;">
                                 {{ $order->shipping_address }},
-                                {{ $order->zip_code ? 'zip-code:' . $order->zip_code : '' }}
-                                <br />{{ $order->district->name }}.
+                                {{-- {{ $order->zip_code ? 'zip-code:' . $order->zip_code : '' }} --}}
                             </div>
                             <!--end::Card body-->
                         </div>

@@ -4,40 +4,61 @@
     Edit Profile
 @endsection
 
+@push('scripts')
+
+    <style>
+        @media (min-width: 1200px) {
+            .btn-add-to-cart {
+                width: 25%;
+                margin: auto;
+            }
+            .savePass{
+                margin-top: 30px;
+                display: block;
+            }
+        }
+    </style>
+
+@endpush
 
 @section('body-content')
 
-<section class="after-header p-tb-10">
-    <div class="container">
-        <ul class="breadcrumb">
-            <li><a href="{{ url('/') }}"><i class="material-icons" title="Home">home</i></a></li>
-            <li><a href="{{ route('user.dashboard') }}">Account</a></li>
-            <li><a href="">Edit Profile</a></li>
-        </ul>
-    </div>
-</section>
-
-<div class="container ac-layout">
-    <div class="ac-header">
-        <div class="left">
-            <span class="avatar">
-                <img src="{{ auth()->user()->avatar ? asset(auth()->user()->avatar) : asset('frontend/image/user.png') }}"
-                    width="80" height="80" alt="Ra"></span>
-            <div class="name">
-                <p>Hello,</p>
-                <p class="user">{{ auth()->user()->name }}</p>
+    <section class="s-page-title">
+        <div class="container">
+            <div class="content">
+                <h1 class="title-page">@yield('page-title')</h1>
+                <ul class="breadcrumbs-page">
+                    <li><a href="{{ route('homepage') }}" class="h6 link">Home</a></li>
+                    <li class="d-flex"><i class="icon icon-caret-right"></i></li>
+                    <li><a href="{{ route('user.dashboard') }}" class="h6 link">My Dashboard</a></li>
+                    <li class="d-flex"><i class="icon icon-caret-right"></i></li>
+                    <li>
+                        <h6 class="current-page fw-normal">@yield('page-title')</h6>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
+    </section>
 
-    @include('frontend.pages.user.user-menu')
+    <section class="flat-spacing">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 d-none d-xl-block">
+                    @include('frontend.pages.user.user-menu')
+                </div>
 
-    <div class="ac-title">
-        <h1>My Account Information</h1>
-    </div>
+                 <div class="col-xl-9">
+                    <div class="my-account-content">
+                       
+                        <livewire:frontend.user.edit-profile :user_id="$user->id" />
 
-    <livewire:frontend.user.edit-profile :user_id="$user->id" />
+                        <livewire:frontend.user.change-password :user_id="$user->id" />
 
-</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
 @endsection

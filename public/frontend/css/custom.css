@@ -105,7 +105,18 @@ input:focus, select:focus, textarea:focus{
     line-height: 110px;
     display: none;
 }
-
+#featured_category{
+    display: none;
+}
+.product-action_list {
+    gap: 57px !important;
+}
+.box-icon{
+    transition: all .3s ease-in-out;
+}
+.box-icon:hover i{
+    color: white !important;
+}
 @media screen and (max-width: 800px) {
 
     .for-dekstop{

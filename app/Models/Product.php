@@ -118,6 +118,11 @@ class Product extends Model
         return $this->hasMany(ProductStock::class);
     }
 
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
     public function specifications()
     {
         return $this->hasMany(ProductSpecification::class);

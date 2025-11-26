@@ -37,7 +37,7 @@
         <section class="s-page-title">
             <div class="container">
                 <div class="content">
-                    <h1 class="title-page">Shop Default Grid</h1>
+                    <h1 class="title-page">Shop Products</h1>
                     <ul class="breadcrumbs-page">
                         <li><a href="{{ route('homepage') }}" class="h6 link">Home</a></li>
                         <li class="d-flex"><i class="icon icon-caret-right"></i></li>
@@ -49,7 +49,7 @@
             </div>
         </section>
 
-        <div class="flat-spacing pb-0">
+        <div class="flat-spacing pb-0" id="featured_category">
             <div class="container">
                 <div dir="ltr" class="swiper tf-swiper" data-preview="5" data-tablet="4" data-mobile-sm="3" data-mobile="2" data-space-lg="40"
                     data-space-md="24" data-space="12" data-pagination="2" data-pagination-sm="3" data-pagination-md="4" data-pagination-lg="5">
@@ -57,11 +57,11 @@
                         @foreach (App\Models\Category::where('featured', 1)->where('status', 1)->latest()->get() as $category)
                             <div class="swiper-slide">
                                 <div class="box-image_category style-2 hover-img">
-                                    <a href="" class="box-image_image img-style">
+                                    <a href="{{ route('category.products', $category->slug) }}" class="box-image_image img-style">
                                         <img class="lazyload" src="{{ asset($category->image ?? 'frontend/images/noimg.jpg') }}" data-src="{{ asset($category->image ?? 'frontend/images/noimg.jpg') }}" alt="">
                                     </a>
                                     <div class="box-image_content">
-                                        <a href="" class="tf-btn btn-white animate-btn animate-dark">
+                                        <a href="{{ route('category.products', $category->slug) }}" class="tf-btn btn-white animate-btn animate-dark">
                                             <span class="h5 fw-medium">
                                                 {{ $category->name }}
                                             </span>
@@ -129,5 +129,10 @@
 
     <script src="{{ asset('frontend/js/nouislider.min.js') }}"></script>
     <script src="{{ asset('frontend/js/shop.js') }}"></script>
+    <script>
+         window.addEventListener('load', function () {
+            document.getElementById('featured_category').style.display = 'block';
+        });
+    </script>
 
 @endsection

@@ -1,26 +1,42 @@
- <div class="actions">
-   @if( $product->productStock->count() > 0 )
-        <a class="st-btn btn-add-cart" type="button" href="{{ route('product-details', $product->slug) }}"><i
-            class="material-icons">shopping_cart</i> Buy Now</a>
-   @else
-        @if( $product->quantity > 0 )
-            <span class="st-btn btn-add-cart" type="button" wire:click="addToCart">
-                <i class="material-icons">shopping_cart</i> Add to Cart
-            </span>
+<ul class="product-action_list">
+    @if($product->productStock->count() > 0)
+        <li>
+            <a href="{{ route('product-details', $product->slug) }}" class="hover-tooltip tooltip-left box-icon">
+                <span class="icon icon-shopping-cart-simple"></span>
+                <span class="tooltip">Buy Now</span>
+            </a>
+        </li>
+    @else
+        @if($product->quantity > 0)
+            <li>
+                <a href="javascript:void(0);" 
+                   class="hover-tooltip tooltip-left box-icon" 
+                   wire:click="addToCart">
+                    <span class="icon icon-shopping-cart-simple"></span>
+                    <span class="tooltip">Add to Cart</span>
+                </a>
+            </li>
         @else
-            <span class="st-btn btn-add add-cart" type="button">
-                <i class="material-icons">error</i> Out of Stock
-            </span>
+            <li>
+                <a href="javascript:void(0);" class="hover-tooltip tooltip-left box-icon disabled" onclick="message('error', 'Product is not available!')"">
+                    <span class="bi-exclamation-triangle"></span>
+                    <span class="tooltip">Out of Stock</span>
+                </a>
+            </li>
         @endif
-   @endif
-
-   <span  class="st-btn btn-compare" type="button" wire:click="toggleWishlist({{ $productId }})">
-        @if($isInWishlist)
-            <i class="material-icons" style="color:#111;">bookmark</i> Unsave
-        @else
-            <i class="material-icons">bookmark_border</i> Save
-        @endif
-    </span>
-
-</div>
-
+    @endif
+    
+    <li class="wishlist">
+        <a href="javascript:void(0);" 
+           class="hover-tooltip tooltip-left box-icon" 
+           wire:click="toggleWishlist({{ $productId }})">
+            @if($isInWishlist)
+                <span class="icon icon-trash" style="color:#111;"></span>
+                <span class="tooltip">Remove Wishlist</span>
+            @else
+                <span class="icon icon-heart"></span>
+                <span class="tooltip">Add to Wishlist</span>
+            @endif
+        </a>
+    </li>
+</ul>

@@ -22,10 +22,10 @@
                         </li>
                         
                         <li class="menu-item position-relative">
-                            <a href="javascript:void(0)" class="item-link">Blog</a>
+                            <a href="javascript:void(0)" class="item-link">BLOG</a>
                         </li>
                         <li class="menu-item position-relative">
-                            <a href="{{ route('contact') }}" class="item-link">Contact Us</a>
+                            <a href="{{ route('contact') }}" class="item-link">CONTACT US</a>
                         </li>
                     </ul>
                 </nav>

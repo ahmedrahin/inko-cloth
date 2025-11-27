@@ -70,15 +70,15 @@
     </div>
     <!-- /Collection -->
 
-     <div class="flat-spacing flat-animate-tab">
+    <div class="flat-spacing flat-animate-tab">
         <div class="container">
             <div class="sect-title wow fadeInUp">
                 <div class="h1 title text-center mb-24">New Arrivals</div>
             </div>
 
-            <div class="wrapper-shop tf-grid-layout tf-col-4">
-                @if (!$trending->isEmpty())
-                    @foreach ($trending as $product)
+            @if (!$newArrivales->isEmpty())
+                <div class="wrapper-shop tf-grid-layout tf-col-4">
+                    @foreach ($newArrivales as $product)
                         <div class="card-product grid" data-availability="In stock" data-brand="{{ $product->brand->name ?? '' }}">
                             <div class="card-product_wrapper">
                                 <a href="{{ route('product-details', $product->slug) }}" class="product-img">
@@ -98,7 +98,6 @@
                                 
                             </div>
 
-                            {{-- Product Info --}}
                             <div class="card-product_info">
                                 <a href="{{ route('product-details', $product->slug) }}" class="name-product h4 link">
                                     {{ $product->name }}
@@ -110,142 +109,89 @@
                                         <span class="price-old h6 fw-normal">${{ format_price($product->base_price) }}</span>
                                     @endif
                                 </div>
+                                @include('frontend.includes.rating')
                             </div>
                         </div>
                     @endforeach
-                @else
-                    <div class="empty-content text-center py-5">
-                        <h5 class="text-danger">Sorry! No Product Found</h5>
-                        <p>Please try searching for something else</p>
-                    </div>
-                @endif
-            </div>
+                </div>
+            @else
+                @include('frontend.includes.no-found')
+            @endif
+            
         </div>
     </div>
  
-    <div class="flat-spacing flat-animate-tab">
-        <div class="container">
-            <div class="sect-title wow fadeInUp">
-                <div class="h1 title text-center mb-24">Most Popular Products</div>
-                <ul class="tab-product_list" role="tablist">
-                    <li class="nav-tab-item" role="presentation">
-                        <a href="#trending" data-bs-toggle="tab" class="tf-btn-line tf-btn-tab active"> TRENDING </a>
-                    </li>
-                    <li class="nav-tab-item" role="presentation">
-                        <a href="#best-seller" data-bs-toggle="tab" class="tf-btn-line tf-btn-tab"> Best selling </a>
-                    </li>
-                    <li class="nav-tab-item" role="presentation">
-                        <a href="#on-sale" data-bs-toggle="tab" class="tf-btn-line tf-btn-tab"> On sale </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="tab-content">
-                <div class="tab-pane active show" id="trending" role="tabpanel">
-                    <div class="wrapper-shop tf-grid-layout tf-col-4">
-                        @if (!$trending->isEmpty())
-                            @foreach ($trending as $product)
-                                <div class="card-product grid" data-availability="In stock" data-brand="{{ $product->brand->name ?? '' }}">
-                                    <div class="card-product_wrapper">
-                                        <a href="{{ route('product-details', $product->slug) }}" class="product-img">
-                                            <img class="lazyload img-product"
-                                                src="{{ asset($product->thumb_image ?? 'frontend/images/noimg.jpg') }}"
-                                                data-src="{{ asset($product->thumb_image ?? 'frontend/images/noimg.jpg') }}"
-                                                alt="{{ $product->name }}">
-                                            @if ($product->gallery && count($product->gallery) > 0)
-                                                <img class="lazyload img-hover"
-                                                    src="{{ asset($product->gallery[0]->image ?? $product->thumb_image) }}"
-                                                    data-src="{{ asset($product->gallery[0]->image ?? $product->thumb_image) }}"
-                                                    alt="{{ $product->name }}">
-                                            @endif
-                                        </a>
+    @include('frontend.includes.home-tap')
 
-                                        <livewire:frontend.shop.shop-product :productId="$product->id" />
-                                        
+    @livewire('frontend.home.special-product')
+
+    @if(!empty($featuredReviews))
+        <!-- Testimonial -->
+        <section class="flat-spacing pb-10 pt-0">
+            <div class="container">
+                <div class="h1 sect-title text-black fw-medium text-center wow fadeInUp">Customer Reviews</div>
+                <div dir="ltr" class="swiper tf-swiper" data-preview="3" data-tablet="2" data-mobile-sm="1" data-mobile="1" data-space-lg="48"
+                    data-space-md="24" data-space="12" data-pagination="1" data-pagination-sm="1" data-pagination-md="2" data-pagination-lg="3">
+                    <div class="swiper-wrapper">
+                        @foreach ($featuredReviews as $review)
+                            <div class="swiper-slide">
+                                <div class="testimonial-V01 wow fadeInLeft">
+                                    <div class="">
+                                        <p class="tes_text h4">
+                                           {{ $review->comment }}
+                                        </p>
+                                        <div class="tes_author">
+                                            <p class="author-name h5">
+                                                {{ $review->user_id && optional($review->user)->name ? $review->user->name : $review->name }}
+                                            </p>
+                                        </div>
+                                        <div class="rate_wrap">
+                                            @php
+                                                $rating = $review->rating;
+                                            @endphp
+
+                                            @for($i = 1; $i <= 5; $i++)
+                                                @if($rating >= $i)
+                                                    {{-- Full star --}}
+                                                    <i class="icon-star text-star"></i>
+                                                @elseif($rating > ($i - 1) && $rating < $i)
+                                                    {{-- Half star --}}
+                                                    <i class="icon-star text-star-half"></i>
+                                                @else
+                                                    {{-- Empty star --}}
+                                                    <i class="icon-star text-star-empty"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
                                     </div>
-
-                                    {{-- Product Info --}}
-                                    <div class="card-product_info">
-                                        <a href="{{ route('product-details', $product->slug) }}" class="name-product h4 link">
-                                            {{ $product->name }}
+                                    <span class="br-line"></span>
+                                    <div class="tes_product">
+                                        <a class="product-image" href="{{ route('product-details', $product->slug) }}">
+                                            <img class="lazyload" src="{{ asset($review->product->thumb_image) }}">
                                         </a>
-
-                                        <div class="price-wrap">
-                                            <span class="price-new h6">${{ format_price($product->offer_price) }}</span>
-                                            @if ($product->discount_option != 1)
-                                                <span class="price-old h6 fw-normal">${{ format_price($product->base_price) }}</span>
-                                            @endif
+                                        <div class="product-infor">
+                                            <h5 class="prd_name">
+                                                <a href="{{ route('product-details', $product->slug) }}" class="link"> {{ $review->product->name }} </a>
+                                            </h5>
+                                            <div class="price-wrap">
+                                                <span class="price-new h6">${{ format_price($review->product->offer_price) }}</span>
+                                                @if ($review->product->discount_option != 1)
+                                                    <span class="price-old h6 fw-normal">${{ format_price($review->product->base_price) }}</span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
-                        @else
-                            <div class="empty-content text-center py-5">
-                                <h5 class="text-danger">Sorry! No Product Found</h5>
-                                <p>Please try searching for something else</p>
                             </div>
-                        @endif
+                        @endforeach
+                        
                     </div>
-                </div>
-
-                <div class="tab-pane" id="best-seller" role="tabpanel">
-                    <div class="wrapper-shop tf-grid-layout tf-col-4">
-                        @if (!$selling->isEmpty())
-                            @foreach ($selling as $product)
-                                <div class="card-product grid" data-availability="In stock" data-brand="{{ $product->brand->name ?? '' }}">
-                                    <div class="card-product_wrapper">
-                                        <a href="{{ route('product-details', $product->slug) }}" class="product-img">
-                                            <img class="lazyload img-product"
-                                                src="{{ asset($product->thumb_image ?? 'frontend/images/noimg.jpg') }}"
-                                                data-src="{{ asset($product->thumb_image ?? 'frontend/images/noimg.jpg') }}"
-                                                alt="{{ $product->name }}">
-                                            @if ($product->gallery && count($product->gallery) > 0)
-                                                <img class="lazyload img-hover"
-                                                    src="{{ asset($product->gallery[0]->image ?? $product->thumb_image) }}"
-                                                    data-src="{{ asset($product->gallery[0]->image ?? $product->thumb_image) }}"
-                                                    alt="{{ $product->name }}">
-                                            @endif
-                                        </a>
-
-                                        <livewire:frontend.shop.shop-product :productId="$product->id" />
-                                        
-                                    </div>
-
-                                    {{-- Product Info --}}
-                                    <div class="card-product_info">
-                                        <a href="{{ route('product-details', $product->slug) }}" class="name-product h4 link">
-                                            {{ $product->name }}
-                                        </a>
-
-                                        <div class="price-wrap">
-                                            <span class="price-new h6">${{ format_price($product->offer_price) }}</span>
-                                            @if ($product->discount_option != 1)
-                                                <span class="price-old h6 fw-normal">${{ format_price($product->base_price) }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        @else
-                            <div class="empty-content text-center py-5">
-                                <h5 class="text-danger">Sorry! No Product Found</h5>
-                                <p>Please try searching for something else</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="tab-pane" id="on-sale" role="tabpanel">
-                    <div dir="ltr" class="swiper tf-swiper wrap-sw-over" data-preview="4" data-tablet="3" data-mobile-sm="2" data-mobile="2"
-                        data-space-lg="48" data-space-md="30" data-space="12" data-pagination="2" data-pagination-sm="2" data-pagination-md="3"
-                        data-pagination-lg="4" data-grid="2">
-                        <div class="swiper-wrapper">
-                        </div>
-                        <div class="sw-dot-default tf-sw-pagination"></div>
-                    </div>
+                    <div class="sw-dot-default tf-sw-pagination"></div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+        <!-- /Testimonial -->
+    @endif    
     
 @endsection
 

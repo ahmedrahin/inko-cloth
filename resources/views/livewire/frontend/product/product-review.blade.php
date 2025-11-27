@@ -138,8 +138,7 @@
                                             <div class="image">
                                                 <img class="lazyload"
                                                     data-src="{{ $review->user && $review->user->avatar ? asset($review->user->avatar) : asset('frontend/images/user.png') }}"
-                                                    src="{{ $review->user && $review->user->avatar ? asset($review->user->avatar) : asset('frontend/images/user.png') }}"
-                                                    alt="{{ $review->user->name ?? $review->name }}">
+                                                    src="{{ $review->user && $review->user->avatar ? asset($review->user->avatar) : asset('frontend/images/user.png') }}">
                                             </div>
 
                                             <div>
@@ -154,18 +153,17 @@
                                                         </h4>
                                                         <div class="user-infor">
                                                             <div class="color">
-                                                                {{ \Carbon\Carbon::parse($review->created_at)->format('F j, Y')
-                                                                }}
+                                                                {{ \Carbon\Carbon::parse($review->created_at)->format('F j, Y')}}
                                                             </div>
                                                             <div class="line"></div>
 
                                                             @php
-                                                            $verified = \App\Models\OrderItems::whereHas('order', function ($q)
-                                                            use ($review) {
-                                                            $q->where('user_id', $review->user_id);
-                                                            })
-                                                            ->where('product_id', $review->product_id)
-                                                            ->exists();
+                                                                $verified = \App\Models\OrderItems::whereHas('order', function ($q)
+                                                                use ($review) {
+                                                                $q->where('user_id', $review->user_id);
+                                                                })
+                                                                ->where('product_id', $review->product_id)
+                                                                ->exists();
                                                             @endphp
 
                                                             @if ($verified)

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
-use App\Models\Subcategory;
+use App\Models\Review;
 use App\Models\Product;
 use File;
 use App\Models\HomeSlider;
@@ -41,21 +41,38 @@ class PagesController extends Controller
             ->get();    
 
         $newArrivales = Product::activeProducts()
-                        ->orderBy('id', 'desc')
-                        ->where('is_new', 1)
+                        ->orderBy('is_new', 'desc') 
+                        ->orderBy('created_at', 'desc')
                         ->take(12)
                         ->get();
 
         $banners = HomeSlider::get();
-        $featuredProducts = Product::activeProducts()->latest()->where('is_featured', 1)->take(12)->get();
+
         $selling = Product::activeProducts()
                     ->withCount('orderItems')
                     ->having('order_items_count', '>', 0)
                     ->orderBy('order_items_count', 'desc')
                     ->take(12)
                     ->get();
+
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth   = Carbon::now()->endOfMonth();
+
+        $featuredReviews = Review::with('product')->where('featured',1)->get();
+
+        $topReviewed = Product::activeProducts()
+            ->withCount([
+                'reviews as positive_reviews_count' => function($q) use ($startOfMonth, $endOfMonth) {
+                    $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                    ->where('rating', '>=', 3);
+                }
+            ])
+            ->having('positive_reviews_count', '>', 0)
+            ->orderBy('positive_reviews_count', 'desc')
+            ->take(12)
+            ->get();            
                     
-        return view('frontend.pages.home', compact('banners','featuredCategories', 'featuredProducts', 'selling', 'newArrivales', 'trending'));
+        return view('frontend.pages.home', compact('banners','featuredCategories', 'selling', 'newArrivales', 'trending', 'topReviewed', 'featuredReviews'));
     }
 
     public function resetToFresh()

@@ -55,7 +55,7 @@ class ProductEditController extends Controller
 
             // Validate the request data
             $rules = [
-                'name' => 'required|string|unique:products,name,' . $product->id,
+                'name' => 'required|string',
                 'brand_id' => 'nullable|exists:brands,id',
                 'category_id' => 'required|exists:categories,id',
                 'sku_code' => 'nullable|string|max:255',

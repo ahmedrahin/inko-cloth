@@ -59,10 +59,7 @@
                     <li class="nav-item">
                         <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_ecommerce_add_product_advanced">Advanced</a>
                     </li>
-                     <li class="nav-item">
-                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                            href="#specification">Specifications</a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
                             href="#filter">Category Filter</a>

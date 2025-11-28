@@ -77,11 +77,8 @@
                         <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
                             href="#kt_ecommerce_add_product_advanced">Advanced</a>
                     </li>
+                    
                     <li class="nav-item">
-                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                            href="#specification">Specifications</a>
-                    </li>
-                     <li class="nav-item">
                         <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
                             href="#filter">Category Filter</a>
                     </li>
@@ -174,15 +171,20 @@
                             $('#errors-msgs').css('display', 'none')
 
                             // Replace alert with SweetAlert
-                            Swal.fire({
+                           Swal.fire({
                                 text: response.message,
                                 icon: 'success',
                                 buttonsStyling: false,
-                                confirmButtonText: 'OK',
+                                confirmButtonText: 'View Details',
                                 customClass: {
                                     confirmButton: 'btn btn-primary'
                                 }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ route('product-management.show', ':id') }}".replace(':id', response.product);
+                                }
                             });
+
 
                             var productId = response.product;
                             Livewire.emit('save', productId);

@@ -101,20 +101,14 @@
             @else
                 {{-- Popular searches when no query --}}
                 <div class="view-history-wrap">
-                    <h4 class="title">Popular Searches</h4>
+                    <h4 class="title">Top Categories</h4>
                     <div class="view-history-list">
-                        <a class="item text-main link h6" href="shop-default-list.html">
-                            <span>Graphic tees</span>
-                            <i class="icon icon-arrow-top-right"></i>
-                        </a>
-                        <a class="item text-main link h6" href="shop-default-list.html">
-                            <span>Summer collection</span>
-                            <i class="icon icon-arrow-top-right"></i>
-                        </a>
-                        <a class="item text-main link h6" href="shop-default-list.html">
-                            <span>Casual wear</span>
-                            <i class="icon icon-arrow-top-right"></i>
-                        </a>
+                        @foreach ($topCategories as $category)
+                            <a class="item text-main link h6" href="">
+                                <span>{{ $category->name }}</span>
+                                <i class="icon icon-arrow-top-right"></i>
+                            </a>
+                        @endforeach
                     </div>
                 </div>
             @endif

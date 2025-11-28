@@ -286,13 +286,13 @@
                             <span class="menu-title">Product Variant</span>
                         </a>
                         <!--end:Menu link-->
-                        <a class="menu-link {{ request()->routeIs('product-management.full.compare*') ? 'active' : '' }}"
+                        {{-- <a class="menu-link {{ request()->routeIs('product-management.full.compare*') ? 'active' : '' }}"
                             href="{{ route('product-management.full.compare') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
                             <span class="menu-title">Featured Compare</span>
-                        </a>
+                        </a> --}}
                     </div>
 
                 </div>
@@ -381,7 +381,7 @@
             </div>
             <!--end:Menu item-->
 
-            <div data-kt-menu-trigger="click"
+            {{-- <div data-kt-menu-trigger="click"
                 class="menu-item menu-accordion {{ request()->routeIs('offer*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
@@ -412,7 +412,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div> --}}
 
             <div class="menu-item">
                 <!--begin:Menu link-->

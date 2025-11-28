@@ -91,6 +91,12 @@ class SearchBox extends Component
 
     public function render()
     {
-        return view('livewire.frontend.shop.search-box');
+        $topCategories = Category::withCount('product')
+                        ->orderBy('product_count', 'desc')
+                        ->where('status',1)
+                        ->take(10)
+                        ->get();
+
+        return view('livewire.frontend.shop.search-box', compact('topCategories'));
     }
 }

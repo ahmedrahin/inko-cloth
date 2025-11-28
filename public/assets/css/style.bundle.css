@@ -2630,7 +2630,7 @@ textarea.form-control-lg {
 }
 .form-check-input:checked {
   background-color: #3E97FF;
-  border-color: #15914b;
+  border-color: #0095e8;
 }
 .form-check-input:checked[type=checkbox] {
   --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 11' width='13' height='11' fill='none'%3e%3cpath d='M11.0426 1.02893C11.3258 0.695792 11.8254 0.655283 12.1585 0.938451C12.4917 1.22162 12.5322 1.72124 12.249 2.05437L5.51985 9.97104C5.23224 10.3094 4.72261 10.3451 4.3907 10.05L0.828197 6.88335C0.50141 6.59288 0.471975 6.09249 0.762452 5.7657C1.05293 5.43891 1.55332 5.40948 1.88011 5.69995L4.83765 8.32889L11.0426 1.02893Z' fill='%23ffffff'/%3e%3c/svg%3e");
@@ -28813,7 +28813,7 @@ textarea.form-control-lg {
   --bs-border-color: #F1F1F2;
   --bs-border-dashed-color: #DBDFE9;
   --bs-component-active-color: #ffffff;
-  --bs-component-active-bg: #15914b;
+  --bs-component-active-bg: #0095e8;
   --bs-component-hover-color: #3E97FF;
   --bs-component-hover-bg: #F9F9F9;
   --bs-component-checked-color: #ffffff;
@@ -28909,7 +28909,7 @@ textarea.form-control-lg {
   --bs-danger: #f1416c;
   --bs-dark: #FFFFFF;
   --bs-secondary: #323248;
-  --bs-primary-active: #15914b!important;
+  --bs-primary-active: #0095e8!important;
   --bs-secondary-active: #474761;
   --bs-light-active: #323248;
   --bs-success-active: #47be7d;
@@ -28963,7 +28963,7 @@ textarea.form-control-lg {
   --bs-border-color: #2B2B40;
   --bs-border-dashed-color: #323248;
   --bs-component-active-color: #ffffff;
-  --bs-component-active-bg: #15914b !important;
+  --bs-component-active-bg: #0095e8 !important;
   --bs-component-hover-color: #3E97FF;
   --bs-component-hover-bg: #1b1b29;
   --bs-component-checked-color: #ffffff;

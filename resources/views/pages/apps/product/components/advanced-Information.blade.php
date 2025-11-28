@@ -63,7 +63,7 @@
                             @endforeach
                         </div>
 
-                        <div class="row mb-3">
+                        <div class="row mb-3" style="display: none;">
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Price</label>
                                 <input type="number" step="0.01" min="0" class="form-control"
@@ -80,8 +80,9 @@
                                 <label class="form-label fw-semibold">Image</label>
                                 <input type="file" name="variations[0][image]" class="form-control" accept="image/*">
                             </div>
-                        </div>
+                        </div> 
 
+                    
                         <div class="d-flex align-items-center gap-4 mt-2">
                             <button type="button" data-repeater-delete="" class="btn btn-sm btn-icon btn-light-danger">
                                 <i class="ki-duotone ki-cross fs-1">
@@ -104,75 +105,10 @@
 
         </div>
 
-        <div class="card card-flush py-4">
-
-            <div class="card-header">
-                <div class="card-title">
-                    <h2>Key Features</h2>
-                </div>
-            </div>
-
-            <div class="card-body pt-0">
-                <div>
-                    <div id="key_features" style="width: 100%" class="min-h-200px mb-2 ql-container ql-snow"></div>
-                    <input name="key_features" hidden>
-                </div>
-            </div>
-
-        </div>
+       
     </div>
 </div>
 
-<div class="tab-pane fade" id="specification" role="tab-panel">
-    <div class="col-12 mt-0">
-        <div class="card radius-10 w-100">
-            <div class="card-body">
-                <h5 style="margin-bottom: 20px;">Product Specifications</h5>
-
-                <div id="specification-wrapper">
-                    <div class="specification-group mb-4 border p-3 rounded" data-group-index="0">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <input type="text" name="spec_group[]" class="form-control w-50"
-                                placeholder="Group (e.g. Processor)">
-                            <button type="button" onclick="removeGroup(this)"
-                                class="btn btn-sm btn-light-danger ms-2">Remove Group</button>
-                        </div>
-
-                        <div class="specification-items">
-                            <div class="row g-3 mb-2 specification-item">
-                                <div class="col-md-5">
-                                    <input type="text" name="spec_name[0][]" class="form-control"
-                                        placeholder="Specification Name (e.g. Processor Brand)">
-                                </div>
-                                <div class="col-md-5">
-                                    <input type="text" name="spec_value[0][]" class="form-control"
-                                        placeholder="Value (e.g. AMD)">
-                                </div>
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <button type="button" onclick="removeSpecification(this)"
-                                        class="btn btn-sm btn-icon btn-light-danger">
-                                        <i class="ki-duotone ki-cross fs-1">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
-                                        </i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button type="button" class="btn btn-sm btn-light-success mt-2"
-                            onclick="addSpecification(this)">+ Add More Row</button>
-                    </div>
-                </div>
-
-                <button type="button" class="btn btn-light-primary btn-sm mt-3" onclick="addGroup()">+ Add New
-                    Group</button>
-            </div>
-        </div>
-    </div>
-
-
-</div>
 
 @push('scripts')
     <script>
@@ -294,7 +230,7 @@
                             @endforeach
                         </div>
 
-                        <div class="row mb-3">
+                        <div class="row mb-3" style="display:none;">
                             <div class="col-md-4" >
                                 <label class="form-label fw-semibold">Price</label>
                                 <input type="number" step="0.01" min="0" class="form-control"
@@ -346,85 +282,4 @@
         });
     </script>
 
-    <script>
-        (function() {
-            let groupIndex = Array.from(document.querySelectorAll('.specification-group'))
-                .reduce((max, g) => Math.max(max, parseInt(g.dataset.groupIndex || '-1', 10)), -1);
-
-            // Add a new specification group
-            window.addGroup = function() {
-                const idx = ++groupIndex;
-                const wrapper = document.getElementById('specification-wrapper');
-
-                const html = `
-                <div class="specification-group mb-4 border p-3 rounded" data-group-index="${idx}">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <input type="text" name="spec_group[]" class="form-control w-50" placeholder="Group (e.g. Display)">
-                        <button type="button" onclick="removeGroup(this)" class="btn btn-sm btn-light-danger ms-2">Remove Group</button>
-                    </div>
-
-                    <div class="specification-items">
-                        <div class="row g-3 mb-2 specification-item">
-                            <div class="col-md-5">
-                                <input type="text" name="spec_name[${idx}][]" class="form-control" placeholder="Specification Name">
-                            </div>
-                            <div class="col-md-5">
-                                <input type="text" name="spec_value[${idx}][]" class="form-control" placeholder="Value">
-                            </div>
-                            <div class="col-md-2 d-flex align-items-center">
-                                <button type="button" onclick="removeSpecification(this)" class="btn btn-sm btn-icon btn-light-danger">
-                                    <i class="ki-duotone ki-cross fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="button" class="btn btn-sm btn-light-success mt-2" onclick="addSpecification(this)">+ Add More Row</button>
-                </div>
-            `;
-
-                wrapper.insertAdjacentHTML('beforeend', html);
-            };
-
-            // Add a new row inside a group
-            window.addSpecification = function(button) {
-                const group = button.closest('.specification-group');
-                const idx = group.dataset.groupIndex; // reliable index from dataset
-                const items = group.querySelector('.specification-items');
-
-                const row = `
-                <div class="row g-3 mb-2 specification-item">
-                    <div class="col-md-5">
-                        <input type="text" name="spec_name[${idx}][]" class="form-control" placeholder="Specification Name">
-                    </div>
-                    <div class="col-md-5">
-                        <input type="text" name="spec_value[${idx}][]" class="form-control" placeholder="Value">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-center">
-                        <button type="button" onclick="removeSpecification(this)" class="btn btn-sm btn-icon btn-light-danger">
-                            <i class="ki-duotone ki-cross fs-1">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                            </i>
-                        </button>
-                    </div>
-                </div>
-            `;
-                items.insertAdjacentHTML('beforeend', row);
-            };
-
-            // Remove a row
-            window.removeSpecification = function(button) {
-                button.closest('.specification-item').remove();
-            };
-
-            // Remove a whole group
-            window.removeGroup = function(button) {
-                button.closest('.specification-group').remove();
-            };
-        })();
-    </script>
 @endpush

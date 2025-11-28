@@ -34,6 +34,7 @@
                         <span class="price-old h6 fw-normal">${{ format_price($product->base_price) }}</span>
                     @endif
                 </div>
+                @include('frontend.includes.rating')
             </div>
         </div>
     @endforeach

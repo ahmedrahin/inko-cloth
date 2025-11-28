@@ -6,7 +6,7 @@
 
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/vendor/nouislider/nouislider.min.css') }}">
-    <style>
+     <style>
         .empty-content {
             position: absolute;
             left: 50%;
@@ -14,32 +14,89 @@
             height: 100%;
             transform: translate(-50%, 95%);
         }
-        .group-category ul {
+
+        /* Base */
+        #category {
             list-style: none;
-            margin: 0;
-            padding-left: 15px;
+            padding: 0;
         }
 
-        .group-category li {
+        #category li {
             position: relative;
+            display: block !important;
         }
 
-        .group-category .sub-category,
-        .group-category .sub-sub-category {
-            display: none;
+        /* Link */
+        #category a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        #category .active > a {
+            background: #f1f1f1;
+            font-weight: bold;
+            color: #C8102E;
+            border-radius: 4px;
+        }
+        #category .filter-group-check .list-item:not(:last-child){
+            margin-bottom: 7px;
+        }
+
+        /* Arrow */
+        #category .arrow {
+            font-size: 16px;
+            transition: transform .25s ease;
+        }
+
+        /* Dropdown hidden state */
+        .sub-category,
+        .sub-sub-category {
+            max-height: 0;
+            opacity: 0;
+            visibility: hidden;
+            overflow: hidden;
+            margin-left: 20px;
             padding-left: 15px;
-            border-left: 1px dashed #ddd;
+            border-left: 1px solid #ececec;
+            transition: all .35s ease;
         }
 
-        .group-category li:hover > .sub-category,
-        .group-category li:hover > .sub-sub-category {
-            display: block;
+        /* On Hover — Smooth dropdown */
+        .list-item:hover > .sub-category {
+            max-height: 500px;
+            opacity: 1;
+            visibility: visible;
         }
 
-        .group-category li.active > a {
-            font-weight: 600;
-            color: var(--theme-color, #e63946);
+        .sub-category > li:hover > .sub-sub-category {
+            max-height: 500px;
+            opacity: 1;
+            visibility: visible;
         }
+
+        /* Arrow rotate on hover */
+        .list-item:hover > a .arrow,
+        .sub-category > li:hover > a .arrow {
+            transform: rotate(90deg);
+        }
+        /* Keep active category open */
+        .list-item.active > .sub-category {
+            max-height: 500px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Keep active sub-category open */
+        .sub-category > li.active > .sub-sub-category {
+            max-height: 500px;
+            opacity: 1;
+            visibility: visible;
+        }
+
 
     </style>
 @endsection
@@ -51,7 +108,7 @@
         <section class="s-page-title">
             <div class="container">
                 <div class="content">
-                    <h1 class="title-page">Shop Default Grid</h1>
+                    <h1 class="title-page">Category Products</h1>
                     <ul class="breadcrumbs-page">
                         <li><a href="{{ route('homepage') }}" class="h6 link">Home</a></li>
                         <li class="d-flex"><i class="icon icon-caret-right"></i></li>

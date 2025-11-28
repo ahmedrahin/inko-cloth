@@ -8,7 +8,7 @@
             </div>
             <div class="col-xl-3 col-md-4 col-6 text-center text-xl-start">
                 <a href="{{ url('/') }}" class="logo-site justify-content-center justify-content-xl-start">
-                    <img src="{{ config('app.logo') }}" alt="Logo">
+                    <img src="{{ asset(config('app.logo')) }}" alt="Logo">
                 </a>
             </div>
             <div class="col-xl-6 d-none d-xl-block">

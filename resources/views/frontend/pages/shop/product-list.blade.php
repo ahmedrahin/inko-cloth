@@ -40,7 +40,7 @@
     @endforeach
 
     {{-- Pagination --}}
-    <div class="wd-full wg-pagination m-0 justify-content-center">
+    <div class="wd-full wg-pagination mb-4 justify-content-center">
 
         {{-- Previous Page Link --}}
         @if ($products->onFirstPage())

@@ -14,19 +14,58 @@
             height: 100%;
             transform: translate(-50%, 95%);
         }
+        #category .filter-group-check .list-item:not(:last-child){
+            margin-bottom: 7px;
+        }
 
-        #category .sub-category, #category .sub-sub-category {
-            padding-left: 20px;
-            margin: 10px 0;
-            border-left: 1px solid #ebebeb;
+        #category {
+            list-style: none;
+            padding: 0;
+        }
+
+        #category li {
+            position: relative;
+            display: block !important;
+        }
+
+        #category a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        #category .arrow {
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        /* HIDE sub menus initially */
+        .sub-category,
+        .sub-sub-category {
+            display: none;
             margin-left: 20px;
+            border-left: 1px solid #ececec;
+            padding-left: 15px;
         }
-        #category .list-item {
-            display: inherit !important;
-        }
-        .sub-category li{
 
+        /* SHOW on hover */
+        .list-item:hover > .sub-category {
+            display: block;
         }
+
+        .sub-category > li:hover > .sub-sub-category {
+            display: block;
+        }
+
+        /* Rotate arrow when open */
+        .list-item:hover > a .arrow,
+        .sub-category > li:hover > a .arrow {
+            transform: rotate(90deg);
+        }
+
     </style>
 @endsection
 
@@ -76,7 +115,7 @@
             </div>
         </div>
 
-        <div class="flat-spacing-3" style="margin-bottom: 70px;">
+        <div class="flat-spacing-3" style="margin-bottom: 10px;">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-3">

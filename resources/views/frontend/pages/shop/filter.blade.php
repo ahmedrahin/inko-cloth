@@ -6,7 +6,7 @@
             <span class="icon-close link icon-close-popup fs-24 close-filter"></span>
         </div>
         <div class="canvas-body">
-            <div class="widget-facet">
+            <div class="widget-facet" style="padding-bottom:30px;">
                 <div class="facet-title" data-bs-target="#category" role="button" data-bs-toggle="collapse"
                     aria-expanded="true" aria-controls="category">
                     <span class="h4 fw-semibold">Category</span>
@@ -17,37 +17,44 @@
                         $categories = App\Models\Category::with(['subcategories.subsubcategories'])->where('status', 1)->get();
                         $currentSlug = request()->segment(count(request()->segments()));
                     @endphp
-                    <ul class="collapse-body filter-group-check group-category">
+                    <ul id="category" class="collapse-body filter-group-check group-category">
+
                         @foreach ($categories as $category)
                             @php
                                 $isActiveCategory = $currentSlug === $category->slug;
+                                $isSubActive = $category->subcategories->contains('slug', $currentSlug);
+                                $isSubSubActive = $category->subcategories
+                                ->flatMap->subsubcategories
+                                ->contains('slug', $currentSlug);
+                                $hasSub = $category->subcategories->count() > 0;
                             @endphp
 
-                            <li class="list-item {{ $isActiveCategory ? 'active' : '' }}">
+                           <li class="list-item {{ $isActiveCategory ? 'active' : '' }}  {{ $isSubActive || $isSubSubActive ? 'subActive' : '' }} ">
+
                                 <a href="{{ route('category.products', $category->slug) }}" class="link h6">
                                     {{ $category->name }}
-                                    @if(config('website_settings.product_count_enabled'))
-                                        <span class="count">({{ $category->product()->activeProducts()->count() }})</span>
+                                    @if ($hasSub)
+                                        <span class="arrow">›</span>
                                     @endif
                                 </a>
 
-                                {{-- 🟢 Subcategories --}}
-                                @if ($category->subcategories->count() > 0)
+                                @if ($hasSub)
                                     <ul class="sub-category">
                                         @foreach ($category->subcategories as $sub)
                                             @php
                                                 $isActiveSub = $currentSlug === $sub->slug;
+                                                $hasSubSub = $sub->subsubcategories->count() > 0;
                                             @endphp
 
                                             <li class="{{ $isActiveSub ? 'active' : '' }}">
                                                 <a href="{{ route('category.products', [$category->slug, $sub->slug]) }}">
                                                     {{ $sub->name }}
-                                                    @if(config('website_settings.product_count_enabled'))
-                                                        <span class="count">({{ $sub->product()->activeProducts()->count() }})</span>
+                                                    @if ($hasSubSub)
+                                                        <span class="arrow">›</span>
                                                     @endif
                                                 </a>
 
-                                                @if ($sub->subsubcategories->count() > 0)
+                                                @if ($hasSubSub)
                                                     <ul class="sub-sub-category">
                                                         @foreach ($sub->subsubcategories as $subsub)
                                                             @php
@@ -57,20 +64,20 @@
                                                             <li class="{{ $isActiveSubSub ? 'active' : '' }}">
                                                                 <a href="{{ route('category.products', [$category->slug, $sub->slug, $subsub->slug]) }}">
                                                                     {{ $subsub->name }}
-                                                                    @if(config('website_settings.product_count_enabled'))
-                                                                        <span class="count">({{ $subsub->product()->activeProducts()->count() }})</span>
-                                                                    @endif
                                                                 </a>
                                                             </li>
                                                         @endforeach
                                                     </ul>
                                                 @endif
+
                                             </li>
                                         @endforeach
                                     </ul>
                                 @endif
+
                             </li>
                         @endforeach
+
                     </ul>
                 </div>
             </div>
@@ -383,6 +390,5 @@
         });
     </script>
 
-    
     
 @endpush

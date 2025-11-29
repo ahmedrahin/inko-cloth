@@ -43,18 +43,23 @@
                                         @foreach ($category->subcategories as $sub)
                                             @php
                                                 $isActiveSub = $currentSlug === $sub->slug;
-                                                $hasSubSub = $sub->subsubcategories->count() > 0;
+                                                $isActiveSubSub = $sub->subsubcategories->contains('slug', $currentSlug);
+                                                $subClass = '';
+                                                if ($isActiveSubSub) {
+                                                    $subClass = 'subsubActive';
+                                                }
                                             @endphp
 
-                                            <li class="{{ $isActiveSub ? 'active' : '' }}">
+                                            <li class="{{ $isActiveSub ? 'active' : '' }} {{ $subClass }}">
                                                 <a href="{{ route('category.products', [$category->slug, $sub->slug]) }}">
                                                     {{ $sub->name }}
-                                                    @if ($hasSubSub)
+
+                                                    @if ($sub->subsubcategories->count() > 0)
                                                         <span class="arrow">›</span>
                                                     @endif
                                                 </a>
 
-                                                @if ($hasSubSub)
+                                                @if ($sub->subsubcategories->count() > 0)
                                                     <ul class="sub-sub-category">
                                                         @foreach ($sub->subsubcategories as $subsub)
                                                             @php

@@ -84,7 +84,7 @@
             transform: rotate(90deg);
         }
         /* Keep active category open */
-        .list-item.active > .sub-category {
+        .list-item.active > .sub-category, .list-item.subActive > .sub-category, .subsubActive > .sub-sub-category {
             max-height: 500px;
             opacity: 1;
             visibility: visible;
@@ -97,7 +97,10 @@
             visibility: visible;
         }
 
-
+        .list-item.subActive > a, .subsubActive a {
+            font-weight: 600;
+            color: #C8102E !important;
+        }
     </style>
 @endsection
 
@@ -167,10 +170,8 @@
                                         <option value="best_selling" {{ request('sort')=='best_selling' ? 'selected' : '' }}>Best Selling</option>
                                         <option value="offer_price" {{ request('sort')=='offer_price' ? 'selected' : '' }}>Price, low to high
                                         </option>
-                                        <option value="offer_price_desc" {{ request('sort')=='offer_price_desc' ? 'selected' : '' }}>Price, high to
-                                            low</option>
+                                        <option value="offer_price_desc" {{ request('sort')=='offer_price_desc' ? 'selected' : '' }}>Price, high to low</option>
                                     </select>
-
                                 </div>
                             </div>
                         </div>

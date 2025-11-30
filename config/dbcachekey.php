@@ -5,6 +5,7 @@
     return [
         'brand'             => 'brands_cache_data_table',
         'category'          => 'categories_cache_data_table',
+        'menu_category'          => 'menu_categories_cache_data_table',
         'subcategory'       => 'subcategories_cache_data_table',
         'subsubcategory'    => 'subsubcategories_cache_data_table',
         'productattribute'  => 'attribute_cache_data_table',

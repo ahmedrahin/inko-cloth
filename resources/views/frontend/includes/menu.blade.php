@@ -22,15 +22,7 @@
                             <div class="sub-menu mega-menu">
                                 <div class="container">
                                     <div class="row">
-                                        <div class="col-2">
-                                            <div class="mega-menu-item">
-                                                <h4 class="menu-heading">Shop Layout</h4>
-                                                <ul class="sub-menu_list">
-                                                    <li><a href="shop-default.html" class="sub-menu_link">Default Grid</a></li>
-                                                    <li><a href="shop-default-list.html" class="sub-menu_link">Default List</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        @include('frontend.includes.category_menu')
                                     </div>
                                 </div>
                             </div>

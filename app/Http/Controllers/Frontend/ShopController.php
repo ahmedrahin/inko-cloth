@@ -185,7 +185,9 @@ class ShopController extends Controller
             return view('frontend.pages.shop.category-product-list', compact('products'))->render();
         }
 
-        return view('frontend.pages.shop.search-product', compact('products', 'perPage', 'searchTerm', 'categories', 'count'));
+        $brands = Brand::where('status', 1)->get();
+
+        return view('frontend.pages.shop.search-product', compact('products', 'perPage', 'searchTerm', 'categories', 'count', 'brands'));
     }
 
     // product details page

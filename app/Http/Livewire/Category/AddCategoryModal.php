@@ -43,20 +43,25 @@ class AddCategoryModal extends Component
     }
 
     public function updateFeatured($id, $value)
-{
-    $value = $value == 1 ? 1 : 0;
+    {
+        $value = $value == 1 ? 1 : 0;
 
-    $category = Category::find($id);
+        $category = Category::find($id);
 
-    if ($category) {
-        $category->featured = $value;
-        $category->save();
+        if ($category) {
+            $category->featured = $value;
+            $category->save();
 
-        session()->flash('success', 'Featured status updated.');
-    } else {
-        session()->flash('error', 'Category not found.');
+            session()->flash('success', 'Featured status updated.');
+        } else {
+            session()->flash('error', 'Category not found.');
+        }
+
+        Cache::forget(config('dbcachekey.menu_category'));
+        Cache::rememberForever(config('dbcachekey.menu_category'), function () {
+            return Category::orderBy('id', 'desc')->where('status', 1)->where('featured',1)->get();
+        });
     }
-}
 
 
     // Render the component view
@@ -80,7 +85,7 @@ class AddCategoryModal extends Component
             'image.mimes' => 'The image must be a file of type: jpeg, png.',
             'image.max'   => 'The image size must not exceed 2MB.'
         ];
-        
+
         // If editing an existing category, exclude the current category from the unique check
         if ($this->edit_mode) {
             $rules['name'] = 'required|unique:categories,name,' . $this->category_id;
@@ -132,7 +137,7 @@ class AddCategoryModal extends Component
 
     // Create a new category
     private function createNewCategory()
-    {   
+    {
         // Prepare the category data
         $categoryData = [
             'name'   => $this->name,
@@ -141,11 +146,11 @@ class AddCategoryModal extends Component
         ];
 
         // upload image
-        if( $this->image ){
+        if ($this->image) {
             $thisImage = $this->image;
             $imageName = time() . '_' . $thisImage->getClientOriginalName();
             $path = $thisImage->storeAs('uploads/categorize', $imageName, 'real_public');
-        
+
             // Store the path in the database
             $categoryData['image'] = 'uploads/categorize/' . $imageName;
         }
@@ -184,13 +189,13 @@ class AddCategoryModal extends Component
         $subCategories = Subcategory::where('category_id', $category->id)->get();
 
         //change status also the subcategories and subsubcategories
-        foreach( $subCategories as $subCategory ){
+        foreach ($subCategories as $subCategory) {
             $subCategory->update(['status' => $status]);
 
             $sub_subCategories = Subsubcategory::where('subcategory_id', $subCategory->id)->get();
-           foreach( $sub_subCategories as $sub_subCategory ){
+            foreach ($sub_subCategories as $sub_subCategory) {
                 $sub_subCategory->update(['status' => $status]);
-           }
+            }
         }
 
 
@@ -199,6 +204,11 @@ class AddCategoryModal extends Component
 
         // Emit success message
         $this->emit($type, $message);
+
+        Cache::forget(config('dbcachekey.menu_category'));
+        Cache::rememberForever(config('dbcachekey.menu_category'), function () {
+            return Category::orderBy('id', 'desc')->where('status', 1)->where('featured',1)->get();
+        });
         $this->refreshCache();
     }
 
@@ -213,9 +223,9 @@ class AddCategoryModal extends Component
         //     Storage::disk('real_public')->delete($category->image);
         //     $category->update(['image' => null]);
         // }
-        
+
         // Now delete the category
-        $category->delete();        
+        $category->delete();
 
         // Emit success message and reset the form
         $this->emit('info', __('Category was deleted.'));
@@ -265,7 +275,8 @@ class AddCategoryModal extends Component
     }
 
     // delete subcategory
-    public function deleteSubcategory($id){
+    public function deleteSubcategory($id)
+    {
         $getSubCategory = Subcategory::find($id);
         $getSubCategory->delete();
         // Emit success message and reset the form

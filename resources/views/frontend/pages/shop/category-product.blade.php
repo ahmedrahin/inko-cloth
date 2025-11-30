@@ -48,7 +48,7 @@
 
         /* Arrow */
         #category .arrow {
-            font-size: 16px;
+            font-size: 10px;
             transition: transform .25s ease;
         }
 
@@ -100,6 +100,18 @@
         .list-item.subActive > a, .subsubActive a {
             font-weight: 600;
             color: #C8102E !important;
+        }
+        
+        /* Active rotate (Main category) */
+        .list-item.active > a .arrow,
+        .list-item.subActive > a .arrow {
+            transform: rotate(90deg);
+        }
+
+        /* Active rotate (Sub category) */
+        .sub-category > li.active > a .arrow,
+        .sub-category > li.subsubActive > a .arrow {
+            transform: rotate(90deg);
         }
     </style>
 @endsection

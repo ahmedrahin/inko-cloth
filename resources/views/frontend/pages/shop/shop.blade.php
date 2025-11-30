@@ -38,7 +38,7 @@
         }
 
         #category .arrow {
-            font-size: 16px;
+            font-size: 10px;
             transition: 0.2s;
         }
 

@@ -34,7 +34,7 @@
                                 <a href="{{ route('category.products', $category->slug) }}" class="link h6">
                                     {{ $category->name }}
                                     @if ($hasSub)
-                                        <span class="arrow">›</span>
+                                        <span class="arrow"><i class="bi bi-caret-right-fill"></i></span>
                                     @endif
                                 </a>
 
@@ -55,7 +55,7 @@
                                                     {{ $sub->name }}
 
                                                     @if ($sub->subsubcategories->count() > 0)
-                                                        <span class="arrow">›</span>
+                                                        <span class="arrow"><i class="bi bi-caret-right-fill"></i></span>
                                                     @endif
                                                 </a>
 

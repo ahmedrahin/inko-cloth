@@ -31,7 +31,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xl-3">
-                        {{-- @include('frontend.pages.shop.filter') --}}
+                        @include('frontend.pages.shop.filter')
                     </div>
                     
                     <div class="col-xl-9">

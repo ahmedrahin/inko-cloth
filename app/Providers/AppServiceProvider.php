@@ -20,14 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Register singletons
-        $this->app->singleton(ProductFilterService::class, function ($app) {
-            return new ProductFilterService();
-        });
-
-        $this->app->singleton(ProductDetailService::class, function ($app) {
-            return new ProductDetailService();
-        });
+        
     }
 
     /**

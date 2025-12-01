@@ -1913,9 +1913,7 @@ header.header-sticky {
 .logo-site {
   display: flex;
 }
-.logo-site img {
-  aspect-ratio: 2.5094339623;
-}
+
 
 .tf-topbar {
   padding-top: 8px;

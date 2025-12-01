@@ -149,7 +149,7 @@
 <!-- Toolbar -->
 <div class="tf-toolbar-bottom">
     <div class="toolbar-item">
-        <a href="shop-default.html">
+        <a href="{{ route('shop') }}">
             <span class="toolbar-icon">
                 <i class="icon icon-storefront"></i>
             </span>
@@ -165,7 +165,7 @@
         </a>
     </div>
     <div class="toolbar-item">
-        <a href="account-page.html">
+        <a href="{{ !auth()->check() ? route('user.login') : route('user.dashboard') }}">
             <span class="toolbar-icon">
                 <i class="icon icon-user"></i>
             </span>
@@ -176,7 +176,9 @@
         <a href="wishlist.html">
             <span class="toolbar-icon">
                 <i class="icon icon-heart"></i>
-                <span class="toolbar-count">7</span>
+                <span class="toolbar-count">
+                    <livewire:frontend.wishlist.count-wishlist />
+                </span>
             </span>
             <span class="toolbar-label">Wishlist</span>
         </a>
@@ -185,7 +187,9 @@
         <a href="view-cart.html">
             <span class="toolbar-icon">
                 <i class="icon icon-shopping-cart-simple"></i>
-                <span class="toolbar-count">24</span>
+                <span class="toolbar-count">
+                    <livewire:frontend.cart.btn-cart />
+                </span>
             </span>
             <span class="toolbar-label">Cart</span>
         </a>

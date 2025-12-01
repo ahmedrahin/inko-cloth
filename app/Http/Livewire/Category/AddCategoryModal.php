@@ -57,10 +57,7 @@ class AddCategoryModal extends Component
             session()->flash('error', 'Category not found.');
         }
 
-        Cache::forget(config('dbcachekey.menu_category'));
-        Cache::rememberForever(config('dbcachekey.menu_category'), function () {
-            return Category::orderBy('id', 'desc')->where('status', 1)->where('featured',1)->get();
-        });
+        $this->refreshCache();
     }
 
 
@@ -205,10 +202,6 @@ class AddCategoryModal extends Component
         // Emit success message
         $this->emit($type, $message);
 
-        Cache::forget(config('dbcachekey.menu_category'));
-        Cache::rememberForever(config('dbcachekey.menu_category'), function () {
-            return Category::orderBy('id', 'desc')->where('status', 1)->where('featured',1)->get();
-        });
         $this->refreshCache();
     }
 
@@ -265,6 +258,11 @@ class AddCategoryModal extends Component
         Cache::forget($this->cacheKey);
         Cache::rememberForever($this->cacheKey, function () {
             return Category::orderBy('id', 'desc')->get();
+        });
+
+        Cache::forget(config('dbcachekey.menu_category'));
+        Cache::rememberForever(config('dbcachekey.menu_category'), function () {
+            return Category::orderBy('id', 'desc')->where('status', 1)->where('featured',1)->get();
         });
     }
 

@@ -40,7 +40,7 @@
 
                                 @if ($hasSub)
                                     <ul class="sub-category">
-                                        @foreach ($category->subcategories as $sub)
+                                        @foreach ($category->subcategories->where('status',1) as $sub)
                                             @php
                                                 $isActiveSub = $currentSlug === $sub->slug;
                                                 $isActiveSubSub = $sub->subsubcategories->contains('slug', $currentSlug);
@@ -61,7 +61,7 @@
 
                                                 @if ($sub->subsubcategories->count() > 0)
                                                     <ul class="sub-sub-category">
-                                                        @foreach ($sub->subsubcategories as $subsub)
+                                                        @foreach ($sub->subsubcategories->where('status',1) as $subsub)
                                                             @php
                                                                 $isActiveSubSub = $currentSlug === $subsub->slug;
                                                             @endphp

@@ -1,7 +1,7 @@
 
 @if (!$products->isEmpty())
     @foreach ($products as $product)
-        <div class="card-product grid" data-availability="In stock" data-brand="{{ $product->brand->name ?? '' }}">
+        <div class="card-product grid">
             <div class="card-product_wrapper">
 
                 {{-- Product Image --}}
@@ -25,7 +25,7 @@
             {{-- Product Info --}}
             <div class="card-product_info">
                 <a href="{{ route('product-details', $product->slug) }}" class="name-product h4 link">
-                    {{ $product->name }}
+                    {{ Str::limit($product->name, 25, '...') }}
                 </a>
 
                 <div class="price-wrap">

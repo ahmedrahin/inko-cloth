@@ -126,6 +126,15 @@ input:focus, select:focus, textarea:focus{
         display: none;
     }
     .for-mobile{
-        display: block;
+        display: block !important;
+    }
+    .text-logo-mb img {
+        max-width: 80%;
+    }
+    .canvas-mb .canvas-header{
+        padding-bottom: 17px !important; 
+    }
+    .productBoxItem{
+
     }
 }

@@ -5,7 +5,6 @@
 @endsection
 
 @section('page-css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/vendor/nouislider/nouislider.min.css') }}">
     <style>
         .empty-content {
             position: absolute;

@@ -553,32 +553,6 @@
         }
     };
 
-    /* Coupon Copy
-    -------------------------------------------------------------------------*/
-    var textCopy = function () {
-        $(".coupon-copy-wrap").on("click", function () {
-            const couponCode = $(this).closest(".discount-bot,.wrap-code").find(".coupon-code,.coppyText").text().trim();
-
-            if (navigator.clipboard) {
-                navigator.clipboard
-                    .writeText(couponCode)
-                    .then(function () {
-                        alert("Copied! " + couponCode);
-                    })
-                    .catch(function (err) {
-                        alert("Unable to copy: " + err);
-                    });
-            } else {
-                const tempInput = $("<input>");
-                $("body").append(tempInput);
-                tempInput.val(couponCode).select();
-                document.execCommand("copy");
-                tempInput.remove();
-                alert("Copied! " + couponCode);
-            }
-        });
-    };
-
     /* Parallaxie 
     -------------------------------------------------------------------------*/
     var parallaxie = function () {
@@ -734,97 +708,118 @@
 
         $desktopMenu.find("> li.menu-item").each(function (i, menuItem) {
             const $item = $(menuItem);
-            const text = $item.find("> a.item-link").clone().children().remove().end().text().trim();
+            const $link = $item.find("> a.item-link");
+            const text = $link.clone().children().remove().end().text().trim();
             const submenu = $item.find("> .sub-menu");
             const id = "dropdown-menu-" + i;
-            if (text.toLowerCase() === "home") {
-                const $li = $(`
-              <li class="nav-mb-item">
-                  <a href="#${id}" class="collapsed mb-menu-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="${id}">
-                      <span>${text}</span>
-                      <span class="icon icon-caret-down"></span>
-                  </a>
-                  <div id="${id}" class="collapse">
-                      <ul class="sub-nav-menu"></ul>
-                  </div>
-              </li>
-          `);
-                $(".modalDemo .demo-name").each(function () {
-                    const $demoName = $(this);
-                    const link = $demoName.attr("href") || "#";
-                    const title = $demoName.text().trim();
-                    const isActive = $demoName.hasClass("active");
-                    if (title) {
-                        const activeClass = isActive ? "active" : "";
-                        $li.find(".sub-nav-menu").append(`<li><a href="${link}" class="sub-nav-link ${activeClass}">${title}</a></li>`);
-                    }
-                });
-                $mobileMenu.append($li);
-                return;
-            }
+            
+            // Check if this is the CATEGORIES menu item
+            const isCategoriesMenu = text === "CATEGORIES" || submenu.hasClass("mega-menu");
+            
+            if (isCategoriesMenu) {
+                // This is the CATEGORIES mega menu
+                const hasSubcategories = submenu.find(".mega-menu-item").length > 0;
+                
+                if (hasSubcategories) {
+                    // Categories with subcategories - show with arrow
+                    const $li = $(
+                        `<li class="nav-mb-item">
+                            <a href="#${id}" class="collapsed mb-menu-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="${id}">
+                                <span>${text}</span>
+                                <span class="icon icon-caret-down"></span>
+                            </a>
+                            <div id="${id}" class="collapse"></div>
+                        </li>`
+                    );
 
-            if (submenu.length > 0) {
-                const $li = $(`
-                <li class="nav-mb-item">
-                    <a href="#${id}" class="collapsed mb-menu-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="${id}">
-                        <span>${text}</span>
-                        <span class="icon icon-caret-down"></span>
-                    </a>
-                    <div id="${id}" class="collapse"></div>
-                </li>
-            `);
+                    const $subNav = $('<ul class="sub-nav-menu"></ul>');
 
-                const $subNav = $('<ul class="sub-nav-menu"></ul>');
+                    // Process each category group
+                    submenu.find(".mega-menu-item").each(function (j) {
+                        const $megaItem = $(this);
+                        const heading = $megaItem.find(".menu-heading").text().trim();
+                        const headingLink = $megaItem.find(".menu-heading a").attr("href") || "#";
+                        const subId = `${id}-group-${j}`;
+                        const $subList = $megaItem.find(".sub-menu_list li");
+                        
+                        if ($subList.length > 0) {
+                            // Category has subcategories - show with arrow
+                            const $group = $(
+                                `<li>
+                                    <a href="#${subId}" class="collapsed sub-nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="${subId}">
+                                        <span>${heading}</span>
+                                        <span class="icon icon-caret-down"></span>
+                                    </a>
+                                    <div id="${subId}" class="collapse">
+                                        <ul class="sub-nav-menu sub-menu-level-2"></ul>
+                                    </div>
+                                </li>`
+                            );
 
-                submenu.find(".mega-menu-item").each(function (j) {
-                    const heading = $(this).find(".menu-heading").text().trim();
-                    const subId = `${id}-group-${j}`;
-                    const $group = $(`
-                    <li>
-                        <a href="#${subId}" class="collapsed sub-nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="${subId}">
-                            <span>${heading}</span>
-                            <span class="icon icon-caret-down"></span>
-                        </a>
-                        <div id="${subId}" class="collapse">
-                            <ul class="sub-nav-menu sub-menu-level-2"></ul>
-                        </div>
-                    </li>
-                `);
+                            $subList.each(function () {
+                                const $link = $(this).find("a");
+                                const linkHref = $link.attr("href") || "#";
+                                const title = $link.text().trim();
+                                const isActive = $link.hasClass("active");
 
-                    $(this)
-                        .find(".sub-menu_list a")
-                        .each(function () {
-                            const $link = $(this);
-                            const linkHref = $link.attr("href") || "#";
-                            const title = $link.text().trim();
-                            const isActive = $link.hasClass("active");
+                                if (title !== "") {
+                                    const activeClass = isActive ? "active" : "";
+                                    $group
+                                        .find(".sub-menu-level-2")
+                                        .append(`<li><a href="${linkHref}" class="sub-nav-link ${activeClass}">${title}</a></li>`);
+                                }
+                            });
 
-                            if (title !== "") {
-                                const activeClass = isActive ? "active" : "";
-                                $group
-                                    .find(".sub-menu-level-2")
-                                    .append(`<li><a href="${linkHref}" class="sub-nav-link ${activeClass}">${title}</a></li>`);
-                            }
-                        });
+                            $subNav.append($group);
+                        } else {
+                            // Category has NO subcategories - direct link without arrow
+                            $subNav.append(
+                                `<li><a href="${headingLink}" class="sub-nav-link">${heading}</a></li>`
+                            );
+                        }
+                    });
 
-                    $subNav.append($group);
-                });
+                    $li.find(`#${id}`).append($subNav);
+                    $mobileMenu.append($li);
+                } else {
+                    // No categories at all - just show as direct link
+                    const href = $link.attr("href") || "#";
+                    $mobileMenu.append(
+                        `<li class="nav-mb-item"><a href="${href}" class="mb-menu-link"><span>${text}</span></a></li>`
+                    );
+                }
+            } else {
+                // For other menu items (BLOG, etc.)
+                if (submenu.length > 0 && submenu.find("a").length > 0) {
+                    // Has submenu items - show with arrow
+                    const $li = $(
+                        `<li class="nav-mb-item">
+                            <a href="#${id}" class="collapsed mb-menu-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="${id}">
+                                <span>${text}</span>
+                                <span class="icon icon-caret-down"></span>
+                            </a>
+                            <div id="${id}" class="collapse">
+                                <ul class="sub-nav-menu"></ul>
+                            </div>
+                        </li>`
+                    );
 
-                if ($subNav.children().length === 0) {
                     submenu.find("a").each(function () {
                         const link = $(this).attr("href") || "#";
                         const title = $(this).text().trim();
                         if (title !== "") {
-                            $subNav.append(`<li><a href="${link}" class="sub-nav-link">${title}</a></li>`);
+                            $li.find(".sub-nav-menu").append(`<li><a href="${link}" class="sub-nav-link">${title}</a></li>`);
                         }
                     });
+
+                    $mobileMenu.append($li);
+                } else {
+                    // No submenu - direct link
+                    const href = $link.attr("href") || "#";
+                    $mobileMenu.append(
+                        `<li class="nav-mb-item"><a href="${href}" class="mb-menu-link"><span>${text}</span></a></li>`
+                    );
                 }
-                $li.find(`#${id}`).append($subNav);
-                $mobileMenu.append($li);
-            } else {
-                $mobileMenu.append(
-                    `<li class="nav-mb-item"><a href="${$item.find("a").attr("href")}" class="mb-menu-link"><span>${text}</span></a></li>`
-                );
             }
         });
 
@@ -1097,43 +1092,7 @@
             }, 300);
         });
     };
-    /* RTL
-  ------------------------------------------------------------------------------------- */
-    var RTL = function () {
-        var isRTL = $("body").hasClass("rtl") || localStorage.getItem("dir") === "rtl";
-
-        if (isRTL) {
-            $("html").attr("dir", "rtl");
-            $("body").addClass("rtl");
-            $("#toggle-rtl").text("ltr");
-
-            $(".tf-btn,.tf-btn-link").find(".icon").removeClass("icon-arrow-right").addClass("icon-arrow-left");
-            $(".nav-shop_link").find(".icon2").removeClass("icon-caret-right").addClass("icon-caret-left");
-            $(".pagination-item .icon").each(function () {
-                const $icon = $(this);
-                if ($icon.hasClass("icon-caret-right")) {
-                    $icon.removeClass("icon-caret-right").addClass("icon-caret-left");
-                } else if ($icon.hasClass("icon-caret-left")) {
-                    $icon.removeClass("icon-caret-left").addClass("icon-caret-right");
-                }
-            });
-            localStorage.setItem("dir", "rtl");
-        } else {
-            $("html").attr("dir", "ltr");
-            $("body").removeClass("rtl");
-            $("#toggle-rtl").text("rtl");
-            localStorage.setItem("dir", "ltr");
-        }
-        $("#toggle-rtl").on("click", function () {
-            var currentDir = $("html").attr("dir");
-            if (currentDir === "rtl") {
-                localStorage.setItem("dir", "ltr");
-            } else {
-                localStorage.setItem("dir", "rtl");
-            }
-            location.reload();
-        });
-    };
+   
     // Dom Ready
     $(function () {
         headerSticky();
@@ -1154,7 +1113,6 @@
         infiniteSlide();
         handleSidebarFilter();
         estimateShipping();
-        textCopy();
         parallaxie();
         tableCompareRemove();
         clickActive();
@@ -1172,7 +1130,6 @@
         notifyForm();
         customSelect();
         hoverPin();
-        RTL();
         preloader();
     });
 })(jQuery);

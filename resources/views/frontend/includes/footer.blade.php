@@ -184,14 +184,14 @@
         </a>
     </div>
     <div class="toolbar-item">
-        <a href="view-cart.html">
+        <a href="{{ route('contact') }}">
             <span class="toolbar-icon">
-                <i class="icon icon-shopping-cart-simple"></i>
-                <span class="toolbar-count">
+                <i class="icon icon-phone"></i>
+                {{-- <span class="toolbar-count">
                     <livewire:frontend.cart.btn-cart />
-                </span>
+                </span> --}}
             </span>
-            <span class="toolbar-label">Cart</span>
+            <span class="toolbar-label">Contact</span>
         </a>
     </div>
 </div>

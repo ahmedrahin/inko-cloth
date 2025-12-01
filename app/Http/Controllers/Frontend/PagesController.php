@@ -16,64 +16,77 @@ class PagesController extends Controller
 {
     public function home()
     {
+        $last60Days = Carbon::now()->subDays(60);
+
         $featuredCategories = Category::withCount('product')
             ->where('featured', true)
             ->take(10)
             ->get();
 
-        $oneMonthAgo = Carbon::now()->subMonth();
         $trending = Product::activeProducts()
-            ->where('created_at', '>=', $oneMonthAgo)  
+            ->where('created_at', '>=', $last60Days)
             ->withCount([
-                'orderItems as sale_count' => function ($q) {
-                    $q->select(DB::raw('count(*)'));
+                'orderItems as sale_count' => function ($q) use ($last60Days) {
+                    $q->where('created_at', '>=', $last60Days);
                 },
-                'wishlists as wishlist_count' => function ($q) {
-                    $q->select(DB::raw('count(*)'));
+                'wishlists as wishlist_count' => function ($q) use ($last60Days) {
+                    $q->where('created_at', '>=', $last60Days);
                 },
-                'reviews as review_count' => function ($q) {
-                    $q->select(DB::raw('count(*)'))
+                'reviews as review_count' => function ($q) use ($last60Days) {
+                    $q->where('created_at', '>=', $last60Days)
                         ->where('rating', '>=', 3);
                 },
             ])
             ->orderByDesc(DB::raw('sale_count + wishlist_count + review_count'))
             ->take(12)
-            ->get();    
+            ->get();
 
         $newArrivales = Product::activeProducts()
-                        ->orderBy('is_new', 'desc') 
-                        ->orderBy('created_at', 'desc')
-                        ->take(12)
-                        ->get();
+            ->orderBy('is_new', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->take(12)
+            ->get();
 
         $banners = HomeSlider::get();
 
         $selling = Product::activeProducts()
-                    ->withCount('orderItems')
-                    ->having('order_items_count', '>', 0)
-                    ->orderBy('order_items_count', 'desc')
-                    ->take(12)
-                    ->get();
+            ->withCount([
+                'orderItems as order_items_count' => function ($query) use ($last60Days) {
+                    $query->where('created_at', '>=', $last60Days);
+                }
+            ])
+            ->having('order_items_count', '>', 0)
+            ->orderBy('order_items_count', 'desc')
+            ->take(12)
+            ->get();
 
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth   = Carbon::now()->endOfMonth();
-
-        $featuredReviews = Review::with('product')->where('featured',1)->get();
+        $featuredReviews = Review::with('product')
+            ->where('featured', 1)
+            ->get();
 
         $topReviewed = Product::activeProducts()
             ->withCount([
-                'reviews as positive_reviews_count' => function($q) use ($startOfMonth, $endOfMonth) {
-                    $q->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                'reviews as positive_reviews_count' => function($q) use ($last60Days) {
+                    $q->where('created_at', '>=', $last60Days)
                     ->where('rating', '>=', 3);
                 }
             ])
             ->having('positive_reviews_count', '>', 0)
             ->orderBy('positive_reviews_count', 'desc')
             ->take(12)
-            ->get();            
-                    
-        return view('frontend.pages.home', compact('banners','featuredCategories', 'selling', 'newArrivales', 'trending', 'topReviewed', 'featuredReviews'));
+            ->get();
+
+        return view('frontend.pages.home', compact(
+            'banners',
+            'featuredCategories',
+            'selling',
+            'newArrivales',
+            'trending',
+            'topReviewed',
+            'featuredReviews'
+        ));
     }
+
 
     public function resetToFresh()
     {

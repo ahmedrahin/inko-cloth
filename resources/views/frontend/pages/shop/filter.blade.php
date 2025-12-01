@@ -395,5 +395,4 @@
         });
     </script>
 
-    
 @endpush

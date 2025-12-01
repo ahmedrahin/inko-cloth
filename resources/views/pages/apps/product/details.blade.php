@@ -332,13 +332,13 @@
                                 Order Analysis
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        {{-- <li class="nav-item" role="presentation">
                             <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#stock"
                                 type="button" role="tab" aria-controls="contact" aria-selected="true">
                                 <i class="bi bi-clipboard-data"></i>
                                 Stock History
                             </button>
-                        </li>
+                        </li> --}}
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="home-tab" data-bs-toggle="tab"
                                 data-bs-target="#home" type="button" role="tab" aria-controls="home"

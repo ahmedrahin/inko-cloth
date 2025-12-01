@@ -108,8 +108,8 @@ input:focus, select:focus, textarea:focus{
 #featured_category{
     display: none;
 }
-.product-action_list {
-    gap: 57px !important;
+.product-action_list .box-icon{
+    position: inherit !important;
 }
 .box-icon{
     transition: all .3s ease-in-out;
@@ -134,7 +134,25 @@ input:focus, select:focus, textarea:focus{
     .canvas-mb .canvas-header{
         padding-bottom: 17px !important; 
     }
-    .productBoxItem{
-
+    
+    .card-product_info .name-product{
+        font-size: 18px !important;
     }
+    .sect-title {
+        margin-bottom: 20px !important;
+    }
+    .meta-filter-shop{
+        margin-bottom: 10px;
+    }
+    .product-action_list .box-icon{
+        width: 30px;
+        height: 30px;
+    }
+    .card-product_wrapper .box-icon .icon {
+        font-size: 15px;
+    }
+    .product-action_list{
+        gap: 8px;
+    }
+    .product-action_list{top: 12px;}
 }

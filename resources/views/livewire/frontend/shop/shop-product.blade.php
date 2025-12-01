@@ -26,7 +26,7 @@
         @endif
     @endif
     
-    <li class="wishlist">
+    <li>
         <a href="javascript:void(0);" 
            class="hover-tooltip tooltip-left box-icon" 
            wire:click="toggleWishlist({{ $productId }})">

@@ -7,14 +7,6 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend/vendor/nouislider/nouislider.min.css') }}">
      <style>
-        .empty-content {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            height: 100%;
-            transform: translate(-50%, 95%);
-        }
-
         /* Base */
         #category {
             list-style: none;
@@ -164,7 +156,7 @@
             </div>
         </div>
 
-        <div class="flat-spacing-3" style="margin-bottom: 70px;">
+        <div class="flat-spacing-3" style="margin-bottom: 10px;">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-3">
@@ -173,7 +165,8 @@
                     
                     <div class="col-xl-9">
                         <div class="tf-shop-control">
-                            @include('frontend.pages.shop.filter-tags')
+                            {{-- @include('frontend.pages.shop.filter-tags') --}}
+                            <div></div>
                             <div class="tf-control-sorting">
                                 <p class="h6 d-none d-lg-block">Sort by:</p>
                                 <div class="custom-select">

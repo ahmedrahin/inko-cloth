@@ -5,9 +5,9 @@
         </div>
 
         @if (!$featuredProducts->isEmpty())
-               <div class="row" >
+               <div class="row gap-0 px-2" >
                     @foreach ($featuredProducts as $product)
-                        <div class="col-md-3 col-6 p-md-3 productBoxItem">
+                        <div class="col-md-3 col-6 p-md-3 p-2 productBoxItem">
                             @include('frontend.includes.product-info')
                         </div>
                     @endforeach

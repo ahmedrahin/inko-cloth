@@ -103,7 +103,7 @@
                 class="btn btn-success btn-sm me-lg-n7">Edit Order</a> --}}
             <!--end::Button-->
             <!--begin::Button-->
-            <a href="{{ route('order-management.order.create') }}" class="btn btn-primary btn-sm">Add New Order</a>
+            <button class="btn btn-primary btn-sm" >Add New Order</button>
             <!--end::Button-->
         </div>
 

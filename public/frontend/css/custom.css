@@ -75,10 +75,10 @@ input:focus, select:focus, textarea:focus{
     color: white;
 }
 .for-dekstop{
-    display: block;
+    display: block !important;
 }
 .for-mobile{
-    display: none;
+    display: none !important;
 }
 
 .tf-mini-cart-bottom {
@@ -120,10 +120,16 @@ input:focus, select:focus, textarea:focus{
 .card-product_info .price-wrap{
     margin-bottom: 10px;
 }
+.menu-item a.active {
+    color: #c8102e;
+}
+.tf-product-info-wrap .tf-product-total-quantity .group-btn{
+    gap: 9px !important;
+}
 @media screen and (max-width: 800px) {
 
     .for-dekstop{
-        display: none;
+        display: none !important;
     }
     .for-mobile{
         display: block !important;
@@ -155,4 +161,28 @@ input:focus, select:focus, textarea:focus{
         gap: 8px;
     }
     .product-action_list{top: 12px;}
+    .btnBuy button{
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .btnBuy.d-flex {
+        flex-wrap: wrap;
+        margin-top: 20px;
+        width: 100%;
+    }
+    .modal-share .wrap-code{
+        padding: 7px 24px;
+    }
+    .modal-share .btn-coppy-text{min-width: 90px;}
+    .form-change_pass{gap: 20px;}
+    .savePass{
+        width: 100%;
+        margin-top: 25px;
+    }
+    h6 {
+        font-size: 15px;
+    }
+    .table-my_order th, .table-my_order td{font-size: 15px;}
+    .br-line{display: none;}
+    .order-detail_content{grid-template-columns:inherit !important;}
 }

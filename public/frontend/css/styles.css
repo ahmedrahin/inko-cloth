@@ -14637,7 +14637,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 @media (min-width: 1200px) {
   .tf-shop-control {
-    margin-bottom: 48px;
+    margin-bottom: 35px;
   }
 }
 

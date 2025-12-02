@@ -4,14 +4,15 @@
     </button>
 </div>
 
-<div class="meta-filter-shop active" style="">
+<div></div>
+{{-- <div class="meta-filter-shop active" style="">
     <div id="product-count-grid" class="count-text"><span class="count">5</span> Products found</div>
     <div id="applied-filters"><span class="filter-tag remove-tag"><span class="icon icon-close"></span>Price: $0 -
             $458</span></div>
     <button id="remove-all" class="remove-all-filters" style="">
         <i class="icon icon-close"></i> Clear all
     </button>
-</div>
+</div> --}}
 
 
 @push('scripts')

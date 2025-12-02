@@ -30,7 +30,7 @@
             </div>
 
             <div class="tab-pane" id="best-seller" role="tabpanel">
-                @if ($selling->isEmpty())
+                @if (!$selling->isEmpty())
                     <div class="row gap-0 px-2" >
                         @foreach ($selling as $product)
                             <div class="col-md-3 col-6 p-md-3 p-2 productBoxItem">

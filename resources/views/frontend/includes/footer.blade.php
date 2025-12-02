@@ -173,7 +173,7 @@
         </a>
     </div>
     <div class="toolbar-item">
-        <a href="wishlist.html">
+        <a href="{{ route('wishlist') }}">
             <span class="toolbar-icon">
                 <i class="icon icon-heart"></i>
                 <span class="toolbar-count">

@@ -9,7 +9,10 @@
     <style>
         .content  {
             font-size: 18px !important;
-            margin-top: 40px !important;
+            margin-top: 30px !important;
+        }
+       .content ul{
+            padding: 20px 0;
         }
     </style>
 
@@ -17,20 +20,16 @@
 
 @section('body-content')
 
-    <div class="container" style="padding: 50px 0;">
+    <div class="container" style="padding: 50px 20px;">
         <div class="row">
             <h2>Terms & Condition</h2>
 
-            <div class="content" >
+            <div class="content">
                 @php
                     echo App\Models\PagesContent::first()->terms ?? '';
                 @endphp
             </div>
         </div>
     </div>
-
-@endsection
-
-@section('page-script')
 
 @endsection

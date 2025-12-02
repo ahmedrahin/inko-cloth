@@ -9,7 +9,10 @@
     <style>
         .content  {
             font-size: 18px !important;
-            margin-top: 40px !important;
+            margin-top: 30px !important;
+        }
+       .content ul{
+            padding: 20px 0;
         }
     </style>
 
@@ -17,7 +20,7 @@
 
 @section('body-content')
 
-    <div class="container" style="padding: 50px 0;">
+    <div class="container" style="padding: 50px 20px;">
         <div class="row">
             <h2>Privacy Policy</h2>
 
@@ -28,9 +31,5 @@
             </div>
         </div>
     </div>
-
-@endsection
-
-@section('page-script')
 
 @endsection

@@ -116,7 +116,7 @@
                     
                     <div class="col-xl-9">
                         <div class="tf-shop-control">
-                            {{-- @include('frontend.pages.shop.filter-tags') --}}
+                            @include('frontend.pages.shop.filter-tags')
                             <div class="tf-control-sorting">
                                 <p class="h6 d-none d-lg-block">Sort by:</p>
                                 <div class="custom-select">

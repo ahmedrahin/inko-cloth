@@ -71,7 +71,7 @@
 
 @section('body-content')
 
-    <section class="s-page-title style-2">
+    <section class="s-page-title style-2" style="padding-top: 30px !important;">
         <div class="container">
             <div class="content">
                 <ul class="breadcrumbs-page">

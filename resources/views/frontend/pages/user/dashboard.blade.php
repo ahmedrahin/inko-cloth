@@ -91,6 +91,62 @@
                             </div>
                         </div>
                     </div>
+                    <div class="my-account-content">
+                        <h2 class="account-title type-semibold">Recent Orders</h2>
+                        <div class="overflow-auto">
+                            <table class="table-my_order">
+                                <thead>
+                                    <tr>
+                                        <th>Order</th>
+                                        <th class="text-center">Total Item</th>
+                                        <th class="text-center">Grand Total</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-end">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($orders->sortByDesc('id') as $order)
+                                        <tr class="tb-order-item">
+                                            <td class="tb-order_code">#{{ $order->order_id }}</td>
+                                            <td class="text-center">{{ $order->orderItems()->sum('quantity') }}</td>
+                                            <td class="text-center">${{ format_price($order->grand_total) }}</td>
+                                            <td class="text-center">
+                                                @php
+                                                    $status = $order->delivery_status;
+                                                    $statusClasses = [
+                                                        'pending'    => 'stt-pending',
+                                                        'processing' => 'stt-delivery', 
+                                                        'delivered'  => 'stt-delivery',
+                                                        'completed'  => 'stt-complete',
+                                                        'canceled'   => 'stt-cancel',
+                                                        'fake'       => 'stt-fake',
+                                                    ];
+                                                    
+                                                    $statusLabels = [
+                                                        'pending'    => 'Pending',
+                                                        'processing' => 'Processing',
+                                                        'delivered'  => 'Delivered', 
+                                                        'completed'  => 'Completed',
+                                                        'canceled'   => 'Cancelled',
+                                                        'fake'       => 'Fake Order',
+                                                    ];
+                                                @endphp
+                                                <div class="tb-order_status {{ $statusClasses[$status] ?? 'stt-pending' }}">
+                                                    {{ $statusLabels[$status] ?? ucfirst($status) }}
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="{{ route('order.invoice', ['user_id' => auth()->user()->id, 'order_id' => $order->order_id]) }}" class="link fw-semibold">
+                                                    View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>

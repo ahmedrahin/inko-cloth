@@ -107,10 +107,10 @@
                             </div>
                             {{-- optional: keep size-guide only for Size attribute --}}
                             @if (strtolower($attrName) === 'size')
-                                <a href="#size-guide" data-bs-toggle="modal" class="size-guide link h6 fw-medium">
+                                {{-- <a href="#size-guide" data-bs-toggle="modal" class="size-guide link h6 fw-medium">
                                     <i class="icon icon-ruler"></i>
                                     Size Guide
-                                </a>
+                                </a> --}}
                             @endif
                         </div>
 
@@ -166,6 +166,8 @@
                 </button>
             </div>
 
+            <livewire:frontend.wishlist.towishlist :productId="$product->id"></livewire>
+            <livewire:frontend.wishlist.add-wishlist></livewire>
 
             @if($product->stock_out == 1 || $product->quantity == 0)
                 <button class="tf-btn btn-add-to-cart" style="background: #626262;" disabled>
@@ -188,8 +190,7 @@
                 </div>
             @endif
 
-            <livewire:frontend.wishlist.towishlist :productId="$product->id"></livewire>
-            <livewire:frontend.wishlist.add-wishlist></livewire>
+            
         </div>
 
     </div>

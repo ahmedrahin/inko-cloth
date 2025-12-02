@@ -230,26 +230,6 @@
                                             </div>
                                             <input name="term_condition" hidden>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Warranty Note</label>
-                                            <div id="warranty" style="width: 100%"
-                                                class="min-h-200px mb-2 ql-container ql-snow">
-                                                @php
-                                                    echo $contentSetting->warranty_text ?? '';
-                                                @endphp
-                                            </div>
-                                            <input name="warranty" hidden>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Servicing Note</label>
-                                            <div id="servicing_text" style="width: 100%"
-                                                class="min-h-200px mb-2 ql-container ql-snow">
-                                                @php
-                                                    echo $contentSetting->servicing_text ?? '';
-                                                @endphp
-                                            </div>
-                                            <input name="servicing_text" hidden>
-                                        </div>
 
                                         <div class="row py-5">
                                             <div class="col-md-9 offset-md-3">
@@ -362,16 +342,14 @@
                 const privacyEditor = new Quill('#privacy_policy', quillOptions);
                 const refundEditor = new Quill('#refund_policy', quillOptions);
                 const termsEditor = new Quill('#term_condition', quillOptions);
-                const warranty = new Quill('#warranty', quillOptions);
-                const servicing_text = new Quill('#servicing_text', quillOptions);
+                
 
                 // Function to update hidden inputs
                 function updateHiddenInputs() {
                     $('input[name="privacy_policy"]').val(privacyEditor.root.innerHTML);
                     $('input[name="refund_policy"]').val(refundEditor.root.innerHTML);
                     $('input[name="term_condition"]').val(termsEditor.root.innerHTML);
-                    $('input[name="warranty"]').val(warranty.root.innerHTML);
-                    $('input[name="servicing_text"]').val(servicing_text.root.innerHTML);
+                   
                 }
 
                 // Function to send AJAX request

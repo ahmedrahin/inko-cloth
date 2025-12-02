@@ -32,6 +32,21 @@ Order Information
     </div>
 </section>
 
+<div class="btn-sidebar-mb d-lg-none left">
+        <button data-bs-toggle="offcanvas" data-bs-target="#mbSidebar">
+            <i class="icon icon-sidebar"></i>
+        </button>
+    </div>
+    <div class="offcanvas offcanvas-start canvas-sidebar" id="mbSidebar">
+        <div class="canvas-wrapper">
+            <div class="canvas-header">
+                <span class="title h4 fw-bold">My Acount</span>
+                <span class="icon-close link icon-close-popup" data-bs-dismiss="offcanvas"></span>
+            </div>
+            <div class="canvas-body sidebar-mobile-append sidebar-account"></div>
+        </div>
+    </div>
+
 <section class="flat-spacing">
     <div class="container">
         <div class="row">

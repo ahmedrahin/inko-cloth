@@ -15,10 +15,13 @@
                 <nav class="box-navigation">
                     <ul class="box-nav-menu">
                         <li class="menu-item position-relative">
-                            <a href="{{ route('homepage') }}" class="item-link">HOME</a>
+                            <a href="{{ route('homepage') }}" class="item-link {{ request()->routeIs('homepage') ? 'active' : '' }}">HOME</a>
                         </li>
                         <li class="menu-item position-relative">
-                            <a href="{{ route('shop') }}" class="item-link">SHOP</a>
+                            <a href="{{ route('about') }}" class="item-link {{ request()->routeIs('about') ? 'active' : '' }}">ABOUT US</a>
+                        </li>
+                        <li class="menu-item position-relative">
+                            <a href="{{ route('shop') }}" class="item-link {{ request()->routeIs('shop') ? 'active' : '' }}">SHOP</a>
                         </li>
                         <li class="menu-item">
                             <a href="javascript:void(0)" class="item-link">CATEGORIES <i class="icon icon-caret-down"></i></a>
@@ -30,11 +33,11 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="menu-item position-relative">
+                        {{-- <li class="menu-item position-relative">
                             <a href="javascript:void(0)" class="item-link">BLOG</a>
-                        </li>
+                        </li> --}}
                         <li class="menu-item position-relative">
-                            <a href="{{ route('contact') }}" class="item-link">CONTACT US</a>
+                            <a href="{{ route('contact') }}" class="item-link {{ request()->routeIs('contact') ? 'active' : '' }}">CONTACT US</a>
                         </li>
                     </ul>
                 </nav>

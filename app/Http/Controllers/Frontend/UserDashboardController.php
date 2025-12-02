@@ -13,7 +13,8 @@ class UserDashboardController extends Controller
 {
     public function dashboard(){
         $user = User::findOrFail(Auth::id());
-        return view('frontend.pages.user.dashboard', compact('user'));
+        $orders = $user->orders()->take(2)->latest()->where('order_date', '>=', now()->subDays(7))->get();
+        return view('frontend.pages.user.dashboard', compact('user', 'orders'));
     }
 
     public function orders(){

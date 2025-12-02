@@ -181,7 +181,10 @@
                         <span wire:loading.remove wire:target="addToCart">ADD TO CART</span>
                         <span wire:loading wire:target="addToCart" class="formloader"></span>
                     </button>
-                    <button class="tf-btn btn-primary">BUY IT NOW</button>
+                    <button class="tf-btn btn-primary" wire:click="directCheckout">
+                        <span wire:loading.remove wire:target="directCheckout">BUY IT NOW</span>
+                        <span wire:loading wire:target="directCheckout" class="formloader"></span>
+                    </button>
                 </div>
             @endif
 
@@ -197,15 +200,15 @@
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const quantityInputs = document.querySelectorAll('.wg-quantity');
-                
+
                 quantityInputs.forEach((wrapper) => {
                     const addButton = wrapper.querySelector('.btn-increase');
                     const subButton = wrapper.querySelector('.btn-decrease');
                     const inputEl = wrapper.querySelector('.quantity-product');
-                    
+
                     if (inputEl && inputEl.dataset.quantity) {
                         const maxQuantity = parseInt(inputEl.dataset.quantity);
-                        
+
                         // Update quantity display
                         function updateQuantityDisplay() {
                             const currentQuantity = document.getElementById('current-quantity');
@@ -213,14 +216,14 @@
                                 currentQuantity.textContent = inputEl.value;
                             }
                         }
-                        
+
                         // Update button states
                         function updateButtonStates() {
                             const currentValue = Number(inputEl.value);
                             addButton.disabled = (currentValue >= maxQuantity);
                             subButton.disabled = (currentValue <= 1);
                         }
-                        
+
                         // Increase quantity
                         addButton?.addEventListener('click', function() {
                             let currentValue = Number(inputEl.value);
@@ -233,7 +236,7 @@
                             updateButtonStates();
                             updateQuantityDisplay();
                         });
-                        
+
                         // Decrease quantity
                         subButton?.addEventListener('click', function() {
                             let currentValue = Number(inputEl.value);
@@ -246,22 +249,22 @@
                             updateButtonStates();
                             updateQuantityDisplay();
                         });
-                        
+
                         // Handle direct input
                         inputEl.addEventListener('input', function() {
                             let value = Number(inputEl.value);
-                            
+
                             // Validate input
                             if (isNaN(value) || value < 1) {
                                 inputEl.value = 1;
                             } else if (value > maxQuantity) {
                                 inputEl.value = maxQuantity;
                             }
-                            
+
                             updateButtonStates();
                             updateQuantityDisplay();
                         });
-                        
+
                         // Handle blur event for final validation
                         inputEl.addEventListener('blur', function() {
                             if (inputEl.value === '' || isNaN(Number(inputEl.value))) {
@@ -270,7 +273,7 @@
                             updateButtonStates();
                             updateQuantityDisplay();
                         });
-                        
+
                         // Initial button state
                         updateButtonStates();
                         updateQuantityDisplay();

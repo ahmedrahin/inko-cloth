@@ -101,6 +101,71 @@ class AddCart extends Component
         $this->emit('cartAdded');
     }
 
+    public function directCheckout()
+    {
+        $product = Product::with('productStock.attributeOptions.attribute')->find($this->productId);
+
+        if (!$product) {
+            $this->emit('error', 'Product not found.');
+            return;
+        }
+
+        // Validate required attributes
+        $requiredAttributes = [];
+        foreach ($product->productStock as $stock) {
+            foreach ($stock->attributeOptions as $option) {
+                $attrName = $option->attribute->attr_name;
+                $requiredAttributes[$attrName] = true;
+            }
+        }
+
+        foreach (array_keys($requiredAttributes) as $attrName) {
+            if (empty($this->selectedAttributes[$attrName])) {
+                $this->attributeErrors[$attrName] = "Please select $attrName";
+            }
+        }
+
+        if (!empty($this->attributeErrors)) {
+            $this->emit('error', 'Please select all required options.');
+            return;
+        }
+
+        // Validate quantity
+        if ($this->quantity <= 0 || !is_numeric($this->quantity)) {
+            $this->emit('error', 'Invalid product quantity.');
+            return;
+        }
+
+        // Check stock availability
+        if ($this->quantity > $product->quantity) {
+            $this->emit('error', "Only {$product->quantity} items available.");
+            return;
+        }
+
+        // Store product data for direct checkout
+        $checkoutData = [
+            'product_id' => $this->productId,
+            'quantity' => $this->quantity,
+            'attributes' => $this->selectedAttributes,
+            'product_details' => [
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'offer_price' => $product->offer_price,
+                'base_price' => $product->base_price,
+                'image_url' => $product->thumb_image,
+            ],
+            'is_direct_checkout' => true,
+            'added_at' => now(),
+        ];
+
+        session()->put('direct_checkout', $checkoutData);
+        // session()->forget('cart'); // Clear regular cart
+        session()->forget('buy_now_product');
+        session()->forget('applied_coupon');
+
+        return redirect()->route('checkout');
+    }
+
 
     public function render()
     {

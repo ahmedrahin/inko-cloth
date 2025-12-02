@@ -30,7 +30,7 @@ class Checkout extends Component
     public $note;
     public $payment_type;
     public $selectedShippingMethodId;
-    public $selectedShippingCharge = 0 ;
+    public $selectedShippingCharge = 0;
 
     public $cart = [];
     public $quantities = [];
@@ -40,7 +40,7 @@ class Checkout extends Component
     public $appliedCoupon;
     private $cacheKey;
 
-    public $sslcommerzUrl ;
+    public $sslcommerzUrl;
 
     protected $listeners = [
         'cartUpdated' => 'refreshCart',
@@ -59,7 +59,7 @@ class Checkout extends Component
 
         $this->appliedCoupon = session()->get('applied_coupon', null);
 
-        if( Auth::check() ){
+        if (Auth::check()) {
             $this->name = Auth::user()->name;
             $this->email = Auth::user()->email;
             $this->phone = Auth::user()->phone;
@@ -93,24 +93,54 @@ class Checkout extends Component
 
         // Assign valid items to the cart
         $this->cart = $validCart;
-    }
 
+        // Check for direct checkout first
+        $directCheckout = session()->get('direct_checkout');
+
+        if ($directCheckout && $directCheckout['is_direct_checkout']) {
+            $product = Product::find($directCheckout['product_id']);
+
+            if ($product && ($product->status == 1 || $product->status == 3) && $product->quantity > 0) {
+                $cartKey = "{$product->id}";
+                foreach ($directCheckout['attributes'] as $key => $value) {
+                    $cartKey .= "-{$key}:{$value}";
+                }
+                $this->cart = [
+                    $cartKey => [
+                        'product_id' => $product->id,
+                        'quantity' => $directCheckout['quantity'],
+                        'attributes' => $directCheckout['attributes'],
+                        'name' => $product->name,
+                        'slug' => $product->slug,
+                        'offer_price' => $product->offer_price,
+                        'price' => $product->base_price,
+                        'image_url' => $product->thumb_image,
+                        'available_quantity' => $product->quantity,
+                        'discount_option' => $product->discount_option,
+                    ]
+                ];
+
+                return;
+            }
+        }
+
+    }
 
     public function applyCoupon()
     {
-        if( $this->couponCode == null ){
+        if ($this->couponCode == null) {
             $this->emit('error', 'please enter your coupon code.');
             return;
         }
 
         $coupon = Coupon::whereRaw('BINARY code = ?', [$this->couponCode])
-                ->where('status', 1)
-                ->whereDate('start_at', '<=', now())
-                ->where(function ($query) {
-                    $query->whereNull('expire_date')
-                        ->orWhereDate('expire_date', '>=', now());
-                })
-                ->first();
+            ->where('status', 1)
+            ->whereDate('start_at', '<=', now())
+            ->where(function ($query) {
+                $query->whereNull('expire_date')
+                    ->orWhereDate('expire_date', '>=', now());
+            })
+            ->first();
 
         if (!$coupon) {
             $this->emit('error', 'Invalid or expired coupon code!');
@@ -118,12 +148,13 @@ class Checkout extends Component
             return;
         }
 
-         $categoryIds = $coupon->categories()->pluck('categories.id')->toArray();
+        $categoryIds = $coupon->categories()->pluck('categories.id')->toArray();
 
         $eligibleTotal = 0;
         foreach ($this->cart as $item) {
-            $product = \App\Models\Product::find($item['product_id'] ?? explode('-', $item['id'])[0]);
-            if (!$product) continue;
+            $product = Product::find($item['product_id'] ?? explode('-', $item['id'])[0]);
+            if (!$product)
+                continue;
 
             // If coupon has categories, only count products inside them
             if (empty($categoryIds) || $product->category()->whereIn('categories.id', $categoryIds)->exists()) {
@@ -137,7 +168,7 @@ class Checkout extends Component
             return;
         }
 
-        if( $coupon->min_purchase_amount && ($coupon->min_purchase_amount > $this->getTotalAmount() ) ){
+        if ($coupon->min_purchase_amount && ($coupon->min_purchase_amount > $this->getTotalAmount())) {
             $this->emit('error', 'You need to minimum purchase ' . $coupon->min_purchase_amount . 'tk for use this coupon');
             $this->couponCode = '';
             return;
@@ -238,8 +269,8 @@ class Checkout extends Component
         $this->validate($rules, $message);
 
         $cart = session()->get('cart', []);
-
-        if(empty($cart)){
+        $direct_checkout = session()->get('direct_checkout', []);
+        if (empty($cart) && empty($direct_checkout)) {
             $this->emit('error', 'Your cart is empty');
             return;
         }
@@ -277,7 +308,7 @@ class Checkout extends Component
                 'order_date' => Carbon::now(),
                 'note' => $this->note,
                 'grand_total' => $this->grandTotal(),
-                'subtotal'   => $this->getTotalAmount(),
+                'subtotal' => $this->getTotalAmount(),
                 'cupon_code' => $this->appliedCoupon['code'] ?? null,
                 'coupon_discount' => $this->appliedCoupon['discount'] ?? 0,
                 'order_source' => 'website'
@@ -309,8 +340,8 @@ class Checkout extends Component
                     if ($product->fresh()->quantity == 0) {
                         \App\Models\ProductStockManage::create([
                             'product_id' => $product->id,
-                            'stock'      => 'out_of_stock',
-                            'quantity'   => 0,
+                            'stock' => 'out_of_stock',
+                            'quantity' => 0,
                         ]);
                     }
                 }
@@ -332,6 +363,7 @@ class Checkout extends Component
 
             Mail::to(config('app.email'))->send(new OrderPlaced($order));
             session()->forget('cart');
+            session()->forget('direct_checkout');
             session()->forget('applied_coupon');
 
             return redirect()->route('success.order', ['order_id' => $orderId]);
@@ -379,7 +411,7 @@ class Checkout extends Component
 
     public function render()
     {
-        $districts = District::orderBy('name', 'asc')->where('status',1)->get();
+        $districts = District::orderBy('name', 'asc')->where('status', 1)->get();
         return view('livewire.frontend.order.checkout', compact('districts'));
     }
 }

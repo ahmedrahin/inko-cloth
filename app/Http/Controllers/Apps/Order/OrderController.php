@@ -40,7 +40,7 @@ class OrderController extends Controller
                 COUNT(orders.id) as total_orders,
                 COALESCE(SUM(orders.grand_total), 0) as total_amount
             ')
-            ->whereNull('orders.deleted_at') 
+            ->whereNull('orders.deleted_at')
             ->groupBy('orders.delivery_status')
             ->get()
             ->keyBy('status');
@@ -162,8 +162,13 @@ class OrderController extends Controller
     {
         // Fetch cart data from the session
         $cart = session()->get('cart', []);
-        if (empty($cart) || (config('website_settings.guest_checkout') == 0 && !Auth::check()) ) {
+        $direct_checkout = session()->get('direct_checkout', []);
+        if (empty($cart) && empty($direct_checkout)) {
             return redirect()->route('homepage');
+        }
+
+        if (config('website_settings.guest_checkout') == 0 && !Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please login to proceed with checkout.');
         }
 
         // Pass the cart data to the checkout view
@@ -213,7 +218,7 @@ class OrderController extends Controller
                 COUNT(orders.id) as total_orders,
                 COALESCE(SUM(orders.grand_total), 0) as total_amount
             ')
-            ->whereNull('orders.deleted_at') 
+            ->whereNull('orders.deleted_at')
             ->groupBy('orders.delivery_status')
             ->get()
             ->keyBy('status');
@@ -236,11 +241,11 @@ class OrderController extends Controller
         $isMonthExists = DB::table('orders')
                         ->whereYear('order_date', $year)
                         ->whereMonth('order_date', $month)
-                        ->whereNull('orders.deleted_at') 
+                        ->whereNull('orders.deleted_at')
                         ->exists();
 
         $allYear = DB::table('orders')
-                    ->whereNull('orders.deleted_at') 
+                    ->whereNull('orders.deleted_at')
                     ->selectRaw('DISTINCT YEAR(order_date) as year')
                     ->orderBy('year', 'desc')
                     ->pluck('year');
@@ -256,7 +261,7 @@ class OrderController extends Controller
                 COUNT(orders.id) as total_orders,
                 COALESCE(SUM(orders.grand_total), 0) as total_amount
             ')
-            ->whereNull('orders.deleted_at') 
+            ->whereNull('orders.deleted_at')
             ->groupBy('orders.delivery_status')
             ->get()
             ->keyBy('status');

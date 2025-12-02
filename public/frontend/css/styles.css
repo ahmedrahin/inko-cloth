@@ -16645,7 +16645,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 .list-order-product .infor-prd {
   display: grid;
-  gap: 8px;
+  gap: 5px;
   flex: 1;
 }
 

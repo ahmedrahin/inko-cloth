@@ -16,7 +16,7 @@ use App\Mail\OrderPlaced;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Library\SslCommerz\SslCommerzNotification;
-
+use App\Jobs\OrderSent;
 
 class Checkout extends Component
 {
@@ -72,7 +72,7 @@ class Checkout extends Component
         // Retrieve the cart from the session
         $sessionCart = session()->get('cart', []);
 
-        $validCart = []; // Temporary array for valid items
+        $validCart = []; 
 
         foreach ($sessionCart as $cartKey => $item) {
             $productId = explode('-', $cartKey)[0];
@@ -98,18 +98,33 @@ class Checkout extends Component
         $directCheckout = session()->get('direct_checkout');
 
         if ($directCheckout && $directCheckout['is_direct_checkout']) {
+
             $product = Product::find($directCheckout['product_id']);
 
             if ($product && ($product->status == 1 || $product->status == 3) && $product->quantity > 0) {
+
+                // Create cart key with attributes
                 $cartKey = "{$product->id}";
                 foreach ($directCheckout['attributes'] as $key => $value) {
                     $cartKey .= "-{$key}:{$value}";
                 }
+
+                // Convert attributes to view-friendly format
+                $attributesInfo = [];
+                foreach ($directCheckout['attributes'] as $key => $value) {
+                    $attributesInfo[] = [
+                        'name' => ucfirst($key),
+                        'value' => $value,
+                    ];
+                }
+
+                // Final direct checkout cart override
                 $this->cart = [
                     $cartKey => [
                         'product_id' => $product->id,
                         'quantity' => $directCheckout['quantity'],
                         'attributes' => $directCheckout['attributes'],
+                        'attributes_info' => $attributesInfo, 
                         'name' => $product->name,
                         'slug' => $product->slug,
                         'offer_price' => $product->offer_price,
@@ -359,7 +374,8 @@ class Checkout extends Component
                 'note' => 'Order placed, waiting for processing.',
             ]);
 
-            Mail::to(config('app.email'))->send(new OrderPlaced($order));
+            OrderSent::dispatch($order);
+
             session()->forget('cart');
             session()->forget('direct_checkout');
             session()->forget('applied_coupon');

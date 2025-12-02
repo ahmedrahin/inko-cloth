@@ -141,7 +141,10 @@
             <div class="col-lg-5">
                 <div class="fl-sidebar-cart sticky-top">
                     <div class="box-your-order">
-                        <h2 class="title type-semibold">Your Order</h2>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h2 class="title type-semibold">Your Order</h2>
+                            <a href="{{ route('cart') }}" class="text-primary" style="text-decoration: underline;">Update Cart</a>
+                        </div>
                         <ul class="list-order-product">
                             @foreach ($cart as $item)
                                 <li class="order-item">

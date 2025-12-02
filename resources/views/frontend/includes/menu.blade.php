@@ -74,7 +74,6 @@
 
 <livewire:frontend.cart.shopping-cart />
 <livewire:frontend.shop.search-box />
-{{-- <livewire:clear-checkout /> --}}
 
 <!-- Mobile Menu -->
 <div class="offcanvas offcanvas-start canvas-mb" id="mobileMenu">

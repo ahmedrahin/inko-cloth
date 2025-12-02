@@ -1,156 +1,288 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
-	<!--begin::Head-->
-	<head>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Order Alert - {{config('app.name')}}</title>
+    <style>
+        /* Reset and Base Styles */
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            line-height: 1.6;
+            color: #333;
+        }
         
-		<title></title>
-		<meta charset="utf-8" />
-
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-		<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
-		
-	</head>
-	<!--end::Head-->
-	<!--begin::Body-->
-	<body id="kt_body" class="app-blank">
-		
-		<!--begin::Root-->
-		<div class="d-flex flex-column flex-root" id="kt_app_root">
-			<!--begin::Wrapper-->
-			<div class="d-flex flex-column flex-column-fluid">
-				
-				<!--begin::Body-->
-				<div class="scroll-y flex-column-fluid px-10 py-10" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_app_header_nav" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true" style="background-color:#D5D9E2; --kt-scrollbar-color: #d9d0cc; --kt-scrollbar-hover-color: #d9d0cc">
-					<!--begin::Email template-->
-					<style>
-                        html,body { padding:0; margin:0; font-family: Inter, Helvetica, "sans-serif"; } a:hover { color: #009ef7; }
-                        li{display: inline;list-style: none;padding: 0 2px;}
-                        li i {font-size: 18px !important;}
-                    </style>
-					<div id="#kt_app_body_content" style="background-color:#D5D9E2; font-family:Arial,Helvetica,sans-serif; line-height: 1.5; min-height: 100%; font-weight: normal; font-size: 15px; color: #2F3044; margin:0; padding:0; width:100%;">
-						<div style="background-color:#ffffff; padding: 45px 0 34px 0; border-radius: 24px; margin:40px auto; max-width: 600px;">
-							<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" height="auto" style="border-collapse:collapse">
-								<tbody>
-									<tr>
-										<td align="center" valign="center" style="text-align:center; padding-bottom: 10px">
-											<!--begin:Email content-->
-											<div style="text-align:center; margin:0 60px 34px 60px">
-												<!--begin:Logo-->
-												<div style="margin-bottom: 10px">
-													<a href="{{url('/')}}" rel="noopener" target="_blank">
-														<img alt="Logo" src="{{config('app.logo-dark')}}" style="height: 35px" />
-													</a>
-												</div>
-												<!--end:Logo-->
-												
-												<div style="font-size: 14px; font-weight: 500; margin-bottom: 42px; font-family:Arial,Helvetica,sans-serif">
-													<p style="margin-bottom:9px; color:#181C32; font-size: 22px; font-weight:700">Recived a new order</p>
-												</div>
-
-                                                <div>
-													<!--begin:Title-->
-													<h3 style="text-align:left; color:#181C32; font-size: 16px; font-weight:600; margin-bottom: 22px">Customer Information</h3>
-													<!--end:Title-->
-													<!--begin:Items-->
-													<div style="padding-bottom:9px">
-														<!--begin:Item-->
-														<div style="display:flex; justify-content: space-between; color:#7E8299; font-size: 14px; font-weight:500; margin-bottom:8px">
-															<div style="font-family:Arial,Helvetica,sans-serif">Customer Name:</div>
-															<div style="font-family:Arial,Helvetica,sans-serif">{{$order->name}}</div>
-
-														</div>
-														<div style="display:flex; justify-content: space-between; color:#7E8299; font-size: 14px; font-weight:500; margin-bottom:8px">
-															<div style="font-family:Arial,Helvetica,sans-serif">Phone No:</div>
-															<div style="font-family:Arial,Helvetica,sans-serif">{{$order->phone}}</div>
-
-														</div>
-														
-														<div class="separator separator-dashed" style="margin:15px 0; border-color: #dbdfe9;"></div>
-														
-													</div>
-												</div>
-												
-												<div style="margin-bottom: 15px">
-													<!--begin:Title-->
-													<h3 style="text-align:left; color:#181C32; font-size: 16px; font-weight:600; margin-bottom: 22px">Order Information</h3>
-
-													<div style="padding-bottom:9px">
-														<div style="display:flex; justify-content: space-between; color:#7E8299; font-size: 14px; font-weight:500; margin-bottom:8px">
-															<div style="font-family:Arial,Helvetica,sans-serif">Order-id:</div>
-															<div style="font-family:Arial,Helvetica,sans-serif">#{{$order->id}}</div>
-
-														</div>
-														<div style="display:flex; justify-content: space-between; color:#7E8299; font-size: 14px; font-weight:500; margin-bottom:8px">
-															<div style="font-family:Arial,Helvetica,sans-serif">Total Quantity:</div>
-															<div style="font-family:Arial,Helvetica,sans-serif">{{$order->orderItems->sum('quantity')}}</div>
-
-														</div>
-                                                        <div style="display:flex; justify-content: space-between; color:#7E8299; font-size: 14px; font-weight:500; margin-bottom:8px">
-															<div style="font-family:Arial,Helvetica,sans-serif">Grand Total:</div>
-															<div style="font-family:Arial,Helvetica,sans-serif">৳{{$order->grand_total}}</div>
-
-														</div>
-                                                        <div style="display:flex; justify-content: space-between; color:#7E8299; font-size: 14px; font-weight:500; margin-bottom:8px">
-															<div style="font-family:Arial,Helvetica,sans-serif">Order Date:</div>
-															<div style="font-family:Arial,Helvetica,sans-serif">{{ \Carbon\Carbon::parse($order->order_date)->format('M d, Y') }}</div>
-
-														</div>
-													</div>
-													
-												</div>
-												
-												<a href="{{route('order-management.order.show',$order->id)}}" target="_blank" style="background-color:#50cd89; border-radius:6px;display:inline-block; padding:11px 19px; color: #FFFFFF; font-size: 14px; font-weight:500;">Order Details</a>
-												<!--begin:Action-->
-											</div>
-											<!--end:Email content-->
-										</td>
-									</tr>
-									
-									<tr>
-										<td align="center" valign="center" style="text-align:center; padding-bottom: 20px;">
-											@if( !is_null(config('app.facebook')) )
-                                                <li>
-                                                <a href="{{config('app.facebook')}}"><i class="bi bi-facebook"></i></a>
-                                                </li>
-                                            @endif
-                                            @if( !is_null(config('app.whatsapp')) )
-                                                <li>
-                                                <a href="{{config('app.whatsapp')}}"><i class="bi bi-whatsapp"></i></a>
-                                                </li>
-                                            @endif
-                                            @if( !is_null(config('app.instra')) )
-                                                <li>
-                                                <a href="{{config('app.instra')}}"><i class="bi bi-instagram"></i></a>
-                                                </li>
-                                            @endif
-                                            @if( !is_null(config('app.youtube')) )
-                                                <li>
-                                                <a href="{{config('app.youtube')}}"><i class="bi bi-youtube"></i></a>
-                                                </li>
-                                            @endif
-										</td>
-									</tr>
-									<tr>
-										<td align="center" valign="center" style="font-size: 13px; padding:0 15px; text-align:center; font-weight: 500; color: #A1A5B7;font-family:Arial,Helvetica,sans-serif">
-											<p>&copy; Copyright {{config('app.name')}}.</p>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<!--end::Email template-->
-				</div>
-				<!--end::Body-->
-			</div>
-			<!--end::Wrapper-->
-		</div>
-		
-	</body>
-	<!--end::Body-->
+        /* Main Container */
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        
+        /* Header */
+        .email-header {
+            background-color: #4f46e5;
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            max-height: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .header-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .header-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        /* Content */
+        .content {
+            padding: 40px 30px;
+        }
+        
+        /* Section */
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .section-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: -15px;
+            margin-bottom: 20px;
+        }
+        
+        /* Info Grid - Simple Table Layout */
+        .info-grid {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .info-label {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 12px 0;
+            text-align: left;
+            width: 35%;
+        }
+        
+        .info-value {
+            color: #111827;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 12px 0;
+            text-align: left;
+        }
+        
+        .info-row {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        /* Total Section */
+        .total-section {
+            background-color: #f9fafb;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .total-label {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .total-amount {
+            color: #111827;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        /* Button */
+        .button-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .action-button {
+            display: inline-block;
+            background-color: #4f46e5;
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        /* Footer */
+        .email-footer {
+            background-color: #f9fafb;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .social-icons {
+            margin-bottom: 20px;
+        }
+        
+        .social-icon {
+            display: inline-block;
+            margin: 0 8px;
+            color: #6b7280;
+            font-size: 18px;
+            text-decoration: none;
+        }
+        
+        .copyright {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        
+        .company-name {
+            color: #111827;
+            font-weight: 600;
+        }
+        
+        /* Mobile Responsive */
+        @media only screen and (max-width: 480px) {
+            .email-header,
+            .content {
+                padding: 25px 20px;
+            }
+            
+            .header-title {
+                font-size: 24px;
+            }
+            
+            .info-label,
+            .info-value {
+                display: block;
+                width: 100%;
+                padding: 8px 0;
+            }
+            
+            .info-label {
+                font-weight: 600;
+            }
+            
+            .info-row {
+                padding: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <div class="logo-container">
+                <img src="{{config('app.logo-dark')}}" alt="{{config('app.name')}}" class="logo" />
+            </div>
+            <h1 class="header-title">New Order Alert</h1>
+            <p class="header-subtitle">
+                Order Received! A new order has been successfully placed on your store.
+            </p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Customer Information -->
+            <div class="section">
+                <h2 class="section-title">Customer Information</h2>
+                <p class="section-subtitle">Details about the customer</p>
+                
+                <table class="info-grid">
+                    <tr class="info-row">
+                        <td class="info-label">Customer Name</td>
+                        <td class="info-value">{{$order->name}}</td>
+                    </tr>
+                    <tr class="info-row">
+                        <td class="info-label">Phone Number</td>
+                        <td class="info-value">{{$order->phone}}</td>
+                    </tr>
+                    <tr class="info-row">
+                        <td class="info-label">Email Address</td>
+                        <td class="info-value">{{$order->email ?? 'Not provided'}}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Order Information -->
+            <div class="section">
+                <h2 class="section-title">Order Details</h2>
+                <p class="section-subtitle">Complete order information</p>
+                
+                <table class="info-grid">
+                    <tr class="info-row">
+                        <td class="info-label">Order ID</td>
+                        <td class="info-value">#{{$order->order_id}}</td>
+                    </tr>
+                    <tr class="info-row">
+                        <td class="info-label">Total Items</td>
+                        <td class="info-value">{{$order->orderItems->sum('quantity')}} items</td>
+                    </tr>
+                    <tr class="info-row">
+                        <td class="info-label">Order Date</td>
+                        <td class="info-value">{{ \Carbon\Carbon::parse($order->order_date)->format('F j, Y - h:i A') }}</td>
+                    </tr>
+                   
+                </table>
+            </div>
+            
+            <!-- Grand Total -->
+            <div class="total-section">
+                <div class="total-label">Grand Total</div>
+                <div class="total-amount">${{number_format($order->grand_total, 2)}}</div>
+            </div>
+            
+            <!-- Action Button -->
+            <div class="button-container">
+                <a href="{{route('order-management.order.show',$order->id)}}" target="_blank" class="action-button" style="color: white;">
+                    View Complete Order Details
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="email-footer">
+            <div class="copyright">
+                © {{date('Y')}} <span class="company-name">{{config('app.name')}}</span>. All rights reserved.
+                <br>
+                This is an automated notification email.
+            </div>
+        </div>
+    </div>
+</body>
 </html>

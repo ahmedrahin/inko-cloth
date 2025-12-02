@@ -5,7 +5,11 @@
 @endsection
 
 @section('page-css')
-
+    <style>
+        .shop-cart{
+            display: none !important;
+        }
+    </style>
 @endsection
 
 

@@ -22,36 +22,50 @@ use App\Http\Controllers\Payment\BkashPaymentController;
 */
 
 // home and static pages
-Route::controller(PagesController::class)->group(function () {
-    Route::get('/', 'home')->name('homepage');
-    Route::get('/about-us', 'about')->name('about');
-    Route::get('/contact-us', 'contact')->name('contact');
-    Route::post('/send-message', 'resetToFresh')->name('message');
-});
+Route::middleware('clear.direct_checkout')->group(function(){
+    Route::controller(PagesController::class)->group(function () {
+        Route::get('/', 'home')->name('homepage');
+        Route::get('/about-us', 'about')->name('about');
+        Route::get('/contact-us', 'contact')->name('contact');
+        Route::post('/send-message', 'resetToFresh')->name('message');
+    });
 
-Route::get('terms-condition', function(){
-    return view('frontend.pages.static.terms');
-})->name('terms');
-Route::get('privacy-policy', function(){
-    return view('frontend.pages.static.privacy-policy');
-})->name('privacy.policy');
-Route::get('refund-policy', function(){
-    return view('frontend.pages.static.refund');
-})->name('refund.policy');
+    Route::get('terms-condition', function(){
+        return view('frontend.pages.static.terms');
+    })->name('terms');
+    Route::get('privacy-policy', function(){
+        return view('frontend.pages.static.privacy-policy');
+    })->name('privacy.policy');
+    Route::get('refund-policy', function(){
+        return view('frontend.pages.static.refund');
+    })->name('refund.policy');
 
-// product-details page
-Route::get('/product/{slug}', [ShopController::class, 'productDetails'])->name('product-details');
+    // product-details page
+    Route::get('/product/{slug}', [ShopController::class, 'productDetails'])->name('product-details');
 
-Route::get('pc-builder', function(){
-    return view('frontend.pages.offers.pc-builder');
-})->name('pc.builder');
+    // shop page
+    Route::controller(ShopController::class)->group(function () {
+        Route::get('shop', 'allProducts')->name('shop');
+        Route::get('category/{slug1?}/{slug2?}/{slug3?}', [ShopController::class, 'categoryProducts'])->name('category.products');
+        Route::get('/search', 'searchProducts')->name('search.products');
+        Route::get('/wishlist', 'wishlist')->name('wishlist');
+    });
 
-// shop page
-Route::controller(ShopController::class)->group(function () {
-    Route::get('shop', 'allProducts')->name('shop');
-    Route::get('category/{slug1?}/{slug2?}/{slug3?}', [ShopController::class, 'categoryProducts'])->name('category.products');
-    Route::get('/search', 'searchProducts')->name('search.products');
-    Route::get('/wishlist', 'wishlist')->name('wishlist');
+    Route::get('/cart', function(){
+        return view('frontend.pages.order.cart');
+    })->name('cart');
+
+    // user dashboard page
+    Route::controller(UserDashboardController::class)->middleware('auth')->group(function () {
+        Route::get('/account', 'dashboard')->name('user.dashboard');
+        Route::get('/account/order', 'orders')->name('user.orders');
+        Route::get('/account/order-info/{user_id}/{order_id}', 'invoice')->name('order.invoice');
+        Route::get('/account/edit-profile', 'editProfile')->name('user.edit.profile');
+        Route::get('/account/update-password', 'updatePassword')->name('user.edit.password');
+        Route::get('/account/my-wishlist', 'wishlist')->name('user.wishlist');
+        Route::post('avatar/upload', 'uploadAvatar')->name('user.avatar.upload');
+        Route::post('avatar/remove', 'removeAvatar')->name('user.avatar.remove');
+    });
 });
 
 // checkout page
@@ -61,25 +75,8 @@ Route::get('/success-order/{order_id}', function ($order_id) {
     return view('frontend.pages.order.success', compact('order'));
 })->name('success.order');
 
-
 // order invoice download pdf
 Route::get('/order-invoice/{order_id}', [OrderController::class, 'downloadInvoice'])->name('order.invoice.pdf');
-
-Route::get('/cart', function(){
-    return view('frontend.pages.order.cart');
-})->name('cart');
-
-// user dashboard page
-Route::controller(UserDashboardController::class)->middleware('auth')->group(function () {
-    Route::get('/account', 'dashboard')->name('user.dashboard');
-    Route::get('/account/order', 'orders')->name('user.orders');
-    Route::get('/account/order-info/{user_id}/{order_id}', 'invoice')->name('order.invoice');
-    Route::get('/account/edit-profile', 'editProfile')->name('user.edit.profile');
-    Route::get('/account/update-password', 'updatePassword')->name('user.edit.password');
-    Route::get('/account/my-wishlist', 'wishlist')->name('user.wishlist');
-    Route::post('avatar/upload', 'uploadAvatar')->name('user.avatar.upload');
-    Route::post('avatar/remove', 'removeAvatar')->name('user.avatar.remove');
-});
 
 Route::fallback(function () {
     return view('pages.system.fallback');

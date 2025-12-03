@@ -208,7 +208,7 @@
         <!-- Header -->
         <div class="email-header">
             <div class="logo-container">
-                <img src="{{config('app.logo-dark')}}" alt="{{config('app.name')}}" class="logo" />
+                <img src="{{config('app.logo')}}" alt="{{config('app.name')}}" class="logo" />
             </div>
             <h1 class="header-title">New Order Alert</h1>
             <p class="header-subtitle">

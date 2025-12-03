@@ -40,6 +40,22 @@
                             <div class="sld_image">
                                 <img src="{{ asset($banner->image) }}" data-src="{{ asset($banner->image) }}" alt="Image" class="lazyload">
                             </div>
+                            <div class="sld_content">
+                                <div class="container">
+                                    <div class="content-sld_wrap">
+                                        <h1 class="title_sld text-display fade-item fade-item-1">Fall Winter <br class="d-sm-none">Collection</h1>
+                                        <p class="sub-text_sld h5 text-black fade-item fade-item-2">
+                                            Vivamus lacinia odio vitae vestibulum vestibulum
+                                        </p>
+                                        <div class="fade-item fade-item-3">
+                                            <a href="shop-default-list.html" class="tf-btn animate-btn fw-semibold">
+                                                Shop now
+                                                <i class="icon icon-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endforeach

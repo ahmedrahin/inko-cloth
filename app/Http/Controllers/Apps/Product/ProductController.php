@@ -260,6 +260,7 @@ class ProductController extends Controller
             'free_shipping' => $request->free_shipping ?? 'no',
             'is_new' => $request->is_new ?? 2,
             'is_featured' => $request->is_featured ?? 2,
+            'badge' => $request->badge ?? null,
             'pre_order' => $request->preorder ?? 2,
             'model' => $request->model,
             'user_id' => Auth::id(),

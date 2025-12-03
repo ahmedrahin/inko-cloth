@@ -59,12 +59,6 @@
                     $product->is_featured == 1 ? 'checked' : '' }}>
                 <label for="is_featured" class="form-check-label">set as featured product</label>
             </div>
-
-            <div class="form-check form-check-custom form-check-solid mb-2">
-                <input class="form-check-input" type="checkbox" id="preorder" name="preorder" value="1" {{
-                    $product->pre_order == 1 ? 'checked' : '' }}>
-                <label for="preorder" class="form-check-label">set as pre order product</label>
-            </div>
         </div>
 
     </div>
@@ -101,6 +95,27 @@
         </div>
 
 
+    </div>
+</div>
+
+<div class="card card-flush py-4">
+    <!--begin::Card header-->
+    <div class="card-header">
+        <!--begin::Card title-->
+        <div class="card-title">
+            <h2>Badge</h2>
+        </div>
+    </div>
+    <div class="card-body pt-0 pb-7">
+        <select class="form-select mb-2" data-control="select2" data-hide-search="true" data-placeholder="Select an option" id="product_badge" name="badge">
+            <option value=""></option>
+            <option value="trending" {{ $product->badge == 'trending' ? 'selected' : '' }}>Trending</option>
+            <option value="new" {{ $product->badge == 'new' ? 'selected' : '' }}>New Arrival</option>
+            <option value="flash" {{ $product->badge == 'falsh' ? 'selected' : '' }}>Flash Sale</option>
+            <option value="hot" {{ $product->badge == 'hot' ? 'selected' : '' }}>Hot</option>
+        </select>
+
+        <div class="text-muted fs-7">Set the product badge.</div>
     </div>
 </div>
 

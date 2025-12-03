@@ -417,6 +417,7 @@ class ProductEditController extends Controller
             'publish_at' => $request->publish_at,
             'expire_date' => $request->expire_date,
             'pre_order' => $request->preorder ?? 2,
+            'badge' => $request->badge ?? null,
 
             ...$discountDetails,
         ];

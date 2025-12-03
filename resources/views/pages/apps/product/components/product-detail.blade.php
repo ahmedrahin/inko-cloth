@@ -51,10 +51,6 @@
                 <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" value="1">
                 <label for="is_featured" class="form-check-label">set as featured product</label>
             </div>
-             <div class="form-check form-check-custom form-check-solid mb-2">
-                <input class="form-check-input" type="checkbox" id="preorder" name="preorder" value="1">
-                <label for="preorder" class="form-check-label">set as pre order product</label>
-            </div>
         </div>
     </div>
 </div>
@@ -86,6 +82,27 @@
             <input class="form-control" id="kt_ecommerce_add_product_status_datepicker" placeholder="Pick date & time" name="publish_at" value="{{ old('publish_at') }}" />
             <span id="publish_at" class="text-danger"></span>
         </div>
+    </div>
+</div>
+
+<div class="card card-flush py-4">
+    <!--begin::Card header-->
+    <div class="card-header">
+        <!--begin::Card title-->
+        <div class="card-title">
+            <h2>Badge</h2>
+        </div>
+    </div>
+    <div class="card-body pt-0 pb-7">
+        <select class="form-select mb-2" data-control="select2" data-hide-search="true" data-placeholder="Select an option" id="product_badge" name="badge">
+            <option value=""></option>
+            <option value="trending">Trending</option>
+            <option value="new">New Arrival</option>
+            <option value="flash">Flash Sale</option>
+            <option value="hot">Hot</option>
+        </select>
+
+        <div class="text-muted fs-7">Set the product badge.</div>
     </div>
 </div>
 

@@ -164,7 +164,7 @@ class OrderController extends Controller
         $cart = session()->get('cart', []);
         $direct_checkout = session()->get('direct_checkout', []);
         if (empty($cart) && empty($direct_checkout)) {
-            return redirect()->route('homepage');
+            return redirect()->route('shop')->with('error', 'Your cart is empty');
         }
 
         if (config('website_settings.guest_checkout') == 0 && !Auth::check()) {

@@ -166,7 +166,6 @@ class AddCart extends Component
         return redirect()->route('checkout');
     }
 
-
     public function render()
     {
         $product = Product::with([

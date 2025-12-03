@@ -268,9 +268,7 @@ class Checkout extends Component
 
         $this->validate($rules, $message);
 
-        $cart = session()->get('cart', []);
-        $direct_checkout = session()->get('direct_checkout', []);
-        if (empty($cart) && empty($direct_checkout)) {
+        if (empty($this->cart)) {
             $this->emit('error', 'Your cart is empty');
             return;
         }
@@ -314,7 +312,7 @@ class Checkout extends Component
                 'order_source' => 'website'
             ]);
 
-            foreach (session('cart') as $item) {
+            foreach ($this->cart as $item) {
                 $product = Product::find($item['product_id']);
                 if ($product && $product->quantity >= $item['quantity']) {
                     $price = $item['offer_price'];
@@ -414,4 +412,5 @@ class Checkout extends Component
         $districts = District::orderBy('name', 'asc')->where('status', 1)->get();
         return view('livewire.frontend.order.checkout', compact('districts'));
     }
+
 }

@@ -48,7 +48,7 @@
                         @if(!auth()->check())
                             <a class="nav-icon-item link" href="{{ route('user.login') }}"><i class="icon icon-user"></i></a>
                         @else
-                            <a class="nav-icon-item link" href="{{ route('user.dashboard') }}"><i class="icon icon-user"></i></a>    
+                            <a class="nav-icon-item link" href="{{ route('user.dashboard') }}"><i class="icon icon-user"></i></a>
                         @endif
                     </li>
                     <li class="d-none d-md-flex">
@@ -58,7 +58,7 @@
                     </li>
                     <li class="d-none shop-cart d-sm-flex m-0">
                         <a class="nav-icon-item link" href="{{ route('wishlist') }}"><i class="icon icon-heart"></i><livewire:frontend.wishlist.count-wishlist /></a>
-                        
+
                     </li>
                     <li class="shop-cart" data-bs-toggle="offcanvas" data-bs-target="#shoppingCart">
                         <a class="nav-icon-item link" href="#shoppingCart" data-bs-toggle="offcanvas">
@@ -74,6 +74,7 @@
 
 <livewire:frontend.cart.shopping-cart />
 <livewire:frontend.shop.search-box />
+{{-- <livewire:clear-checkout /> --}}
 
 <!-- Mobile Menu -->
 <div class="offcanvas offcanvas-start canvas-mb" id="mobileMenu">
@@ -110,7 +111,7 @@
                 </a>
             </div>
         </div>
-        
+
         <div class="flow-us-wrap">
             <h5 class="title">Follow us on</h5>
             <ul class="tf-social-icon">
@@ -162,9 +163,9 @@
                 @endif
             </ul>
         </div>
-        
+
     </div>
     <div class="canvas-footer">
-        
+
     </div>
 </div>

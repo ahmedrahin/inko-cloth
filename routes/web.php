@@ -22,10 +22,12 @@ use App\Http\Controllers\Payment\BkashPaymentController;
 */
 
 // home and static pages
-Route::get('/', [PagesController::class, 'home'])->name('homepage');
-Route::get('/about-us', [PagesController::class, 'about'])->name('about');
-Route::get('/contact-us', [PagesController::class, 'contact'])->name('contact');
-Route::post('/send-message', [PagesController::class, 'resetToFresh'])->name('message');
+Route::controller(PagesController::class)->group(function () {
+    Route::get('/', 'home')->name('homepage');
+    Route::get('/about-us', 'about')->name('about');
+    Route::get('/contact-us', 'contact')->name('contact');
+    Route::post('/send-message', 'resetToFresh')->name('message');
+});
 
 Route::get('terms-condition', function(){
     return view('frontend.pages.static.terms');
@@ -50,9 +52,6 @@ Route::controller(ShopController::class)->group(function () {
     Route::get('category/{slug1?}/{slug2?}/{slug3?}', [ShopController::class, 'categoryProducts'])->name('category.products');
     Route::get('/search', 'searchProducts')->name('search.products');
     Route::get('/wishlist', 'wishlist')->name('wishlist');
-    Route::get('/compare', 'compare')->name('compare');
-    Route::get('/compare/full', 'fullCompare')->name('full.compare');
-    Route::get('/compare/remove/{id}', 'removeCompare')->name('compare.remove');
 });
 
 // checkout page
@@ -68,7 +67,7 @@ Route::get('/order-invoice/{order_id}', [OrderController::class, 'downloadInvoic
 
 Route::get('/cart', function(){
     return view('frontend.pages.order.cart');
-})->name('cart')->middleware('check.cart');
+})->name('cart');
 
 // user dashboard page
 Route::controller(UserDashboardController::class)->middleware('auth')->group(function () {
@@ -80,11 +79,6 @@ Route::controller(UserDashboardController::class)->middleware('auth')->group(fun
     Route::get('/account/my-wishlist', 'wishlist')->name('user.wishlist');
     Route::post('avatar/upload', 'uploadAvatar')->name('user.avatar.upload');
     Route::post('avatar/remove', 'removeAvatar')->name('user.avatar.remove');
-});
-
-Route::controller(OfferController::class)->group(function () {
-    Route::get('/offers', 'offers')->name('offers');
-    Route::get('/offer-info/{id}', 'offerDetails')->name('offer.details');
 });
 
 Route::fallback(function () {

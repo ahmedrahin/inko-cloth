@@ -1,11 +1,11 @@
 @extends('frontend.layout.app')
 
 @section('page-title')
-    Checkout 
+    Checkout
 @endsection
 
 @section('page-css')
-    
+
 @endsection
 
 

@@ -33,7 +33,7 @@
                             <div class="form_content">
                                 <div class="cols tf-grid-layout sm-col-2">
                                     <fieldset>
-                                        <input type="text" placeholder="Full Name*" wire:model="name" 
+                                        <input type="text" placeholder="Full Name*" wire:model="name"
                                                class="@error('name') error_border @enderror">
                                         @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </fieldset>
@@ -59,7 +59,7 @@
                                 <div class="cols tf-grid-layout sm-col-2">
                                     {{-- <fieldset>
                                         <div class="tf-select">
-                                            <select wire:model="district_id" 
+                                            <select wire:model="district_id"
                                                     class="@error('district_id') error_border @enderror">
                                                 <option value="">Select City</option>
                                                 @foreach ($districts as $district)
@@ -80,7 +80,7 @@
                                         <input type="text" placeholder="Postal code" wire:model="zip_code">
                                     </fieldset>
                                 </div>
-                                
+
                                 <textarea placeholder="Note about your order" style="height: 180px;" wire:model="note"></textarea>
                             </div>
                         </div>
@@ -91,7 +91,7 @@
                             <div class="payment-method-box" id="payment-method-box">
                                 <div class="payment_accordion">
                                     <label for="cash-on" class="payment_check checkbox-wrap">
-                                        <input type="radio" name="payment-method" class="tf-check-rounded style-2" 
+                                        <input type="radio" name="payment-method" class="tf-check-rounded style-2"
                                                id="cash-on" wire:model="payment_type" value="cod">
                                         <span class="pay-title">Cash On Delivery</span>
                                     </label>
@@ -104,7 +104,7 @@
                             <h2 class="title type-semibold">Shipping Method</h2>
                             @foreach ($shippingMethods as $method)
                                 <label for="shipping-{{ $method->id }}" class="check-ship mb-12">
-                                    <input type="radio" id="shipping-{{ $method->id }}" 
+                                    <input type="radio" id="shipping-{{ $method->id }}"
                                            class="tf-check-rounded style-2 line-black"
                                            wire:model="selectedShippingMethodId" value="{{ $method->id }}">
                                     <span class="text h6">
@@ -146,7 +146,7 @@
                             @foreach ($cart as $item)
                                 <li class="order-item">
                                     <a href="{{ route('product-details', $item['slug']) }}" class="img-prd">
-                                        <img class="lazyload" src="{{ asset($item['image_url']) }}" 
+                                        <img class="lazyload" src="{{ asset($item['image_url']) }}"
                                              data-src="{{ asset($item['image_url']) }}" alt="{{ $item['name'] }}">
                                     </a>
                                     <div class="infor-prd">
@@ -176,7 +176,7 @@
                                 <span class="fw-bold text-black">Subtotal</span>
                                 <span>${{ format_price($this->getTotalAmount(), 0) }}</span>
                             </li>
-                            
+
                             @if (!empty($appliedCoupon))
                                 <li class="total-item h6">
                                     <span class="fw-bold text-black">Coupon Discount</span>

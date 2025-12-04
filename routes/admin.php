@@ -169,6 +169,7 @@ Route::middleware(['isAdmin'])->group(function () {
 
      // home slider
     Route::resource('slider', SliderController::class);
+    Route::get('slider-content', [SliderController::class, 'sliderContent'])->name('slider.content');
 
     // offers
     Route::resource('offer', OfferController::class);

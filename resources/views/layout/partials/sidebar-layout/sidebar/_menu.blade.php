@@ -381,39 +381,6 @@
             </div>
             <!--end:Menu item-->
 
-            {{-- <div data-kt-menu-trigger="click"
-                class="menu-item menu-accordion {{ request()->routeIs('offer*') ? 'here show' : '' }}">
-                <!--begin:Menu link-->
-                <span class="menu-link">
-                    <i class="ki-duotone ki-bookmark-2">
-                        <span class="path1"></span>
-                        <span class="path2"></span>
-                    </i>
-                    <span class="menu-title">Offers</span>
-                    <span class="menu-arrow"></span>
-                </span>
-
-                <div class="menu-sub menu-sub-accordion">
-                    <div class="menu-item">
-                        <a class="menu-link {{ request()->routeIs('offer.create') ? 'active' : '' }}"
-                            href="{{ route('offer.create') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">Create New Offer</span>
-                        </a>
-                        <a class="menu-link {{ request()->routeIs('offer.index') ? 'active' : '' }}"
-                            href="{{ route('offer.index') }}">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">Offer List</span>
-                        </a>
-                    </div>
-                </div>
-
-            </div> --}}
-
             <div class="menu-item">
                 <!--begin:Menu link-->
                 <a class="menu-link {{ request()->routeIs('subscription*') ? 'active' : '' }}"
@@ -454,20 +421,41 @@
             </div>
             <!--end:Menu item-->
 
-            <!--begin:Menu item-->
-            <div class="menu-item">
+             <div data-kt-menu-trigger="click"
+                class="menu-item menu-accordion {{ request()->routeIs('slider.*') ? 'here show' : '' }}">
                 <!--begin:Menu link-->
-                <a class="menu-link {{ request()->routeIs('slider*') ? 'active' : '' }}"
-                    href="{{ route('slider.index') }}">
+                <span class="menu-link">
                     <i class="ki-duotone ki-picture">
                         <span class="path1"></span>
                         <span class="path2"></span>
                     </i>
-                    <span class="menu-title">Banner Images</span>
-                </a>
+                    <span class="menu-title">Home Banner</span>
+                    <span class="menu-arrow"></span>
+                </span>
                 <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->routeIs('slider.index') ? 'active' : '' }}"
+                            href="{{ route('slider.index') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Banner Images</span>
+                        </a>
+                        <a class="menu-link {{ request()->routeIs('slider.content') ? 'active' : '' }}"
+                            href="{{ route('slider.content') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Banner Content</span>
+                        </a>
+                    </div>
+
+                </div>
             </div>
-            <!--end:Menu item-->
 
             <!--begin:Menu item-->
             <div class="menu-item pt-5">
@@ -555,7 +543,6 @@
                 <!--end:Menu content-->
             </div>
             <!--end:Menu item-->
-
 
             <div data-kt-menu-trigger="click"
                 class="menu-item menu-accordion {{ request()->routeIs('setting.*') ? 'here show' : '' }}">

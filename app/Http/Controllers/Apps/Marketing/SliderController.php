@@ -53,4 +53,9 @@ class SliderController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Image deleted successfully']);
     }
+
+    public function sliderContent(){
+        return view('pages.apps.slider.content');
+    }
+
 }

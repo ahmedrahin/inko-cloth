@@ -15,6 +15,8 @@ return [
     |
     */
 
+    // test
+
     'name' => env('APP_NAME', 'Shop'),
 
     /*

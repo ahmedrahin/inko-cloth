@@ -10,4 +10,9 @@ class BannerContent extends Model
     protected $guarded = [];
     
     use HasFactory;
+
+     public function slider()
+    {
+        return $this->belongsTo(HomeSlider::class);
+    }
 }

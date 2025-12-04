@@ -56,6 +56,10 @@ Breadcrumbs::for('subscription', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push('Subscription Email', );
 });
+Breadcrumbs::for('banner_content', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Banner Content', );
+});
 
 // Home > Dashboard > User Management
 Breadcrumbs::for('user-management.users.index', function (BreadcrumbTrail $trail) {

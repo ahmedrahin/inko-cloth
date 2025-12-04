@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('banner_contents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('home_slider_id')->constrained()->onDelete('cascade');
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->string('link')->nullable();
             $table->timestamps();

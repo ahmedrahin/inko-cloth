@@ -10,4 +10,9 @@ class HomeSlider extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function content()
+    {
+        return $this->hasOne(BannerContent::class, 'home_slider_id');
+    }
 }

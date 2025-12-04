@@ -19,26 +19,21 @@ class BannerConter extends Component
         'link' => 'nullable|string',
     ];
 
-    protected $listeners = [
-        'open_add_modal' => 'openAddModal',
-    ];
-
+   
     public function openModal($id)
     {
         $this->slider_id = $id;
 
-        dd($this->slider_id = $id);
-
         $content = BannerContent::where('home_slider_id', $id)->first();
 
         if ($content) {
-            $this->title = $content->title;
-            $this->description = $content->description;
-            $this->link = $content->link;
+            $this->title = $content->title ?? null;
+            $this->description = $content->description ?? null;
+            $this->link = $content->link ?? null;
         } else {
-            $this->title = '';
-            $this->description = '';
-            $this->link = '';
+            $this->title = null;
+            $this->description = null;
+            $this->link = null;
         }
     }
 
@@ -55,20 +50,9 @@ class BannerConter extends Component
             ]
         );
 
-        session()->flash('success', 'Banner content updated!');
-        $this->dispatchBrowserEvent('modal-close');
+        $this->emit('success', __('Content update successfully.'));
     }
 
-    public function openAddModal()
-    {
-       $this->reset(['description','title', 'link']);
-    }
-
-    public function hydrate()
-    {
-        $this->resetErrorBag();
-        $this->resetValidation();
-    }
 
     public function render()
     {

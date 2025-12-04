@@ -1,13 +1,12 @@
 <div class="card product-datatable">
 
-    <div class="card-body py-4">
+    <div class="card-body py-4 pt-10">
         <div class="row">
             @foreach ($sliders as $index => $value)
                 <div class="col-md-4 mb-8">
                     <div class="card card-flush h-xl-100 mb-4">
                         <!--begin::Header-->
                         <div class="card-header pt-7">
-                            <!--begin::Title-->
                             <h3 class="card-title align-items-start flex-column">
                                 <span class="card-label fw-bold text-dark">Banner {{ $index + 1 }}</span>
                             </h3>
@@ -17,7 +16,6 @@
                                     data-bs-target="#kt_modal_add{{ $value->id }}"  wire:click="openModal({{ $value->id }})">
                                     {!! getIcon('pencil', 'fs-2', '', 'i') !!}
                                 </button>
-
                             </div>
                         </div>
                         <div class="card-body pt-7">
@@ -36,8 +34,12 @@
                                             </i>
                                         </div>
                                     </a>
-                                    <div class="m-0">
-                                        <h4>Title</h4>
+                                    <div class="mt-5 text-center">
+                                        <h5>{!! $value->content->title ?? '<span class="text-muted">No title</span>' !!}</h5>
+                                        <p>{!! $value->content->description ?? '<span class="text-muted">No description</span>' !!}</p>
+                                        @if($value->content->link)
+                                            <a href="{{ $value->content->link }}" class="text-underline" ta>Link</a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +49,7 @@
                     </div>
                 </div>
 
-                <div class="modal fade" id="kt_modal_add{{ $value->id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal fade" id="kt_modal_add{{ $value->id }}" tabindex="-1" aria-hidden="true" wire:ignore.self>
                     <div class="modal-dialog modal-dialog-centered mw-650px">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -58,15 +60,34 @@
                                 </div>
                             </div>
 
-                            <div class="modal-body px-5 my-7">
+                            <div class="modal-body px-5 my-3">
                                 <form wire:submit.prevent="submit" class="form">
                                     <div class="d-flex flex-column scroll-y px-5 px-lg-10" style="height: 300px;">
 
                                         <div class="fv-row mb-7">
                                             <label class="fw-semibold fs-6 mb-2">Title</label>
-                                            <input type="text" wire:model.defer="name" name="name"
+                                            <input type="text" wire:model.defer="title" name="Title"
                                                 class="form-control form-control-solid mb-3 mb-lg-0 "
                                                 placeholder="Title" />
+                                        </div>
+
+                                        <div class="fv-row mb-7">
+                                            <label class="fw-semibold fs-6 mb-2">Link</label>
+                                            <input type="text" wire:model.defer="link" name="link"
+                                                class="form-control form-control-solid mb-3 mb-lg-0 "
+                                                placeholder="Link" />
+                                        </div>
+
+                                        <div class="fv-row mb-7">
+                                            <label class="fw-semibold fs-6 mb-2">Description</label>
+                                            <textarea name="description"
+                                            wire:model.defer="description"
+                                            class="form-control form-control-solid mb-3 mb-lg-0 @error('description') error-border @enderror"
+                                            placeholder="Write description..."
+                                            style="height: 130px;"></textarea>
+                                            @error('description')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                         <div class="text-center pt-3">

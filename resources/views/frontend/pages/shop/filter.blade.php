@@ -165,9 +165,9 @@
             @endif
             
         </div>
-        <div class="canvas-bottom d-xl-none">
+        {{-- <div class="canvas-bottom d-xl-none">
             <button id="reset-filter" class="tf-btn btn-reset">Reset Filters</button>
-        </div>
+        </div> --}}
     </div>
 </div>
 

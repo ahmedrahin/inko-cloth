@@ -23,7 +23,7 @@
                         <li class="menu-item position-relative">
                             <a href="{{ route('shop') }}" class="item-link {{ request()->routeIs('shop') ? 'active' : '' }}">SHOP</a>
                         </li>
-                        <li class="menu-item">
+                        {{-- <li class="menu-item">
                             <a href="javascript:void(0)" class="item-link">CATEGORIES <i class="icon icon-caret-down"></i></a>
                             <div class="sub-menu mega-menu">
                                 <div class="container">
@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                         {{-- <li class="menu-item position-relative">
                             <a href="javascript:void(0)" class="item-link">BLOG</a>
                         </li> --}}

@@ -3,8 +3,10 @@
 <meta name="author" content="themesflat.com">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description"
-    content="Themesflat Ochaka - A modern and elegant Multipurpose eCommerce HTML Template, perfect for online stores selling rings, necklaces, watches, and other accessories. SEO-optimized, fast-loading, and fully customizable.">
+    content="inky, inky clothing, cap, inky website, ecommerce">
 
 
 {{-- page title --}}
 <title>@yield('page-title') | {{ config('app.name') }} </title>
+
+<img src="{{ asset(config('app.favicon')) }}" alt="">

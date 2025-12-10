@@ -9,4 +9,4 @@
 {{-- page title --}}
 <title>@yield('page-title') | {{ config('app.name') }} </title>
 
-<img src="{{ asset(config('app.favicon')) }}" alt="">
+<link rel="icon" href="{{ asset(config('app.favicon')) }}">

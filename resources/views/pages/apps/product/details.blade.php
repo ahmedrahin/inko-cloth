@@ -118,10 +118,10 @@
                                 </div>
                                 <div class="product-price">
                                     <h4 class="mt-3">
-                                        {{ $product->offer_price }}৳
+                                        ${{ $product->offer_price }}
                                         @if ($product->discount_option == 2 || $product->discount_option == 3)
                                             <span class="text-danger" style="font-weight: 600;">
-                                                <del>{{ formatPrice($product->base_price) }}৳</del>
+                                                <del>${{ formatPrice($product->base_price) }}</del>
                                                 ({{ formatPrice($product->discount_percentage_or_flat_amount) }}{{ $product->discount_option == 2 ? '%' : '' }})
                                             </span>
                                         @endif

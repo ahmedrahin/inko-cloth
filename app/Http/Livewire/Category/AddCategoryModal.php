@@ -211,12 +211,11 @@ class AddCategoryModal extends Component
         // Delete the category by ID
         $category = Category::find($id);
 
-        // Delete the category image if it exists
-        // if ($category && $category->image) {
-        //     Storage::disk('real_public')->delete($category->image);
-        //     $category->update(['image' => null]);
-        // }
-
+        if ($category->image) {
+            Storage::disk('real_public')->delete($category->image);
+            $category->update(['image' => null]);
+        }
+        
         // Now delete the category
         $category->delete();
 

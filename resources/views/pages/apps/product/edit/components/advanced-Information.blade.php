@@ -14,7 +14,7 @@
                     <span id="sku_code" class="text-danger"></span>
                 </div>
                 <div class=" fv-row">
-                    <label class="required form-label">SKU</label>
+                    <label class="required form-label">Quantity</label>
                    <input type="number" name="quantity" value="{{ $product->quantity }}" class="form-control mb-2">
                     <span id="quantity" class="text-danger"></span>
                 </div>

@@ -6,7 +6,7 @@
             <!--begin::Title-->
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bold text-dark">Stock Report</span>
-                <span class="text-gray-400 mt-1 fw-semibold fs-6">Total Stock {{ $product->stockHistories->sum('quantity') }} Psc & Total stock amount {{ format_price($product->stockHistories->sum('total_amount')) }}৳ </span>
+                <span class="text-gray-400 mt-1 fw-semibold fs-6">Total Stock {{ $product->stockHistories->sum('quantity') }} Psc & Total stock amount ${{ format_price($product->stockHistories->sum('total_amount')) }} </span>
             </h3>
 
         </div>
@@ -55,13 +55,13 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        {{ $stock->stock === 'stock_in' ? format_price($stock->product_price). '৳' : '' }}
+                                        {{ $stock->stock === 'stock_in' ? '$' . format_price($stock->product_price) : '' }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $stock->stock === 'stock_in' ? format_price($stock->wholesale_price). '৳' : '' }}
+                                        {{ $stock->stock === 'stock_in' ? '$' . format_price($stock->wholesale_price) : '' }}
                                     </td>
                                     <td class="text-center">
-                                        {{ $stock->stock === 'stock_in' ? format_price($stock->wholesale_price * $stock->quantity). '৳' : '' }}
+                                        {{ $stock->stock === 'stock_in' ? '$' . format_price($stock->wholesale_price * $stock->quantity) : '' }}
                                     </td>
                                     <td class="text-center">
                                         @if ($stock->stock === 'out_of_stock')

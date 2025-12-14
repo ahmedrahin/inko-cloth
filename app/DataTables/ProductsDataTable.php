@@ -28,9 +28,9 @@ class ProductsDataTable extends DataTable
             })
             ->editColumn('base_price', function (Product $product) {
                 if ($product->discount_option == 1) {
-                    return ($product->base_price) . '৳';
+                    return '$' . ($product->base_price);
                 } else {
-                    return ($product->offer_price) . '৳' . '<br><del style="color: #f1416cad">' . ($product->base_price) . '৳' . '</del>';
+                    return '$' . ($product->offer_price) . '<br><del style="color: #f1416cad">' . '$' . ($product->base_price) . '</del>';
                 }
             })
             ->editColumn('offer_price', function (Product $product) {

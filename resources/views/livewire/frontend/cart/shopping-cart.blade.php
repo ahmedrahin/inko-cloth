@@ -44,7 +44,7 @@
                                                 <div class="h6 fw-semibold">
                                                     <span class="number">{{ $item['quantity'] }}x</span>
                                                     <span class="price text-primary tf-mini-card-price">
-                                                        {{ format_price($item['offer_price']) }}৳
+                                                        ${{ format_price($item['offer_price']) }}
                                                     </span>
                                                 </div>
 
@@ -82,7 +82,7 @@
                                     Subtotal (<span class="prd-count">{{ array_sum(array_column($cart, 'quantity')) }}</span> items)
                                 </h6>
                                 <h4 class="text-primary total-price tf-totals-total-value">
-                                    {{ number_format($this->getTotalAmount(), 0) }}৳
+                                    ${{ number_format($this->getTotalAmount(), 0) }}
                                 </h4>
                             </div>
                         </div>

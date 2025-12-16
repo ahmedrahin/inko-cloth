@@ -97,6 +97,15 @@
                                     </label>
                                 </div>
                             </div>
+                            <div class="payment-method-box" id="payment-method-box">
+                                <div class="payment_accordion">
+                                    <label for="stripe" class="payment_check checkbox-wrap">
+                                        <input type="radio" name="payment-method" class="tf-check-rounded style-2"
+                                               id="stripe" wire:model="payment_type" value="stripe">
+                                        <span class="pay-title">Pay with Stripe</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Shipping Method -->

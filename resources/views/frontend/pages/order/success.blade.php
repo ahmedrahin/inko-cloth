@@ -42,7 +42,7 @@
     @php
         $payment = match ($order->payment_type) {
             'cod' => 'Cash On Delivery',
-            'sslcommerz' => 'Online Payment',
+            'stripe' => 'Pay with Stripe',
             default => 'Unknown',
         };
     @endphp

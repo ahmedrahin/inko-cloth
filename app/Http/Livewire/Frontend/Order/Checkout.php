@@ -15,8 +15,9 @@ use App\Models\Coupon;
 use App\Mail\OrderPlaced;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use App\Library\SslCommerz\SslCommerzNotification;
-use App\Jobs\OrderSent;
+
+use App\Services\OrderService;
+use App\Services\StripeService;
 
 class Checkout extends Component
 {
@@ -39,8 +40,6 @@ class Checkout extends Component
     public $discountAmount = 0;
     public $appliedCoupon;
     private $cacheKey;
-
-    public $sslcommerzUrl;
 
     protected $listeners = [
         'cartUpdated' => 'refreshCart',
@@ -267,123 +266,72 @@ class Checkout extends Component
         }
     }
 
-    public function order()
+    protected $rules = [
+        'name' => 'required',
+        'email' => 'nullable|email',
+        'phone' => 'required|numeric',
+        'shipping_address' => 'required',
+        'city' => 'required',
+    ];
+
+    public function order(OrderService $orderService, StripeService $stripeService)
     {
-        $rules = [
-            'name' => 'required',
-            'email' => 'nullable|email',
-            'phone' => 'required|numeric',
-            'shipping_address' => 'required',
-            'city' => 'required',
-        ];
-
-        $message = [
-            'district_id.required' => 'Please select a city.',
-        ];
-
-        $this->validate($rules, $message);
-
-        if (empty($this->cart)) {
-            $this->emit('error', 'Your cart is empty');
-            return;
-        }
-
-        if ($this->selectedShippingMethodId === null) {
-            $this->emit('warning', 'Select a shipping method');
-            return;
-        }
-
-        if ($this->payment_type === '') {
-            $this->emit('warning', 'Select a payment method');
-            return;
-        }
-
-        $letters = Str::upper(Str::random(4));
-        $numbers = (string) rand(1000, 9999);
-        $orderId = str_shuffle($letters . $numbers);
-
-
-        if ($this->payment_type === 'cod') {
-            $order = Order::create([
-                'order_id' => $orderId,
-                'user_id' => Auth::id(),
-                'user_type' => 'customer',
-                'name' => $this->name,
-                'email' => $this->email,
-                'phone' => $this->phone,
-                'shipping_address' => $this->shipping_address,
-                'zip_code' => $this->zip_code,
-                'city' => $this->city,
-                'district_id' => $this->district_id,
-                'payment_type' => 'cod',
-                'shipping_method' => $this->selectedShippingMethodId,
-                'shipping_cost' => $this->selectedShippingCharge,
-                'order_date' => Carbon::now(),
-                'note' => $this->note,
-                'grand_total' => $this->grandTotal(),
-                'subtotal' => $this->getTotalAmount(),
-                'cupon_code' => $this->appliedCoupon['code'] ?? null,
-                'coupon_discount' => $this->appliedCoupon['discount'] ?? 0,
-                'order_source' => 'website'
-            ]);
-
-            foreach ($this->cart as $item) {
-                $product = Product::find($item['product_id']);
-                if ($product && $product->quantity >= $item['quantity']) {
-                    $price = $item['offer_price'];
-                    $product->decrement('quantity', $item['quantity']);
-
-                    $orderItem = $order->orderItems()->create([
-                        'product_id' => $product->id,
-                        'quantity' => $item['quantity'],
-                        'price' => $price,
-                    ]);
-
-                    // Dynamically save all selected attributes
-                    if (!empty($item['attributes']) && is_array($item['attributes'])) {
-                        foreach ($item['attributes'] as $attrName => $attrValue) {
-                            $orderItem->orderItemVariations()->create([
-                                'attribute_name' => $attrName,
-                                'attribute_value' => $attrValue,
-                            ]);
-                        }
-                    }
-
-                    // Check if stock is 0 after decrement, then log it
-                    if ($product->fresh()->quantity == 0) {
-                        \App\Models\ProductStockManage::create([
-                            'product_id' => $product->id,
-                            'stock' => 'out_of_stock',
-                            'quantity' => 0,
-                        ]);
-                    }
-                }
+        $this->validate(); 
+        
+        try {
+            if (empty($this->cart)) {
+                throw new \Exception('Your cart is empty');
             }
 
-            // add notification
-            $notification = new \App\Models\Notification();
-            $notification->create([
-                'type' => 'order',
-                'order_id' => $order->id,
-            ]);
+            if (!$this->selectedShippingMethodId) {
+                throw new \Exception('Select a shipping method');
+            }
 
-            // add order history
-            OrderHistory::create([
-                'order_id' => $order->id,
-                'status' => 'pending',
-                'note' => 'Order placed, waiting for processing.',
-            ]);
+            if (!$this->payment_type) {
+                throw new \Exception('Select a payment method');
+            }
 
-            OrderSent::dispatch($order);
+            if ($this->payment_type === 'cod') {
+                $order = $orderService->placeOrder($this, $this->cart, 'cod');
+                return redirect()->route('success.order', ['order_id' => $order->order_id])-with('success', 'Order placed successfully!');
+            }
 
-            session()->forget('cart');
-            session()->forget('direct_checkout');
-            session()->forget('applied_coupon');
+            if ($this->payment_type === 'stripe') {
+                $orderData = [
+                    'cart' => $this->cart,
+                    'form_data' => [
+                        'name' => $this->name,
+                        'email' => $this->email,
+                        'phone' => $this->phone,
+                        'shipping_address' => $this->shipping_address,
+                        'zip_code' => $this->zip_code,
+                        'city' => $this->city,
+                        'district_id' => $this->district_id,
+                        'selectedShippingMethodId' => $this->selectedShippingMethodId,
+                        'selectedShippingCharge' => $this->selectedShippingCharge,
+                        'note' => $this->note,
+                        'appliedCoupon' => $this->appliedCoupon ?? [],
+                        'grandTotal' => $this->grandTotal(),
+                        'subtotal' => $this->getTotalAmount(),
+                    ]
+                ];
 
-            return redirect()->route('success.order', ['order_id' => $orderId]);
+                $stripeSessionId = 'stripe_order_' . time() . '_' . rand(1000, 9999);
+                session([$stripeSessionId => $orderData]);
+                $userId = auth()->check() ? auth()->id() : null;
+                
+                $session = $stripeService->createCheckout(
+                    $this->cart, 
+                    $this->grandTotal(), 
+                    $userId,
+                    $stripeSessionId
+                );
+
+                return redirect()->away($session->url);
+            }
+        } catch(\Exception $e) {
+            $this->emit('error', $e->getMessage());
         }
-
-        $this->emit('error', 'Invalid payment method selected.');
     }
 
 

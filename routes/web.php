@@ -12,8 +12,7 @@ use App\Http\Controllers\Frontend\UserDashboardController;
 use App\Models\Order;
 use App\Http\Controllers\Apps\Order\OrderController;
 use App\Http\Controllers\Apps\Marketing\OfferController;
-use App\Http\Controllers\Payment\SSLCommerzController;
-use App\Http\Controllers\Payment\BkashPaymentController;
+use App\Http\Controllers\Payment\StripePaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +73,10 @@ Route::get('/success-order/{order_id}', function ($order_id) {
     $order = Order::where('order_id', $order_id)->firstOrFail();
     return view('frontend.pages.order.success', compact('order'));
 })->name('success.order');
+
+// stripe payment
+Route::get('/checkout/success', [StripePaymentController::class, 'handleStripeSuccess'])->name('checkout.success');
+Route::get('/checkout.cancel', [StripePaymentController::class, 'handleStripeCancel'])->name('checkout.cancel');
 
 // order invoice download pdf
 Route::get('/order-invoice/{order_id}', [OrderController::class, 'downloadInvoice'])->name('order.invoice.pdf');

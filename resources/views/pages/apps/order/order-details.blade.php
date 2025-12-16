@@ -570,6 +570,11 @@
                                             <td class="text-dark fs-3 fw-bolder text-end">
                                                 ${{ format_price($order->grand_total) }}</td>
                                         </tr>
+                                        <tr>
+                                            <td colspan="4" class="fs-3 text-success text-end">Paid</td>
+                                            <td class="text-dark fs-3 fw-bolder text-end">
+                                                ${{ format_price($order->paid_amount) }}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                                 <!--end::Table-->

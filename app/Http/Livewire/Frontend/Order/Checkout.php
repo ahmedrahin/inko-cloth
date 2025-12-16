@@ -293,7 +293,7 @@ class Checkout extends Component
 
             if ($this->payment_type === 'cod') {
                 $order = $orderService->placeOrder($this, $this->cart, 'cod');
-                return redirect()->route('success.order', ['order_id' => $order->order_id])-with('success', 'Order placed successfully!');
+                return redirect()->route('success.order', ['order_id' => $order->order_id])->with('success', 'Order placed successfully!');
             }
 
             if ($this->payment_type === 'stripe') {

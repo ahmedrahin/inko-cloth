@@ -126,6 +126,10 @@ input:focus, select:focus, textarea:focus{
 .tf-product-info-wrap .tf-product-total-quantity .group-btn{
     gap: 9px !important;
 }
+.logo-site img {
+    max-height: 100px;
+}
+
 @media screen and (max-width: 800px) {
 
     .for-dekstop{
@@ -133,6 +137,9 @@ input:focus, select:focus, textarea:focus{
     }
     .for-mobile{
         display: block !important;
+    }
+    .logo-site img {
+        max-height: 70px !important;
     }
     .text-logo-mb img {
         max-width: 80%;

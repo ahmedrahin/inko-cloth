@@ -87,7 +87,7 @@
                                     <span class="fs-6">
                                         {{ $order->shipping_address }},
                                         {{ $order->zip_code ? 'zip-code:' . $order->zip_code : '' }}
-                                        <br />{{ $order->district->name }}.
+                                        <br />{{ $order->district->name ?? '' }}.
                                     </span>
                                 </div>
                                 <div class="flex-root d-flex flex-column">

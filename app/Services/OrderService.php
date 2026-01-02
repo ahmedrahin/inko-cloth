@@ -103,10 +103,33 @@ class OrderService
             'note' => 'Order placed, waiting for processing.',
         ]);
 
-        OrderSent::dispatch($order);
+        if ($this->mailIsConfigured()) {
+            if(config('app.email')){
+                OrderSent::dispatch($order);
+            }
+        }
 
         session()->forget('cart');
         session()->forget('direct_checkout');
         session()->forget('applied_coupon');
+    }
+
+    private function mailIsConfigured(): bool
+    {
+        $required = [
+            'mail.default',
+            'mail.mailers.smtp.host',
+            'mail.mailers.smtp.port',
+            'mail.mailers.smtp.username',
+            'mail.mailers.smtp.password',
+        ];
+
+        foreach ($required as $key) {
+            if (empty(config($key))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

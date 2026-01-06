@@ -24,11 +24,11 @@ if (!function_exists('formatCurrencyShort')) {
     function formatCurrencyShort($amount): string
     {
         if ($amount >= 1000000) {
-            return number_format($amount / 1000000, 1) . 'M৳';
+            return '$' . number_format($amount / 1000000, 1) . 'M';
         } elseif ($amount >= 1000) {
-            return number_format($amount / 1000, 1) . 'K৳';
+            return '$' . number_format($amount / 1000, 1) . 'K';
         } else {
-            return number_format($amount, 2) . '৳';
+            return '$' . number_format($amount, 2);
         }
     }
 }

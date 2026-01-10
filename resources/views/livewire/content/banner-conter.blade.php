@@ -37,9 +37,8 @@
                                     <div class="mt-5 text-center">
                                         <h5>{!! $value->content->title ?? '<span class="text-muted">No title</span>' !!}</h5>
                                         <p>{!! $value->content->description ?? '<span class="text-muted">No description</span>' !!}</p>
-                                        @if($value->content->link)
-                                            <a href="{{ $value->content->link }}" class="text-underline" ta>Link</a>
-                                        @endif
+                                        <a href="{{ $value->content->link ?? '#' }}" class="text-underline" ta>Link</a>
+                                        
                                     </div>
                                 </div>
                             </div>

@@ -88,7 +88,7 @@
                         <!-- Payment Method -->
                         <div class="box-ip-payment">
                             <h2 class="title type-semibold">Choose Payment Option</h2>
-                            <div class="payment-method-box" id="payment-method-box">
+                            {{-- <div class="payment-method-box" id="payment-method-box">
                                 <div class="payment_accordion">
                                     <label for="cash-on" class="payment_check checkbox-wrap">
                                         <input type="radio" name="payment-method" class="tf-check-rounded style-2"
@@ -96,7 +96,7 @@
                                         <span class="pay-title">Cash On Delivery</span>
                                     </label>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="payment-method-box" id="payment-method-box">
                                 <div class="payment_accordion">
                                     <label for="stripe" class="payment_check checkbox-wrap">

@@ -272,6 +272,7 @@ class Checkout extends Component
         'phone' => 'required|numeric',
         'shipping_address' => 'required',
         'city' => 'required',
+        'zip_code' => 'required',
     ];
 
     public function order(OrderService $orderService, StripeService $stripeService)

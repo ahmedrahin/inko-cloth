@@ -77,7 +77,8 @@
                                         @error('city') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </fieldset>
                                     <fieldset>
-                                        <input type="text" placeholder="Postal code" wire:model="zip_code">
+                                        <input type="text" placeholder="Postal code" class="@error('zip_code') error_border @enderror" wire:model="zip_code">
+                                        @error('zip_code') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </fieldset>
                                 </div>
 

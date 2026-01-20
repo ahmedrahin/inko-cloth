@@ -107,7 +107,7 @@
     </div>
     <!-- /Collection -->
 
-    <div class="flat-spacing flat-animate-tab">
+    {{-- <div class="flat-spacing flat-animate-tab">
         <div class="container">
             <div class="sect-title wow fadeInUp">
                 <div class="h1 title text-center mb-24">New Arrivals</div>
@@ -128,12 +128,13 @@
         </div>
     </div>
  
-    @include('frontend.includes.home-tap')
+    @include('frontend.includes.home-tap') --}}
+
+    <div style="padding: 50px 0;"></div>
 
     @livewire('frontend.home.special-product')
 
     @if(!empty($featuredReviews))
-        <!-- Testimonial -->
         <section class="flat-spacing pb-10 pt-0">
             <div class="container">
                 <div class="h1 sect-title text-black fw-medium text-center wow fadeInUp">Customer Reviews</div>
@@ -173,12 +174,12 @@
                                     </div>
                                     <span class="br-line"></span>
                                     <div class="tes_product">
-                                        <a class="product-image" href="{{ route('product-details', $product->slug) }}">
+                                        <a class="product-image" href="{{ route('product-details', $review->product->slug) }}">
                                             <img class="lazyload" src="{{ asset($review->product->thumb_image) }}">
                                         </a>
                                         <div class="product-infor">
                                             <h5 class="prd_name">
-                                                <a href="{{ route('product-details', $product->slug) }}" class="link"> {{ $review->product->name }} </a>
+                                                <a href="{{ route('product-details', $review->product->slug) }}" class="link"> {{ $review->product->name }} </a>
                                             </h5>
                                             <div class="price-wrap">
                                                 <span class="price-new h6">${{ format_price($review->product->offer_price) }}</span>
@@ -197,7 +198,6 @@
                 </div>
             </div>
         </section>
-        <!-- /Testimonial -->
     @endif    
     
 @endsection

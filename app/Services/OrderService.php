@@ -7,9 +7,12 @@ use App\Models\{
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Jobs\OrderSent;
+use App\Services\PrintfulService;
 
 class OrderService
 {
+    public function __construct(private PrintfulService $printfulService) {}
+
     public function placeOrder($context, array $cart, string $paymentType = 'cod', $paidAmount = null)
     {
         $orderData = $this->prepareOrderData($context, $paymentType, $paidAmount);
@@ -18,6 +21,7 @@ class OrderService
 
         $this->saveOrderItems($order, $cart);
         $this->afterOrderPlaced($order);
+        $this->printfulService->createOrder($order);
 
         return $order;
     }
@@ -105,7 +109,7 @@ class OrderService
 
         if ($this->mailIsConfigured()) {
             if(config('app.email')){
-                OrderSent::dispatch($order);
+                //OrderSent::dispatch($order);
             }
         }
 

@@ -25,8 +25,7 @@ class PrintfulService
         try {
             $payload = $this->buildOrderPayload($order);
 
-            $response = Http::withToken($this->apiKey)->acceptJson()
-            ->post($this->baseUrl . '/orders', $payload);
+            $response = Http::withToken($this->apiKey)->acceptJson()->post($this->baseUrl . '/orders', $payload);
 
 
             if (!$response->successful()) {
@@ -40,6 +39,10 @@ class PrintfulService
             }
 
             dd($response->body());
+            Log::info('Printful order created', [
+                'order_id' => $order->id,
+                'response' => $response->body(),
+            ]);
 
             $result = $response->json('result');
 
@@ -74,32 +77,45 @@ class PrintfulService
             // }
 
             $items[] = [
-                'variant_id' => 1,
+                'variant_id' => '#6976601b42d574',
                 'quantity'   => (int) $item->quantity,
+                'name'   => $item->product->name ?? 'Unknown Product',
+                'price'  => (float) $item->price,
+                'retail_price'  => (float) $item->price,
+                'image'  => 'https://inkyclothing.com/uploads/product_images/1768774185_4.png',
+                // 'image' => asset($item->product->thumb_image ?? ''),
                 'files' => [
                     [
                         'type' => 'default',
-                        'url'  => 'https://via.placeholder.com/1800x2400.png'
+                        'url'  => 'https://inkyclothing.com/uploads/product_images/1768774185_4.png'
                     ]
                 ]
             ];
 
-
         }
+        
 
         return [
             'external_id' => $order->order_id,
             'recipient' => [
                 'name'    => $order->name,
-                'address1'=> '19749 Dearborn St',
-                'city'    => 'Chatsworth',
+                'address1'=> $order->shipping_address,
+                'city'    => $order->city ?? null,
                 'state_code' => 'CA',
-                'zip'     => '91311',
+                'zip'     => $order->zip_code ?? null,
                 'country_code' => 'US',
-                'phone'   => '2312322334',
-                'email'   => 'test@example.com',
+                'phone'   => $order->phone,
+                'email'   => $order->email ?? null,
             ],
 
+            'retail_costs' => [
+                'currency'    => 'USD',
+                'subtotal'    => (float) $order->subtotal,
+                'discount'    => (float) $order->coupon_discount,
+                'shipping'    => (float) $order->shipping_cost,
+                'tax'         => 0,
+                'total'       => (float) $order->grand_total,
+            ],
 
             'items' => $items,
         ];

@@ -63,6 +63,8 @@ class Checkout extends Component
             $this->email = Auth::user()->email;
             $this->phone = Auth::user()->phone;
             $this->shipping_address = Auth::user()->address_line1;
+            $this->zip_code = Auth::user()->zipCode;
+            $this->city = Auth::user()->city;
         }
     }
 
@@ -268,7 +270,7 @@ class Checkout extends Component
 
     protected $rules = [
         'name' => 'required',
-        'email' => 'nullable|email',
+        'email' => 'required|email',
         'phone' => 'required|numeric',
         'shipping_address' => 'required',
         'city' => 'required',

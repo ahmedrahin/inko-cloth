@@ -33,7 +33,7 @@ return new class extends Migration
             $table->text('cupon_code')->nullable();
             $table->double('coupon_discount', 20, 2)->nullable();
             $table->string('delivery_status', 20)->default('pending');
-            $table->string('payment_method')->nullable();
+            $table->string('payment_type')->nullable();
             $table->string('payment_from', 191)->nullable();
             $table->longText('note')->nullable();
             $table->string('order_source', 15)->nullable();

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Attribute extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = ['attr_name', 'status'];
 
@@ -17,5 +17,5 @@ class Attribute extends Model
     }
 
     // Add a model event to handle related records on deletion
-    
+
 }

@@ -25,9 +25,9 @@ class PrintfulService
         try {
             $payload = $this->buildOrderPayload($order);
 
-            $response = Http::withToken($this->apiKey)
-                ->acceptJson()
-                ->post($this->baseUrl . '/orders', $payload);
+            $response = Http::withToken($this->apiKey)->acceptJson()
+            ->post($this->baseUrl . '/orders', $payload);
+
 
             if (!$response->successful()) {
                 Log::error('Printful order failed', [
@@ -35,16 +35,19 @@ class PrintfulService
                     'response' => $response->body(),
                 ]);
 
+                dd($response->body());
                 return false;
             }
+
+            dd($response->body());
 
             $result = $response->json('result');
 
             // Save Printful reference
-            $order->update([
-                'printful_order_id'   => $result['id'] ?? null,
-                'fulfillment_status'  => 'sent_to_printful',
-            ]);
+            // $order->update([
+            //     'printful_order_id'   => $result['id'] ?? null,
+            //     'fulfillment_status'  => 'sent_to_printful',
+            // ]);
 
             return true;
 
@@ -66,27 +69,38 @@ class PrintfulService
         $items = [];
 
         foreach ($order->orderItems as $item) {
-            if (!$item->product?->printful_variant_id) {
-                continue;
-            }
+            // if (!$item->product?->printful_variant_id) {
+            //     continue;
+            // }
 
             $items[] = [
-                'variant_id' => (int) 444,
+                'variant_id' => 1,
                 'quantity'   => (int) $item->quantity,
+                'files' => [
+                    [
+                        'type' => 'default',
+                        'url'  => 'https://via.placeholder.com/1800x2400.png'
+                    ]
+                ]
             ];
+
+
         }
 
         return [
-            'external_id' => $order->order_id, // your order reference
+            'external_id' => $order->order_id,
             'recipient' => [
                 'name'    => $order->name,
-                'address1'=> $order->shipping_address,
-                'city'    => $order->city,
-                'zip'     => $order->zip_code,
-                'country_code' => 'BD',
-                'phone'   => $order->phone,
-                'email'   => $order->email,
+                'address1'=> '19749 Dearborn St',
+                'city'    => 'Chatsworth',
+                'state_code' => 'CA',
+                'zip'     => '91311',
+                'country_code' => 'US',
+                'phone'   => '2312322334',
+                'email'   => 'test@example.com',
             ],
+
+
             'items' => $items,
         ];
     }

@@ -71,7 +71,7 @@ class Checkout extends Component
         // Retrieve the cart from the session
         $sessionCart = session()->get('cart', []);
 
-        $validCart = []; 
+        $validCart = [];
 
         foreach ($sessionCart as $cartKey => $item) {
             $productId = explode('-', $cartKey)[0];
@@ -123,7 +123,7 @@ class Checkout extends Component
                         'product_id' => $product->id,
                         'quantity' => $directCheckout['quantity'],
                         'attributes' => $directCheckout['attributes'],
-                        'attributes_info' => $attributesInfo, 
+                        'attributes_info' => $attributesInfo,
                         'name' => $product->name,
                         'slug' => $product->slug,
                         'offer_price' => $product->offer_price,
@@ -277,8 +277,8 @@ class Checkout extends Component
 
     public function order(OrderService $orderService, StripeService $stripeService)
     {
-        $this->validate(); 
-        
+        $this->validate();
+
         try {
             if (empty($this->cart)) {
                 throw new \Exception('Your cart is empty');
@@ -307,7 +307,7 @@ class Checkout extends Component
                         'shipping_address' => $this->shipping_address,
                         'zip_code' => $this->zip_code,
                         'city' => $this->city,
-                        'district_id' => $this->district_id,
+                        // 'district_id' => $this->district_id,
                         'selectedShippingMethodId' => $this->selectedShippingMethodId,
                         'selectedShippingCharge' => $this->selectedShippingCharge,
                         'note' => $this->note,
@@ -320,10 +320,10 @@ class Checkout extends Component
                 $stripeSessionId = 'stripe_order_' . time() . '_' . rand(1000, 9999);
                 session([$stripeSessionId => $orderData]);
                 $userId = auth()->check() ? auth()->id() : null;
-                
+
                 $session = $stripeService->createCheckout(
-                    $this->cart, 
-                    $this->grandTotal(), 
+                    $this->cart,
+                    $this->grandTotal(),
                     $userId,
                     $stripeSessionId
                 );
@@ -374,8 +374,8 @@ class Checkout extends Component
 
     public function render()
     {
-        $districts = District::orderBy('name', 'asc')->where('status', 1)->get();
-        return view('livewire.frontend.order.checkout', compact('districts'));
+        //$districts = District::orderBy('name', 'asc')->where('status', 1)->get();
+        return view('livewire.frontend.order.checkout');
     }
 
 }

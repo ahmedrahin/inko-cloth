@@ -8,22 +8,32 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Jobs\OrderSent;
 use App\Services\PrintfulService;
+use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
     public function __construct(private PrintfulService $printfulService) {}
 
+
     public function placeOrder($context, array $cart, string $paymentType = 'cod', $paidAmount = null)
     {
-        $orderData = $this->prepareOrderData($context, $paymentType, $paidAmount);
+        return DB::transaction(function () use ($context, $cart, $paymentType, $paidAmount) {
 
-        $order = Order::create($orderData);
+            $orderData = $this->prepareOrderData($context, $paymentType, $paidAmount);
 
-        $this->saveOrderItems($order, $cart);
-        $this->afterOrderPlaced($order);
-        $this->printfulService->createOrder($order);
+            $order = Order::create($orderData);
 
-        return $order;
+            $this->saveOrderItems($order, $cart);
+            $this->afterOrderPlaced($order);
+
+            $printfulSuccess = $this->printfulService->createOrder($order);
+
+            if (!$printfulSuccess) {
+                throw new \Exception('Printful order failed');
+            }
+
+            return $order;
+        });
     }
 
     private function prepareOrderData($c, string $paymentType = 'cod', $paidAmount): array
@@ -40,7 +50,7 @@ class OrderService
             'shipping_address' => $c->shipping_address,
             'zip_code' => $c->zip_code,
             'city' => $c->city,
-            'district_id' => $c->district_id,
+            // 'district_id' => $c->district_id,
 
             'payment_type' => $paymentType,
             'shipping_method' => $c->selectedShippingMethodId,
@@ -49,7 +59,7 @@ class OrderService
             'order_date' => now(),
             'note' => $c->note,
 
-            'paid_amount' => $paidAmount ?? 0, 
+            'paid_amount' => $paidAmount ?? 0,
             'grand_total' => $c->grandTotal(),
             'subtotal' => $c->getTotalAmount(),
 

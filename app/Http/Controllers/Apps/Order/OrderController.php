@@ -168,7 +168,7 @@ class OrderController extends Controller
         }
 
         if (config('website_settings.guest_checkout') == 0 && !Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please login to proceed with checkout.');
+            return redirect()->route('user.login')->with('error', 'Please login to proceed with checkout.');
         }
 
         // Pass the cart data to the checkout view

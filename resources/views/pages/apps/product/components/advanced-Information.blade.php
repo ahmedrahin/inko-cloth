@@ -60,6 +60,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             @endforeach
                         </div>
 
@@ -80,9 +81,8 @@
                                 <label class="form-label fw-semibold">Image</label>
                                 <input type="file" name="variations[0][image]" class="form-control" accept="image/*">
                             </div>
-                        </div> 
+                        </div>
 
-                    
                         <div class="d-flex align-items-center gap-4 mt-2">
                             <button type="button" data-repeater-delete="" class="btn btn-sm btn-icon btn-light-danger">
                                 <i class="ki-duotone ki-cross fs-1">
@@ -105,7 +105,7 @@
 
         </div>
 
-       
+
     </div>
 </div>
 

@@ -77,23 +77,32 @@ class PrintfulService
             // }
 
             $items[] = [
-                'variant_id' => '#6976601b42d574',
+                'variant_id' => 8938,
                 'quantity'   => (int) $item->quantity,
                 'name'   => $item->product->name ?? 'Unknown Product',
                 'price'  => (float) $item->price,
                 'retail_price'  => (float) $item->price,
-                'image'  => 'https://inkyclothing.com/uploads/product_images/1768774185_4.png',
-                // 'image' => asset($item->product->thumb_image ?? ''),
+                // 'image'  => 'https://inkyclothing.com/uploads/product_images/1768774185_4.png',
+
                 'files' => [
                     [
                         'type' => 'default',
                         'url'  => 'https://inkyclothing.com/uploads/product_images/1768774185_4.png'
                     ]
+                ],
+
+                'options' => [
+                    [
+                        'id' => 'thread_colors',
+                        'value' => ['#000000', '#CC3333']
+                    ]
                 ]
             ];
 
+
+
         }
-        
+
 
         return [
             'external_id' => $order->order_id,

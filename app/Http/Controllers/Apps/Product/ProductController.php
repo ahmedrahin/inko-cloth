@@ -21,6 +21,7 @@ use App\Models\FilterOption;
 use App\Models\ProductFilterValue;
 use App\Services\ProductDetailsService;
 use App\Http\Requests\StoreProductRequest;
+use Illuminate\Support\Facades\Http;
 
 class ProductController extends Controller
 {
@@ -311,7 +312,7 @@ class ProductController extends Controller
         $attributes = $request->input('attributes', []);
         $variationFiles = $request->file('variations', []);
         foreach ($variations as $index => $variation) {
-            
+
              $imageFile = $variationFiles[$index]['image'] ?? null;
 
             $imagePath = null;
@@ -351,7 +352,7 @@ class ProductController extends Controller
         return 'uploads/product_images/variations/' . $fileName;
     }
 
-    
+
     public function show(string $id)
     {
         $data = $this->productService->getProductDetails($id);

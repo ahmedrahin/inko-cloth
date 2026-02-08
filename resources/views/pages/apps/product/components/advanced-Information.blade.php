@@ -54,13 +54,17 @@
                                         <div class="attribute_value" style="width: 85%">
                                             <select class="form-select value_id_item"
                                                 name="attributes[0][{{ $loop->index }}][attribute_value]"
-                                                data-placeholder="Select a value"
+                                                data-placeholder="Select a variation"
                                                 data-kt-ecommerce-catalog-add-product="product_option">
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Printful Variant Id</label>
+                                    <input type="number" min="0" class="form-control"
+                                        name="variations[0][printful_variant_id]" placeholder="Enter Printful Variant Id" />
+                                </div>
                             @endforeach
                         </div>
 
@@ -227,6 +231,11 @@
                                         </div>
                                     </div>
                                 </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Printful Variant Id</label>
+                                        <input type="number" min="0" class="form-control"
+                                            name="variations[${counter}][printful_variant_id]" placeholder="Enter Printful Variant Id" />
+                                    </div>   
                             @endforeach
                         </div>
 

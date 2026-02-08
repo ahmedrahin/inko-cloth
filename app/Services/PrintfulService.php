@@ -72,12 +72,12 @@ class PrintfulService
         $items = [];
 
         foreach ($order->orderItems as $item) {
-            // if (!$item->product?->printful_variant_id) {
-            //     continue;
-            // }
+            if (!$item->product->productStock?->printful_variant_id) {
+                continue;
+            }
 
             $items[] = [
-                'variant_id' => 8938,
+                'variant_id' => $item->product->productStock->printful_variant_id,
                 'quantity'   => (int) $item->quantity,
                 'name'   => $item->product->name ?? 'Unknown Product',
                 'price'  => (float) $item->price,
@@ -99,10 +99,7 @@ class PrintfulService
                 ]
             ];
 
-
-
         }
-
 
         return [
             'external_id' => $order->order_id,

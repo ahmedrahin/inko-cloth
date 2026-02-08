@@ -282,6 +282,7 @@ class ProductEditController extends Controller
                 $stockData = [
                     'quantity' => $variation['quantity'] ?? 0,
                     'price' => $variation['price'] ?? $product->base_price,
+                    'printful_variant_id' => $variation['printful_variant_id'] ?? null,
                 ];
 
                 if ($imagePath) {
@@ -312,6 +313,7 @@ class ProductEditController extends Controller
                     'quantity' => $variation['quantity'] ?? 0,
                     'price' => $variation['price'] ?? $product->base_price,
                     'image' => $imagePath,
+                    'printful_variant_id' => $variation['printful_variant_id'] ?? null,
                 ]);
 
                 // Create attribute options for new variation

@@ -161,27 +161,27 @@ class ProductController extends Controller
         }
 
         // Save specifications if provided
-        if ($request->filled('spec_group')) {
-            foreach ($request->spec_group as $gIndex => $groupName) {
-                if (empty($groupName))
-                    continue;
+        // if ($request->filled('spec_group')) {
+        //     foreach ($request->spec_group as $gIndex => $groupName) {
+        //         if (empty($groupName))
+        //             continue;
 
-                if (!empty($request->spec_name[$gIndex])) {
-                    foreach ($request->spec_name[$gIndex] as $i => $specName) {
-                        $specValue = $request->spec_value[$gIndex][$i] ?? null;
+        //         if (!empty($request->spec_name[$gIndex])) {
+        //             foreach ($request->spec_name[$gIndex] as $i => $specName) {
+        //                 $specValue = $request->spec_value[$gIndex][$i] ?? null;
 
-                        if ($specName || $specValue) {
-                            ProductSpecification::create([
-                                'product_id' => $product->id,
-                                'group' => $groupName,
-                                'name' => $specName,
-                                'value' => $specValue,
-                            ]);
-                        }
-                    }
-                }
-            }
-        }
+        //                 if ($specName || $specValue) {
+        //                     ProductSpecification::create([
+        //                         'product_id' => $product->id,
+        //                         'group' => $groupName,
+        //                         'name' => $specName,
+        //                         'value' => $specValue,
+        //                     ]);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         // insert stock table
         if ($request->has('quantity') && $request->quantity > 0) {
@@ -323,6 +323,7 @@ class ProductController extends Controller
             $stock = $product->productStock()->create([
                 'sku_code' => $variation['sku_code'] ?? null,
                 'quantity' => $variation['quantity'] ?? 0,
+                'printful_variant_id' => $variation['printful_variant_id'] ?? null,
                 'price' => $variation['price'] ?? $product->base_price,
                 'image'    => $imagePath,
             ]);

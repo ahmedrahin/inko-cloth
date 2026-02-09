@@ -2,7 +2,7 @@
 namespace App\Services;
 
 use App\Models\{
-    Order, Product, Notification, OrderHistory, ProductStockManage
+    Order, Product, Notification, OrderHistory, ProductStockManage, ProductStock
 };
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -74,6 +74,7 @@ class OrderService
         foreach ($cart as $item) {
 
             $product = Product::find($item['product_id']);
+            $stock   = ProductStock::find($item['stock_id']);
 
             if (!$product || $product->quantity < $item['quantity']) {
                 continue;
@@ -85,6 +86,7 @@ class OrderService
                 'product_id' => $product->id,
                 'quantity' => $item['quantity'],
                 'price' => $item['offer_price'],
+                'product_stock_id' => $stock->id,
             ]);
 
             foreach ($item['attributes'] ?? [] as $name => $value) {
@@ -119,7 +121,7 @@ class OrderService
 
         if ($this->mailIsConfigured()) {
             if(config('app.email')){
-                //OrderSent::dispatch($order);
+                // OrderSent::dispatch($order);
             }
         }
 

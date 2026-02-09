@@ -41,15 +41,10 @@ class AddCart extends Component
             return;
         }
 
-        // Validate required attributes based on stock
-        $requiredAttributes = [];
+        $allAttributeValues = AttributeValue::all()->keyBy('id');
 
-        foreach ($product->productStock as $stock) {
-            foreach ($stock->attributeOptions as $option) {
-                $attrName = $option->attribute->attr_name;
-                $requiredAttributes[$attrName] = true;
-            }
-        }
+        // Validate required attributes
+        $requiredAttributes = [];
 
         // Check if all required attributes are selected
         foreach (array_keys($requiredAttributes) as $attrName) {
@@ -68,6 +63,52 @@ class AddCart extends Component
             $this->emit('error', 'Invalid product quantity.');
             return;
         }
+        foreach ($product->productStock as $stock) {
+            foreach ($stock->attributeOptions as $option) {
+                $requiredAttributes[$option->attribute->attr_name] = true;
+            }
+        }
+
+        foreach (array_keys($requiredAttributes) as $attrName) {
+            if (empty($this->selectedAttributes[$attrName])) {
+                $this->attributeErrors[$attrName] = "Please select $attrName";
+            }
+        }
+
+        if (!empty($this->attributeErrors)) {
+            $this->emit('error', 'Please select all required options.');
+            return;
+        }
+
+        // Find the stock for selected attributes
+        $selectedStock = null;
+
+        foreach ($product->productStock as $stock) {
+            $matches = true;
+            foreach ($stock->attributeOptions as $option) {
+                $attrName = $option->attribute->attr_name;
+                $attrValueId = $option->attribute_value_id;
+                $attrValue = $allAttributeValues[$attrValueId]->attr_value ?? null;
+                $selectedValue = $this->selectedAttributes[$attrName] ?? null;
+
+                if ($selectedValue != $attrValue) {
+                    $matches = false;
+                    break;
+                }
+            }
+
+            if ($matches) {
+                $selectedStock = $stock;
+                break;
+            }
+        }
+
+
+        if (!$selectedStock) {
+            $this->emit('error', 'Invalid attribute combination.');
+            return;
+        }
+
 
         // Build cart key dynamically
         $cart = session()->get('cart', []);
@@ -85,13 +126,15 @@ class AddCart extends Component
             return;
         }
 
-        // Store in cart - FIXED: Use $newTotalQuantity instead of $this->quantity
         $cart[$cartKey] = [
             'product_id' => $this->productId,
-            'quantity' => $newTotalQuantity,  // THIS WAS THE BUG
+            'quantity' => $newTotalQuantity,
+            'stock_id' => $selectedStock->id,
             'attributes' => $this->selectedAttributes,
             'added_at' => now(),
         ];
+
+        // dd($cart);
 
         session()->put('cart', $cart);
         session()->forget('applied_coupon');

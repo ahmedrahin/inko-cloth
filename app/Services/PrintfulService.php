@@ -27,23 +27,12 @@ class PrintfulService
 
             $response = Http::withToken($this->apiKey)->acceptJson()->post($this->baseUrl . '/orders', $payload);
 
-
             if (!$response->successful()) {
-                Log::error('Printful order failed', [
-                    'order_id' => $order->id,
-                    'response' => $response->body(),
-                ]);
-
                 dd($response->body());
                 return false;
             }
 
-            dd($response->body());
-            Log::info('Printful order created', [
-                'order_id' => $order->id,
-                'response' => $response->body(),
-            ]);
-
+            // dd($response->body());
             $result = $response->json('result');
 
             // Save Printful reference
@@ -72,12 +61,12 @@ class PrintfulService
         $items = [];
 
         foreach ($order->orderItems as $item) {
-            if (!$item->product->productStock?->printful_variant_id) {
+            if (!$item->stock?->printful_variant_id) {
                 continue;
             }
 
             $items[] = [
-                'variant_id' => $item->product->productStock->printful_variant_id,
+                'variant_id' => (int) $item->stock->printful_variant_id,
                 'quantity'   => (int) $item->quantity,
                 'name'   => $item->product->name ?? 'Unknown Product',
                 'price'  => (float) $item->price,

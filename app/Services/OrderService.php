@@ -14,7 +14,6 @@ class OrderService
 {
     public function __construct(private PrintfulService $printfulService) {}
 
-
     public function placeOrder($context, array $cart, string $paymentType = 'cod', $paidAmount = null)
     {
         return DB::transaction(function () use ($context, $cart, $paymentType, $paidAmount) {
@@ -74,7 +73,8 @@ class OrderService
         foreach ($cart as $item) {
 
             $product = Product::find($item['product_id']);
-            $stock   = ProductStock::find($item['stock_id']);
+
+            $stock   = isset($item['stock_id']) ? ProductStock::find($item['stock_id']) : null;
 
             if (!$product || $product->quantity < $item['quantity']) {
                 continue;
@@ -86,7 +86,7 @@ class OrderService
                 'product_id' => $product->id,
                 'quantity' => $item['quantity'],
                 'price' => $item['offer_price'],
-                'product_stock_id' => $stock->id,
+                'product_stock_id' => $stock->id ?? null,
             ]);
 
             foreach ($item['attributes'] ?? [] as $name => $value) {
@@ -148,4 +148,5 @@ class OrderService
 
         return true;
     }
+
 }

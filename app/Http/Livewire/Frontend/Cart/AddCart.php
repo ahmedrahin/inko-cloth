@@ -129,7 +129,7 @@ class AddCart extends Component
         $cart[$cartKey] = [
             'product_id' => $this->productId,
             'quantity' => $newTotalQuantity,
-            'stock_id' => $selectedStock->id,
+            'stock_id' => $selectedStock->id ?? null,
             'attributes' => $this->selectedAttributes,
             'added_at' => now(),
         ];
@@ -153,15 +153,12 @@ class AddCart extends Component
             return;
         }
 
+        $allAttributeValues = AttributeValue::all()->keyBy('id');
+
         // Validate required attributes
         $requiredAttributes = [];
-        foreach ($product->productStock as $stock) {
-            foreach ($stock->attributeOptions as $option) {
-                $attrName = $option->attribute->attr_name;
-                $requiredAttributes[$attrName] = true;
-            }
-        }
 
+        // Check if all required attributes are selected
         foreach (array_keys($requiredAttributes) as $attrName) {
             if (empty($this->selectedAttributes[$attrName])) {
                 $this->attributeErrors[$attrName] = "Please select $attrName";
@@ -178,10 +175,66 @@ class AddCart extends Component
             $this->emit('error', 'Invalid product quantity.');
             return;
         }
+        foreach ($product->productStock as $stock) {
+            foreach ($stock->attributeOptions as $option) {
+                $requiredAttributes[$option->attribute->attr_name] = true;
+            }
+        }
 
-        // Check stock availability
-        if ($this->quantity > $product->quantity) {
-            $this->emit('error', "Only {$product->quantity} items available.");
+        foreach (array_keys($requiredAttributes) as $attrName) {
+            if (empty($this->selectedAttributes[$attrName])) {
+                $this->attributeErrors[$attrName] = "Please select $attrName";
+            }
+        }
+
+        if (!empty($this->attributeErrors)) {
+            $this->emit('error', 'Please select all required options.');
+            return;
+        }
+
+        // Find the stock for selected attributes
+        $selectedStock = null;
+
+        foreach ($product->productStock as $stock) {
+            $matches = true;
+            foreach ($stock->attributeOptions as $option) {
+                $attrName = $option->attribute->attr_name;
+                $attrValueId = $option->attribute_value_id;
+                $attrValue = $allAttributeValues[$attrValueId]->attr_value ?? null;
+                $selectedValue = $this->selectedAttributes[$attrName] ?? null;
+
+                if ($selectedValue != $attrValue) {
+                    $matches = false;
+                    break;
+                }
+            }
+
+            if ($matches) {
+                $selectedStock = $stock;
+                break;
+            }
+        }
+
+
+        if (!$selectedStock) {
+            $this->emit('error', 'Invalid attribute combination.');
+            return;
+        }
+
+
+        // Build cart key dynamically
+        $cart = session()->get('cart', []);
+
+        $cartKey = "{$this->productId}";
+        foreach ($this->selectedAttributes as $key => $value) {
+            $cartKey .= "-{$key}:{$value}";
+        }
+
+        $existingQuantity = isset($cart[$cartKey]) ? $cart[$cartKey]['quantity'] : 0;
+        $newTotalQuantity = $existingQuantity + $this->quantity;
+
+        if ($newTotalQuantity > $product->quantity) {
+            $this->emit('error', "You have exceeded available stock for {$product->name}. Only {$product->quantity} available.");
             return;
         }
 

@@ -25,6 +25,11 @@ class PrintfulService
         try {
             $payload = $this->buildOrderPayload($order);
 
+            // normal order, no variant not an error
+            if (empty($payload['items'])) {
+                return true;
+            }
+
             $response = Http::withToken($this->apiKey)->acceptJson()->post($this->baseUrl . '/orders', $payload);
 
             if (!$response->successful()) {
@@ -36,10 +41,9 @@ class PrintfulService
             $result = $response->json('result');
 
             // Save Printful reference
-            // $order->update([
-            //     'printful_order_id'   => $result['id'] ?? null,
-            //     'fulfillment_status'  => 'sent_to_printful',
-            // ]);
+            $order->update([
+                'printful_order_id'   => $result['id'] ?? null,
+            ]);
 
             return true;
 
@@ -71,7 +75,6 @@ class PrintfulService
                 'name'   => $item->product->name ?? 'Unknown Product',
                 'price'  => (float) $item->price,
                 'retail_price'  => (float) $item->price,
-                // 'image'  => 'https://inkyclothing.com/uploads/product_images/1768774185_4.png',
 
                 'files' => [
                     [

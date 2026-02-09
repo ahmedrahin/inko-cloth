@@ -79,7 +79,7 @@ class PrintfulService
                 'files' => [
                     [
                         'type' => 'default',
-                        'url'  => 'https://inkyclothing.com/uploads/product_images/1768774185_4.png'
+                        'url'  => 'https://inkyclothing.com/uploads/logo_fav/1767371634_1765304455_inky%20clothing-logo.jpg'
                     ]
                 ],
 

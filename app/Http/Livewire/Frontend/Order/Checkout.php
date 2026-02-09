@@ -54,7 +54,7 @@ class Checkout extends Component
     {
         $this->loadCart();
         $this->loadShippingMethods();
-        $this->payment_type = 'cod';
+        $this->payment_type = 'stripe';
 
         $this->appliedCoupon = session()->get('applied_coupon', null);
 
@@ -98,6 +98,8 @@ class Checkout extends Component
         // Check for direct checkout first
         $directCheckout = session()->get('direct_checkout');
 
+        // dd($directCheckout);
+
         if ($directCheckout && $directCheckout['is_direct_checkout']) {
 
             $product = Product::find($directCheckout['product_id']);
@@ -133,6 +135,7 @@ class Checkout extends Component
                         'image_url' => $product->thumb_image,
                         'available_quantity' => $product->quantity,
                         'discount_option' => $product->discount_option,
+                        'stock_id'   => $directCheckout['stock_id'] ?? null,
                     ]
                 ];
 

@@ -14,7 +14,7 @@ class OrderService
 {
     public function __construct(private PrintfulService $printfulService) {}
 
-    public function placeOrder($context, array $cart, string $paymentType = 'cod', $paidAmount = null)
+    public function placeOrder($context, array $cart, string $paymentType = 'stripe', $paidAmount = null)
     {
         return DB::transaction(function () use ($context, $cart, $paymentType, $paidAmount) {
 
@@ -35,7 +35,7 @@ class OrderService
         });
     }
 
-    private function prepareOrderData($c, string $paymentType = 'cod', $paidAmount): array
+    private function prepareOrderData($c, string $paymentType = 'stripe', $paidAmount): array
     {
         return [
             'order_id' => Str::upper(Str::random(4)) . rand(1000, 9999),
@@ -75,7 +75,6 @@ class OrderService
             $product = Product::find($item['product_id']);
 
             $stock   = isset($item['stock_id']) ? ProductStock::find($item['stock_id']) : null;
-
             if (!$product || $product->quantity < $item['quantity']) {
                 continue;
             }

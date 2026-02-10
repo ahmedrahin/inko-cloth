@@ -18,7 +18,7 @@ class PagesController extends Controller
     {
         $last60Days = Carbon::now()->subDays(60);
 
-        $featuredCategories = Category::withCount('product')
+        $featuredCategories = Category::withCount('product')->where('status', 1)
             ->where('featured', true)
             ->take(10)
             ->get();

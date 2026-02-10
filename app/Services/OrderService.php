@@ -120,7 +120,7 @@ class OrderService
 
         if ($this->mailIsConfigured()) {
             if(config('app.email')){
-                // OrderSent::dispatch($order);
+                OrderSent::dispatch($order);
             }
         }
 

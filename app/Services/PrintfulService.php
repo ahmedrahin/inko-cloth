@@ -100,7 +100,7 @@ class PrintfulService
                 'address1'=> $order->shipping_address,
                 'city'    => $order->city ?? null,
                 'state_code' => 'CA',
-                'zip'     => $order->zip_code ?? null,
+                'zip'     => '91311',
                 'country_code' => 'US',
                 'phone'   => $order->phone,
                 'email'   => $order->email ?? null,

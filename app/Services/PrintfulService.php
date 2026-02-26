@@ -79,7 +79,7 @@ class PrintfulService
                 'files' => [
                     [
                         'type' => 'default',
-                       'url' => 'https://extropy.com.bd/uploads/media/1772133143_in.png',
+                       'url' => $item->product->p_logo  ? asset($item->product->p_logo) : 'https://extropy.com.bd/uploads/media/1772133143_in.png',
                     ]
                 ],
 

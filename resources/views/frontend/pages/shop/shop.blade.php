@@ -134,7 +134,7 @@
                         </div>
                         <div class="wrapper-control-shop gridLayout-wrapper">
 
-                            <div class="wrapper-shop tf-grid-layout tf-col-3" id="gridLayout">
+                            <div class="wrapper-shop tf-grid-layout tf-col-3" id="productLayout">
                                 @include('frontend.pages.shop.product-list')
                             </div>
 

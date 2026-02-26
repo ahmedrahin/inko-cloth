@@ -138,11 +138,11 @@ jQuery(function($) {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             beforeSend: function() {
-                $('#gridLayout').addClass('loading');
+                $('#productLayout').addClass('loading');
                 $('#ajax-loader').show();
             },
             success: function(data) {
-                $('#gridLayout').html(data);
+                $('#productLayout').html(data);
                 
                 // Update filter tags from the response
                 updateFilterTags(data);
@@ -156,7 +156,7 @@ jQuery(function($) {
                 history.pushState(null, '', url);
             },
             complete: function() {
-                $('#gridLayout').removeClass('loading');
+                $('#productLayout').removeClass('loading');
                 $('#ajax-loader').hide();
             },
             error: function(xhr) {
@@ -230,7 +230,7 @@ jQuery(function($) {
         clearAllFilters();
     });
     
-    $(document).on('click', '#gridLayout .wg-pagination a', function(e) {
+    $(document).on('click', '#productLayout .wg-pagination a', function(e) {
         e.preventDefault();
         let url = $(this).attr('href');
         loadProducts(url);
@@ -244,7 +244,7 @@ jQuery(function($) {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             success: function(data) {
-                $('#gridLayout').html(data);
+                $('#productLayout').html(data);
                 updateFilterTags(data);
                 syncCheckboxes();
                 if (typeof Livewire !== "undefined") {

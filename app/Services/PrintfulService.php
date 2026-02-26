@@ -79,7 +79,7 @@ class PrintfulService
                 'files' => [
                     [
                         'type' => 'default',
-                        'url'  => 'https://inkyclothing.com/uploads/logo_fav/1767371634_1765304455_inky%20clothing-logo.jpg'
+                       'url' => $item->product->p_logo  ? asset($item->product->p_logo) : 'https://extropy.com.bd/uploads/media/1772133143_in.png',
                     ]
                 ],
 

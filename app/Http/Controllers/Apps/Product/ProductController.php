@@ -230,9 +230,16 @@ class ProductController extends Controller
 
         if ($request->hasFile('back_image')) {
             $backImage = $request->file('back_image');
-            $backImageName = time() . '_' . $backImage->getClientOriginalName();
+            $backImageName = time() .  $backImage->getClientOriginalName();
             $backImage->move(public_path('uploads/product_images'), $backImageName);
             $data['back_image'] = 'uploads/product_images/' . $backImageName;
+        }
+
+        if ($request->hasFile('p_logo')) {
+            $pLogo = $request->file('p_logo'); 
+            $pLogoName = time() . '_p_logo_' . $pLogo->getClientOriginalName();
+            $pLogo->move(public_path('uploads/product_images'), $pLogoName);
+            $data['p_logo'] = 'uploads/product_images/' . $pLogoName;
         }
 
         return $data;

@@ -54,7 +54,7 @@ class Checkout extends Component
     {
         $this->loadCart();
         $this->loadShippingMethods();
-        $this->payment_type = 'stripe';
+        $this->payment_type = 'cod';
 
         $this->appliedCoupon = session()->get('applied_coupon', null);
 

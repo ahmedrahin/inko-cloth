@@ -219,18 +219,18 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     },
                     beforeSend: function() {
-                        $('#gridLayout').addClass('loading');
+                        $('#productLayout').addClass('loading');
                         $('#ajax-loader').show();
                     },
                     success: function(data) {
-                        $('#gridLayout').html(data);
+                        $('#productLayout').html(data);
                         if (typeof Livewire !== "undefined") {
                             Livewire.rescan();
                         }
                         history.pushState(null, '', url);
                     },
                     complete: function() {
-                        $('#gridLayout').removeClass('loading');
+                        $('#productLayout').removeClass('loading');
                         $('#ajax-loader').hide();
                     },
                     error: function(xhr) {
@@ -249,7 +249,7 @@
                 loadProducts();
             });
 
-            $(document).on('click', '#gridLayout .wg-pagination a', function(e) {
+            $(document).on('click', '#productLayout .wg-pagination a', function(e) {
                 e.preventDefault();
                 let url = $(this).attr('href');
                 loadProducts(url);
@@ -263,7 +263,7 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     },
                     success: function(data) {
-                        $('#gridLayout').html(data);
+                        $('#productLayout').html(data);
                         if (typeof Livewire !== "undefined") {
                             Livewire.rescan();
                         }
@@ -367,16 +367,16 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     },
                     beforeSend: function() {
-                        $('#gridLayout').addClass('loading');
+                        $('#productLayout').addClass('loading');
                         $('#ajax-loader').show();
                     },
                     success: function(data) {
-                        $('#gridLayout').html(data);
+                        $('#productLayout').html(data);
                         Livewire.rescan();
                         history.pushState(null, '', url);
                     },
                     complete: function() {
-                        $('#gridLayout').removeClass('loading');
+                        $('#productLayout').removeClass('loading');
                         $('#ajax-loader').hide();
                     },
                     error: function() {

@@ -391,6 +391,26 @@ class ProductEditController extends Controller
             $data['back_image'] = 'uploads/product_images/' . $backImageName;
         }
 
+        // Handle Printful Logo
+        if ($request->hasRemovePLogo == 1) {
+            if ($product->p_logo && file_exists(public_path($product->p_logo))) {
+                unlink(public_path($product->p_logo));
+            }
+            $data['p_logo'] = null;
+
+        } elseif ($request->hasFile('p_logo')) {
+            if ($product->p_logo && file_exists(public_path($product->p_logo))) {
+                unlink(public_path($product->p_logo));
+            }
+
+            $pLogo = $request->file('p_logo');
+            $pLogoName = time() . '_p_logo_' . $pLogo->getClientOriginalName();
+            $pLogo->move(public_path('uploads/product_images'), $pLogoName);
+
+            // Save new logo path to database
+            $data['p_logo'] = 'uploads/product_images/' . $pLogoName;
+        }
+
 
         return $data;
     }

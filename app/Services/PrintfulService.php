@@ -33,11 +33,10 @@ class PrintfulService
             $response = Http::withToken($this->apiKey)->acceptJson()->post($this->baseUrl . '/orders', $payload);
 
             if (!$response->successful()) {
-                dd($response->body());
+                // dd($response->body());
                 return false;
             }
 
-            // dd($response->body());
             $result = $response->json('result');
 
             // Save Printful reference

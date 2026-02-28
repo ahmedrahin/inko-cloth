@@ -221,25 +221,36 @@ class ProductController extends Controller
     {
         $data = [];
 
+        $cleanName = function ($file, $prefix = '') {
+            $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+
+            // space + special char remove
+            $name = preg_replace('/[^A-Za-z0-9\-]/', '-', $name);
+            $name = strtolower($name);
+
+            return time() . '_' . $prefix . $name . '.' . $extension;
+        };
+
         if ($request->hasFile('thumb_image')) {
-            $thumbImage = $request->file('thumb_image');
-            $thumbImageName = time() . '_' . $thumbImage->getClientOriginalName();
-            $thumbImage->move(public_path('uploads/product_images'), $thumbImageName);
-            $data['thumb_image'] = 'uploads/product_images/' . $thumbImageName;
+            $file = $request->file('thumb_image');
+            $fileName = $cleanName($file);
+            $file->move(public_path('uploads/product_images'), $fileName);
+            $data['thumb_image'] = 'uploads/product_images/' . $fileName;
         }
 
         if ($request->hasFile('back_image')) {
-            $backImage = $request->file('back_image');
-            $backImageName = time() .  $backImage->getClientOriginalName();
-            $backImage->move(public_path('uploads/product_images'), $backImageName);
-            $data['back_image'] = 'uploads/product_images/' . $backImageName;
+            $file = $request->file('back_image');
+            $fileName = $cleanName($file);
+            $file->move(public_path('uploads/product_images'), $fileName);
+            $data['back_image'] = 'uploads/product_images/' . $fileName;
         }
 
         if ($request->hasFile('p_logo')) {
-            $pLogo = $request->file('p_logo'); 
-            $pLogoName = time() . '_p_logo_' . $pLogo->getClientOriginalName();
-            $pLogo->move(public_path('uploads/product_images'), $pLogoName);
-            $data['p_logo'] = 'uploads/product_images/' . $pLogoName;
+            $file = $request->file('p_logo');
+            $fileName = $cleanName($file, 'p_logo_');
+            $file->move(public_path('uploads/product_images'), $fileName);
+            $data['p_logo'] = 'uploads/product_images/' . $fileName;
         }
 
         return $data;

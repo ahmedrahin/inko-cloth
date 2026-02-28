@@ -344,77 +344,92 @@ class ProductEditController extends Controller
     }
 
     // Handle file uploads
+    private function makeSafeFileName($file, $prefix = '')
+    {
+        $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+
+        // remove space & special chars
+        $name = preg_replace('/[^A-Za-z0-9\-]/', '-', $name);
+        $name = strtolower($name);
+
+        return time() . '_' . $prefix . $name . '.' . $extension;
+    }
+    
     private function handleFileUploads(Request $request, Product $product): array
     {
         $data = [];
 
-        // Handle thumb image
+        /* ================= THUMB IMAGE ================= */
         if ($request->hasThumbRemove == 1) {
-            // Delete old image from public folder
+
             if ($product->thumb_image && file_exists(public_path($product->thumb_image))) {
                 unlink(public_path($product->thumb_image));
             }
+
             $data['thumb_image'] = null;
+
         } elseif ($request->hasFile('thumb_image')) {
-            // Delete old image from public folder
+
             if ($product->thumb_image && file_exists(public_path($product->thumb_image))) {
                 unlink(public_path($product->thumb_image));
             }
 
-            $thumbImage = $request->file('thumb_image');
-            $thumbImageName = time() . '_' . $thumbImage->getClientOriginalName();
-            $thumbImage->move(public_path('uploads/product_images'), $thumbImageName);
+            $file = $request->file('thumb_image');
+            $fileName = $this->makeSafeFileName($file);
 
-            // Save the image path to the database
-            $data['thumb_image'] = 'uploads/product_images/' . $thumbImageName;
+            $file->move(public_path('uploads/product_images'), $fileName);
+            $data['thumb_image'] = 'uploads/product_images/' . $fileName;
         }
 
 
-        // Handle back image
+        /* ================= BACK IMAGE ================= */
         if ($request->hasBackRemove == 1) {
-            // Delete old back image from the public folder
+
             if ($product->back_image && file_exists(public_path($product->back_image))) {
                 unlink(public_path($product->back_image));
             }
+
             $data['back_image'] = null;
+
         } elseif ($request->hasFile('back_image')) {
-            // Delete old back image from the public folder
+
             if ($product->back_image && file_exists(public_path($product->back_image))) {
                 unlink(public_path($product->back_image));
             }
 
-            $backImage = $request->file('back_image');
-            $backImageName = time() . '_' . $backImage->getClientOriginalName();
-            $backImage->move(public_path('uploads/product_images'), $backImageName);
+            $file = $request->file('back_image');
+            $fileName = $this->makeSafeFileName($file);
 
-            // Save the image path to the database
-            $data['back_image'] = 'uploads/product_images/' . $backImageName;
+            $file->move(public_path('uploads/product_images'), $fileName);
+            $data['back_image'] = 'uploads/product_images/' . $fileName;
         }
 
-        // Handle Printful Logo
+
+        /* ================= PRINTFUL LOGO ================= */
         if ($request->hasRemovePLogo == 1) {
+
             if ($product->p_logo && file_exists(public_path($product->p_logo))) {
                 unlink(public_path($product->p_logo));
             }
+
             $data['p_logo'] = null;
 
         } elseif ($request->hasFile('p_logo')) {
+
             if ($product->p_logo && file_exists(public_path($product->p_logo))) {
                 unlink(public_path($product->p_logo));
             }
 
-            $pLogo = $request->file('p_logo');
-            $pLogoName = time() . '_p_logo_' . $pLogo->getClientOriginalName();
-            $pLogo->move(public_path('uploads/product_images'), $pLogoName);
+            $file = $request->file('p_logo');
+            $fileName = $this->makeSafeFileName($file, 'p_logo_');
 
-            // Save new logo path to database
-            $data['p_logo'] = 'uploads/product_images/' . $pLogoName;
+            $file->move(public_path('uploads/product_images'), $fileName);
+            $data['p_logo'] = 'uploads/product_images/' . $fileName;
         }
-
 
         return $data;
     }
-
 
     private function prepareProductData(array $validated, Request $request): array
     {

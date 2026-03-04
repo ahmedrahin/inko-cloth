@@ -110,7 +110,7 @@
                         </div>
 
                         <!-- Shipping Method -->
-                        <div class="box-ip-shipping" style="margin-bottom: 35px;">
+                        {{-- <div class="box-ip-shipping" style="margin-bottom: 35px;">
                             <h2 class="title type-semibold">Shipping Method</h2>
                             @foreach ($shippingMethods as $method)
                                 <label for="shipping-{{ $method->id }}" class="check-ship mb-12">
@@ -123,7 +123,7 @@
                                     </span>
                                 </label>
                             @endforeach
-                        </div>
+                        </div> --}}
 
                         <!-- Terms & Submit -->
                         {{-- <div class="agree-text mb-3">

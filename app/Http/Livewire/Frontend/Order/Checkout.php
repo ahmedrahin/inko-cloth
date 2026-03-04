@@ -3,16 +3,13 @@
 namespace App\Http\Livewire\Frontend\Order;
 
 use Livewire\Component;
-use App\Models\ShippingMethod;
-use App\Models\District;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\OrderHistory;
+use App\Models\{
+    Order, Product
+};
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Coupon;
-use App\Mail\OrderPlaced;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -53,7 +50,6 @@ class Checkout extends Component
     public function mount()
     {
         $this->loadCart();
-        $this->loadShippingMethods();
         $this->payment_type = 'cod';
 
         $this->appliedCoupon = session()->get('applied_coupon', null);
@@ -228,48 +224,6 @@ class Checkout extends Component
         // $this->emit('info', 'Coupon removed.');
     }
 
-    public function updatedDistrictId($value)
-    {
-        $methods = ShippingMethod::where('status', 1)->where('base_id', $value)->first();
-
-        if ($methods) {
-
-            $this->selectedShippingMethodId = $methods->id;
-            $this->selectedShippingCharge = $methods->base_charge;
-            $this->shippingMethods = collect();
-        } else {
-            $this->loadShippingMethods();
-        }
-    }
-
-    public function loadShippingMethods()
-    {
-        $this->shippingMethods = ShippingMethod::where('status', 1)
-            ->where('base_id', null)
-            ->get();
-
-        if ($this->shippingMethods->count() === 1) {
-            $singleMethod = $this->shippingMethods->first();
-            $this->selectedShippingMethodId = $singleMethod->id;
-            $this->selectedShippingCharge = $singleMethod->provider_charge;
-        } elseif ($this->shippingMethods->count() > 1) {
-            $this->selectedShippingMethodId = null;
-            $this->selectedShippingCharge = 0;
-        }
-    }
-
-    public function updatedSelectedShippingMethodId()
-    {
-        // Validate and fetch the charge securely
-        $shippingMethod = ShippingMethod::where('id', $this->selectedShippingMethodId)
-            ->first();
-
-        if ($shippingMethod) {
-            $this->selectedShippingCharge = $shippingMethod->provider_charge;
-        } else {
-            $this->selectedShippingCharge = 0;
-        }
-    }
 
     protected $rules = [
         'name' => 'required',
@@ -289,9 +243,9 @@ class Checkout extends Component
                 throw new \Exception('Your cart is empty');
             }
 
-            if (!$this->selectedShippingMethodId) {
-                throw new \Exception('Select a shipping method');
-            }
+            // if (!$this->selectedShippingMethodId) {
+            //     throw new \Exception('Select a shipping method');
+            // }
 
             if (!$this->payment_type) {
                 throw new \Exception('Select a payment method');
@@ -313,8 +267,8 @@ class Checkout extends Component
                         'zip_code' => $this->zip_code,
                         'city' => $this->city,
                         // 'district_id' => $this->district_id,
-                        'selectedShippingMethodId' => $this->selectedShippingMethodId,
-                        'selectedShippingCharge' => $this->selectedShippingCharge,
+                        'selectedShippingMethodId' => $this->selectedShippingMethodId ?? null,
+                        'selectedShippingCharge' => $this->selectedShippingCharge ?? 0,
                         'note' => $this->note,
                         'appliedCoupon' => $this->appliedCoupon ?? [],
                         'grandTotal' => $this->grandTotal(),

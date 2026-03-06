@@ -185,7 +185,7 @@ Breadcrumbs::for('review', function (BreadcrumbTrail $trail) {
 // Home > Dashboarad > shipping
 Breadcrumbs::for('shipping', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('District List', route('shipping.district'));
+    $trail->push('State List', route('shipping.state'));
 });
 // Home > Dashboarad > order
 Breadcrumbs::for('orderlist', function (BreadcrumbTrail $trail) {

@@ -73,9 +73,15 @@
                                     </fieldset> --}}
 
                                     <fieldset>
-                                        <input type="text" placeholder="City/state" wire:model="city" class="@error('city') error_border @enderror">
-                                        @error('city') <div class="text-danger small">{{ $message }}</div> @enderror
+                                        <select wire:model="state_code" class="@error('state_code') error_border @enderror">
+                                            <option value="">Select State</option>
+                                            @foreach($states as $state)
+                                                <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('state_code') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </fieldset>
+
                                     <fieldset>
                                         <input type="text" placeholder="Postal code" class="@error('zip_code') error_border @enderror" wire:model="zip_code">
                                         @error('zip_code') <div class="text-danger small">{{ $message }}</div> @enderror

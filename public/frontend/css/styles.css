@@ -4679,7 +4679,7 @@ form input[type=email],
 form input[type=url],
 form input[type=search],
 form input[type=tel],
-form input[type=color] {
+form input[type=color], select {
   outline: 0;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;

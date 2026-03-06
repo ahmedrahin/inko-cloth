@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Http\Livewire\Shipping;
-use App\Models\District;
+use App\Models\State;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class AddDistrict extends Component
 {
     // Properties for storing district data
-    public $district_id;
+    public $state_id;
     public $name;
+    public $code;
     public $status = 1;
     public $edit_mode = false;
 
@@ -34,11 +35,13 @@ class AddDistrict extends Component
     {
         // Validation rules
         $rules = [
-            'name'  => 'required|unique:districts,name',
+            'name'  => 'required|unique:states,name',
+            'code'  => 'required|unique:states,code',
         ];
 
         if ($this->edit_mode) {
-            $rules['name'] = 'required|unique:districts,name,' . $this->district_id;
+            $rules['name'] = 'required|unique:districts,name,' . $this->state_id;
+            $rules['code'] = 'required|unique:districts,code,' . $this->state_id;
         }
 
         // Validate form input
@@ -61,14 +64,15 @@ class AddDistrict extends Component
         // Prepare the district data
         $districtData = [
             'name' => $this->name,
+            'code' => $this->code,
             'status' => $this->status,
         ];
 
         // Create the district
-        District::create($districtData);
+        State::create($districtData);
 
         // Emit success message
-        $this->emit('success', __('District created successfully.'));
+        $this->emit('success', __('State created successfully.'));
         $this->refreshCache();
 
         // Reset form fields
@@ -78,10 +82,10 @@ class AddDistrict extends Component
     // update the district
     public function updatedistrict($id)
     {
-        $district = district::findOrFail($id);
+        $district = State::findOrFail($id);
 
         $this->edit_mode = true;
-        $this->district_id = $district->id;
+        $this->state_id = $district->id;
         $this->fill($district->toArray());
 
         $this->refreshCache();
@@ -90,21 +94,22 @@ class AddDistrict extends Component
     // Update an existing district
     private function updateExistingdistrict()
     {
-        $district = District::findOrFail($this->district_id);
+        $district = State::findOrFail($this->state_id);
 
         $district->name = $this->name;
         $district->status = $this->status;
+        $district->code = $this->code;
 
         $district->save();
 
-        $this->emit('success', __('District updated successfully.'));
+        $this->emit('success', __('State updated successfully.'));
         $this->refreshCache();
     }
 
     //update status
     public function updateStatus($id, $status)
     {
-        $district = District::findOrFail($id);
+        $district = State::findOrFail($id);
         $district->update(['status' => $status]);
 
         $message = $status == 0 ? "{$district->name} is inactive" : "{$district->name} is active";
@@ -119,7 +124,7 @@ class AddDistrict extends Component
     public function delete($id)
     {
         // Find the district by ID
-        $district = District::findOrFail($id);
+        $district = State::findOrFail($id);
 
         // Delete the district
         $district->delete();
@@ -144,7 +149,7 @@ class AddDistrict extends Component
     {
         // Reset edit mode and form fields
         $this->edit_mode = false;
-        $this->reset(['name', 'district_id', 'status']);
+        $this->reset(['name', 'state_id', 'status', 'code']);
     }
 
     // Refresh the cache
@@ -152,7 +157,7 @@ class AddDistrict extends Component
     {
         Cache::forget($this->cacheKey);
         Cache::rememberForever($this->cacheKey, function () {
-            return district::orderBy('id', 'desc')->get();
+            return State::orderBy('id', 'desc')->get();
         });
     }
 

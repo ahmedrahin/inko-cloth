@@ -33,7 +33,7 @@ class PrintfulService
             $response = Http::withToken($this->apiKey)->acceptJson()->post($this->baseUrl . '/orders', $payload);
 
             if (!$response->successful()) {
-                // dd($response->body());
+                dd($response->body());
                 return false;
             }
 
@@ -78,7 +78,8 @@ class PrintfulService
                 'files' => [
                     [
                        'type' => 'default',
-                       'url' => $item->product->p_logo  ? asset($item->product->p_logo) : asset('p_logo.png'),
+                    //    'url' => $item->product->p_logo ? asset($item->product->p_logo) : asset('p_logo.png'),
+                       'url' => $item->product->p_logo ? asset($item->product->p_logo) : asset('p_logo.png'),
                     ]
                 ],
 

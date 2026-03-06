@@ -117,7 +117,7 @@ Route::middleware(['isAdmin'])->group(function () {
     // shipping management
     Route::name('shipping.')->group(function(){
         Route::controller(ShippingController::class)->group(function () {
-            Route::get('/shipping-district', 'district')->name('district');
+            Route::get('/shipping-state', 'state')->name('state');
             Route::get('/shipping-method', 'shipping_method')->name('shipping_method');
         });
     });

@@ -478,7 +478,16 @@
             <!--begin:Menu item-->
             <div class="menu-item">
                 <!--begin:Menu link-->
-                <a class="menu-link {{ request()->routeIs('shipping.shipping_method') ? 'active' : '' }}"
+                <a class="menu-link {{ request()->routeIs('shipping.state') ? 'active' : '' }}"
+                    href="{{ route('shipping.state') }}">
+                    <i class="ki-duotone ki-geolocation">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                    </i>
+                    <span class="menu-title">State / Cities</span>
+                </a>
+
+                 <a class="menu-link {{ request()->routeIs('shipping.shipping_method') ? 'active' : '' }}"
                     href="{{ route('shipping.shipping_method') }}">
                     <i class="ki-duotone ki-truck">
                         <span class="path1"></span>

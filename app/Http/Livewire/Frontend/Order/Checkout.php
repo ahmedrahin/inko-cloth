@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Frontend\Order;
 
 use Livewire\Component;
 use App\Models\{
-    Order, Product
+    Order, Product, State
 };
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use App\Models\Coupon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 use App\Services\OrderService;
 use App\Services\StripeService;
@@ -38,6 +39,11 @@ class Checkout extends Component
     public $appliedCoupon;
     private $cacheKey;
 
+    // shipping
+    public $country_code = 'US';
+    public $state_code;
+    public $states = [];
+
     protected $listeners = [
         'cartUpdated' => 'refreshCart',
     ];
@@ -53,6 +59,9 @@ class Checkout extends Component
         $this->payment_type = 'cod';
 
         $this->appliedCoupon = session()->get('applied_coupon', null);
+
+        // state list
+        $this->states = State::where('status', 1)->get();
 
         if (Auth::check()) {
             $this->name = Auth::user()->name;
@@ -232,11 +241,16 @@ class Checkout extends Component
         'shipping_address' => 'required',
         'city' => 'required',
         'zip_code' => 'required',
+        'state_code' => 'required',
     ];
 
-    public function order(OrderService $orderService, StripeService $stripeService)
+    protected $messages = [
+        'state_code.required' => 'Please select a state'
+    ];
+
+    public function order(OrderService $orderService, StripeService $stripeService, Request $request)
     {
-        $this->validate();
+         $this->validate();
 
         try {
             if (empty($this->cart)) {

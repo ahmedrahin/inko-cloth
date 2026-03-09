@@ -49,10 +49,12 @@ class OrderService
             'shipping_address' => $c->shipping_address,
             'zip_code' => $c->zip_code,
             'city' => $c->city,
-            // 'district_id' => $c->district_id,
+            'state_id' => $c->state_id,
+            'state_code' => $c->state_code,
 
             'payment_type' => $paymentType,
             'shipping_method' => $c->selectedShippingMethodId,
+            'shipping_type' => $c->selectedShippingMethodType,
             'shipping_cost' => $c->selectedShippingCharge,
 
             'order_date' => now(),

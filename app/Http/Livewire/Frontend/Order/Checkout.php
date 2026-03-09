@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Frontend\Order;
 
 use Livewire\Component;
 use App\Models\{
-    Order, Product, State
+    Order, Product, State, ProductStock
 };
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
@@ -26,14 +26,16 @@ class Checkout extends Component
     public $zip_code;
     public $city;
     public $district_id;
+    public $state_id;
     public $note;
     public $payment_type;
     public $selectedShippingMethodId;
+    public $selectedShippingMethodType;
     public $selectedShippingCharge = 0;
 
     public $cart = [];
     public $quantities = [];
-    public $shippingMethods;
+    public $shippingMethods = [];
     public $couponCode;
     public $discountAmount = 0;
     public $appliedCoupon;
@@ -233,6 +235,80 @@ class Checkout extends Component
         // $this->emit('info', 'Coupon removed.');
     }
 
+    public function updatedStateId($value){
+        if (empty($value)) {
+            $this->shippingMethods = [];
+            $this->selectedShippingMethodId = null;
+            $this->selectedShippingCharge = 0;
+            return;
+        }
+        
+        $state = State::find($value);
+
+        if (!$state) {
+            return;
+        }
+
+        $this->state_code = $state->code;
+        $this->city = $state->name;
+
+        $this->fetchShippingRates($state->code);
+    }
+
+    public function fetchShippingRates($code)
+    {
+        if (!$this->state_id) {
+            return;
+        }
+
+        $items = [];
+
+        foreach ($this->cart as $item) {
+
+            $stock = ProductStock::find($item['stock_id'] ?? null);
+
+            if ($stock && $stock->printful_variant_id) {
+                $items[] = [
+                    'variant_id' => (int) $stock->printful_variant_id,
+                    'quantity'   => (int) $item['quantity'],
+                ];
+            }
+        }
+
+        if (empty($items)) {
+            return;
+        }
+
+        $address = [
+            'country_code' => 'US',
+            'state_code'   => $code,
+        ];
+
+        try {
+            $rates = app(\App\Services\PrintfulService::class)->getShippingRates($items, $address);
+            if (!$rates) {
+                throw new \Exception('Shipping rates not available');
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('Shipping rate load failed. Please try again.');
+        }
+
+        $this->shippingMethods = $rates;
+
+        if (!empty($rates)) {
+            $this->selectedShippingMethodType = $rates[0]['id'];
+            $this->selectedShippingCharge   = $rates[0]['rate'];
+        }
+    }
+
+    public function updatedSelectedShippingMethodType($value)
+    {
+        $method = collect($this->shippingMethods)->firstWhere('id', $value);
+
+        if ($method) {
+            $this->selectedShippingCharge = (float) $method['rate'];
+        }
+    }
 
     protected $rules = [
         'name' => 'required',
@@ -241,11 +317,11 @@ class Checkout extends Component
         'shipping_address' => 'required',
         'city' => 'required',
         'zip_code' => 'required',
-        'state_code' => 'required',
+        'state_id' => 'required',
     ];
 
     protected $messages = [
-        'state_code.required' => 'Please select a state'
+        'state_id.required' => 'Please select a state'
     ];
 
     public function order(OrderService $orderService, StripeService $stripeService, Request $request)
@@ -280,9 +356,11 @@ class Checkout extends Component
                         'shipping_address' => $this->shipping_address,
                         'zip_code' => $this->zip_code,
                         'city' => $this->city,
-                        // 'district_id' => $this->district_id,
-                        'selectedShippingMethodId' => $this->selectedShippingMethodId ?? null,
+                        'state_id' => $this->state_id,
+                        'state_code' => $this->state_code,
+                        // 'selectedShippingMethodId' => $this->selectedShippingMethodId ?? null,
                         'selectedShippingCharge' => $this->selectedShippingCharge ?? 0,
+                        'selectedShippingMethodType' => $this->selectedShippingMethodType ?? null,
                         'note' => $this->note,
                         'appliedCoupon' => $this->appliedCoupon ?? [],
                         'grandTotal' => $this->grandTotal(),
@@ -326,7 +404,8 @@ class Checkout extends Component
     public function grandTotal()
     {
         $discount = $this->appliedCoupon ? ($this->appliedCoupon['discount'] ?? 0) : 0;
-        return $this->getTotalAmount() + $this->selectedShippingCharge - $discount;
+        $total = $this->getTotalAmount() + $this->selectedShippingCharge - $discount;
+        return number_format($total, 2);
     }
 
 

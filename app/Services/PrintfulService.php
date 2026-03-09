@@ -79,7 +79,7 @@ class PrintfulService
                     [
                        'type' => 'default',
                     //    'url' => $item->product->p_logo ? asset($item->product->p_logo) : asset('p_logo.png'),
-                       'url' => $item->product->p_logo ? asset($item->product->p_logo) : asset('p_logo.png'),
+                       'url' => 'https://extropy.com.bd/uploads/media/1772133143_in.png',
                     ]
                 ],
 
@@ -99,7 +99,7 @@ class PrintfulService
                 'name'    => $order->name,
                 'address1'=> $order->shipping_address,
                 'city'    => $order->city ?? null,
-                'state_code' => 'CA',
+                'state_code' => $order->state_code,
                 'zip'     => '91311',
                 'country_code' => 'US',
                 'phone'   => $order->phone,

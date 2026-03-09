@@ -73,13 +73,13 @@
                                     </fieldset> --}}
 
                                     <fieldset>
-                                        <select wire:model="state_code" class="@error('state_code') error_border @enderror">
+                                        <select wire:model="state_id" class="@error('state_id') error_border @enderror">
                                             <option value="">Select State</option>
                                             @foreach($states as $state)
                                                 <option value="{{ $state->id }}">{{ $state->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('state_code') <div class="text-danger small">{{ $message }}</div> @enderror
+                                        @error('state_id') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </fieldset>
 
                                     <fieldset>
@@ -114,22 +114,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Shipping Method -->
-                        {{-- <div class="box-ip-shipping" style="margin-bottom: 35px;">
-                            <h2 class="title type-semibold">Shipping Method</h2>
-                            @foreach ($shippingMethods as $method)
-                                <label for="shipping-{{ $method->id }}" class="check-ship mb-12">
-                                    <input type="radio" id="shipping-{{ $method->id }}"
-                                           class="tf-check-rounded style-2 line-black"
-                                           wire:model="selectedShippingMethodId" value="{{ $method->id }}">
-                                    <span class="text h6">
-                                        <span class="">{{ $method->provider_name }}</span>
-                                        <span class="price">${{ $method->provider_charge }}</span>
-                                    </span>
-                                </label>
-                            @endforeach
-                        </div> --}}
 
                         <!-- Terms & Submit -->
                         {{-- <div class="agree-text mb-3">
@@ -193,30 +177,51 @@
                         <ul class="list-total">
                             <li class="total-item h6">
                                 <span class="fw-bold text-black">Subtotal</span>
-                                <span>${{ format_price($this->getTotalAmount(), 0) }}</span>
+                                <span>${{ format_price($this->getTotalAmount(), 2) }}</span>
                             </li>
 
                             @if (!empty($appliedCoupon))
                                 <li class="total-item h6">
                                     <span class="fw-bold text-black">Coupon Discount</span>
-                                    <span style="color:#ef4a23;">-${{ format_price($appliedCoupon['discount']) }}</span>
+                                    <span style="color:#ef4a23;">-${{ number_format($appliedCoupon['discount'], 2) }}</span>
                                 </li>
                             @endif
 
-                            @if ($selectedShippingCharge)
-                                <li class="total-item h6">
-                                    <span class="fw-bold text-black">Shipping</span>
-                                    <span>${{ format_price($selectedShippingCharge) }}</span>
-                                </li>
+                            <!-- Shipping Method -->
+                            @if(!empty($shippingMethods))
+                                <div class="box-ip-shipping pb-2" style="margin-bottom: 25px;border-bottom:1px solid var(--line);">
+                                    <span class="fw-bold text-black mb-14 d-block mt-3">Shipping Method</span>
+                                    @foreach($shippingMethods as $method)
+                                        <label class="check-ship mb-12">
+                                            <input type="radio"
+                                                class="tf-check-rounded style-2 line-black"
+                                                wire:model="selectedShippingMethodType"
+                                                value="{{ $method['id'] }}">
+
+                                            <span class="text h6">
+                                                <span>{{ $method['name'] }}</span>
+                                                <span class="price">${{ $method['rate'] }}</span>
+                                            </span>
+                                        </label>
+                                    @endforeach
+                                </div>
                             @endif
+                            
                         </ul>
                         <div class="last-total h5 fw-medium text-black">
                             <span>Total</span>
-                            <span>${{ number_format($this->grandTotal(), 0) }}</span>
+                            <span>${{ number_format($this->grandTotal(), 2) }}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="ajax-loader" wire:loading wire:target="state_id">
+        <div style="width: 100%;height:100%;display:flex;align-items:center;justify-content:center;">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    
 </section>

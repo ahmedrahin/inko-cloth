@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('shipping_address');
             $table->string('city')->nullable();
             $table->string('country')->nullable();
+            $table->integer('state_id')->nullable();
+            $table->string('state_code')->nullable();
             $table->string('zip_code')->nullable();
             $table->double('grand_total', 20, 2)->nullable();
             $table->double('subtotal', 20, 2)->nullable();

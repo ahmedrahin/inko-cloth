@@ -9,6 +9,12 @@
         .shop-cart{
             display: none !important;
         }
+        .check-ship .text{
+            flex-wrap: inherit;
+        }
+        .check-ship{
+            padding: 11px 12px;
+        }
     </style>
 @endsection
 

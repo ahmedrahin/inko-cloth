@@ -40,7 +40,7 @@
                                     </div>
                                 </td>
                                 <td class="cart_price h6 each-price" data-cart-title="Price">
-                                    ${{ format_price($item['offer_price']) }}
+                                    ${{ $item['offer_price'] }}
                                 </td>
                                 <td class="cart_quantity" data-cart-title="Quantity">
                                     <div class="wg-quantity">
@@ -59,7 +59,7 @@
                                     </div>
                                 </td>
                                 <td class="cart_total h6 each-subtotal-price" data-cart-title="Total">
-                                    ${{ format_price($item['offer_price'] * $item['quantity']) }}
+                                    ${{ $item['offer_price'] * $item['quantity'] }}
                                 </td>
                                 <td class="cart_remove remove link" data-cart-title="Remove"
                                     wire:click="removeItem('{{ $cartKey }}')">
@@ -87,7 +87,7 @@
                         
                         <h5 class="total-order d-flex justify-content-between align-items-center">
                             <span>Total</span>
-                            <span class="total each-total-price">${{ format_price($this->getTotalAmount()) }}</span>
+                            <span class="total each-total-price">${{ $this->getTotalAmount() }}</span>
                         </h5>
 
                         <div class="list-ver">

@@ -33,8 +33,10 @@ class PrintfulService
             $response = Http::withToken($this->apiKey)->acceptJson()->post($this->baseUrl . '/orders', $payload);
 
             if (!$response->successful()) {
-                dd($response->body());
-                return false;
+                $error = $response->json();
+                $errorMessage = $error['error']['message'] ?? 'Unknown Printful error';
+                
+                throw new \Exception($errorMessage);
             }
 
             $result = $response->json('result');
@@ -100,11 +102,13 @@ class PrintfulService
                 'address1'=> $order->shipping_address,
                 'city'    => $order->city ?? null,
                 'state_code' => $order->state_code,
-                'zip'     => '91311',
+                'zip'     => $order->zip_code,
                 'country_code' => 'US',
                 'phone'   => $order->phone,
                 'email'   => $order->email ?? null,
             ],
+
+            'shipping' => $order->shipping_type,
 
             'retail_costs' => [
                 'currency'    => 'USD',

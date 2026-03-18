@@ -79,7 +79,7 @@
                     </tr>
                     <tr>
                         <td>Payable:</td>
-                        <td class="amount">{{ format_price($order->grand_total) }} BDT</td>
+                        <td class="amount">{{ $order->grand_total }} BDT</td>
                     </tr>
                 </table>
             </td>
@@ -111,7 +111,7 @@
                     </td>
                     <td class="text-center">{{ $item->price }}</td>
                     <td class="text-center">{{ $item->quantity }}</td>
-                    <td class="text-right">{{ format_price($item->price * $item->quantity) }}</td>
+                    <td class="text-right">{{ $item->price * $item->quantity }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -119,24 +119,24 @@
             <tr>
                 <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
                 <td class="text-right">
-                    <strong> {{ format_price($order->orderItems->sum(function ($item) { return $item->price * $item->quantity; })) }} BDT</strong>
+                    <strong> {{ ($order->orderItems->sum(function ($item) { return $item->price * $item->quantity; })) }} BDT</strong>
                 </td>
             </tr>
             <tr>
                 <td colspan="3" class="text-right">Shipping Cost (+):</td>
-                <td class="text-right"> {{ format_price($order->shipping_cost) }} BDT</td>
+                <td class="text-right"> {{ ($order->shipping_cost) }} BDT</td>
             </tr>
             @if( !is_null($order->cupon_code) )
             <tr>
                 <td colspan="3" class="text-right">Discount (-):</td>
-                <td class="text-right">{{format_price($order->coupon_discount)}} BDT</td>
+                <td class="text-right">{{($order->coupon_discount)}} BDT</td>
             </tr>
             @endif
             <tr>
                 <td colspan="3" class="text-right"><strong style="font-size: 16px;">Grand Total:</strong></td>
                 <td class="text-right">
                     <strong style="font-size: 16px;">
-                         {{ format_price($order->grand_total) }} BDT
+                         {{ ($order->grand_total) }} BDT
                     </strong>
                 </td>
             </tr>

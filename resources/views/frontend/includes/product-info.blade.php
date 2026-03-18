@@ -41,9 +41,9 @@
         </a>
 
         <div class="price-wrap">
-            <span class="price-new h6">${{ format_price($product->offer_price) }}</span>
+            <span class="price-new h6">${{ $product->offer_price }}</span>
             @if ($product->discount_option != 1)
-                <span class="price-old h6 fw-normal">${{ format_price($product->base_price) }}</span>
+                <span class="price-old h6 fw-normal">${{ $product->base_price }}</span>
             @endif
         </div>
         @include('frontend.includes.rating')

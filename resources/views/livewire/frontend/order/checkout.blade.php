@@ -169,7 +169,7 @@
                                         <div class="quantity">Qty: {{ $item['quantity'] }}</div>
                                     </div>
                                     <p class="price-prd h6">
-                                        ${{ format_price($item['offer_price'] * $item['quantity']) }}
+                                        ${{ ($item['offer_price'] * $item['quantity']) }}
                                     </p>
                                 </li>
                             @endforeach
@@ -177,7 +177,7 @@
                         <ul class="list-total">
                             <li class="total-item h6">
                                 <span class="fw-bold text-black">Subtotal</span>
-                                <span>${{ format_price($this->getTotalAmount(), 2) }}</span>
+                                <span>${{ $this->getTotalAmount() }}</span>
                             </li>
 
                             @if (!empty($appliedCoupon))

@@ -346,6 +346,43 @@ class Checkout extends Component
                 return redirect()->route('success.order', ['order_id' => $order->order_id])->with('success', 'Order placed successfully!');
             }
 
+
+            if (!preg_match('/^\d{5}$/', $this->zip_code)) {
+                throw new \Exception('Please enter a valid 5-digit ZIP code');
+            }
+            
+            // Printful validation (without creating order)
+            $printfulService = app(\App\Services\PrintfulService::class);
+            
+            // Prepare items for validation
+            $items = [];
+            foreach ($this->cart as $item) {
+                $stock = ProductStock::find($item['stock_id'] ?? null);
+                if ($stock && $stock->printful_variant_id) {
+                    $items[] = [
+                        'variant_id' => (int) $stock->printful_variant_id,
+                        'quantity'   => (int) $item['quantity'],
+                    ];
+                }
+            }
+            
+            // Validate address with Printful
+            if (!empty($items)) {
+                $address = [
+                    'country_code' => 'US',
+                    'state_code'   => $this->state_code,
+                    'zip'          => $this->zip_code,
+                    'city'         => $this->city,
+                ];
+                
+                // This will throw exception if validation fails
+                $rates = $printfulService->getShippingRates($items, $address);
+                
+                if (empty($rates)) {
+                    throw new \Exception('Shipping not available for this address');
+                }
+            }
+
             if ($this->payment_type === 'stripe') {
                 $orderData = [
                     'cart' => $this->cart,

@@ -76,7 +76,7 @@
                     </div>
                     <div class="invoice-info_item invoice-info_date">
                         <h5 class="invoice_label fw-semibold">Total Amount:</h5>
-                        <p class="invoice_value h6 ">${{ format_price($order->grand_total) }}</p>
+                        <p class="invoice_value h6 ">${{ $order->grand_total }}</p>
                     </div>
                     <div class="invoice-info_item" style="min-width: 300px;">
                         <h5 class="invoice_label fw-semibold">Shipping Address:</h5>
@@ -112,28 +112,34 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="h6 invoice__price">${{ format_price($item->price, 2) }}</td>
+                                <td class="h6 invoice__price">${{ $item->price }}</td>
                                 <td class="h6 invoice__vat text-center">{{ $item->quantity }}</td>
-                                <td class="h6 invoice__total text-end">${{ format_price($item->price * $item->quantity, 2) }}</td>
+                                <td class="h6 invoice__total text-end">${{ $item->price * $item->quantity }}</td>
                             </tr>
                             @endforeach
                             <tr>
                                 <td colspan="3" class="h6 invoice__desc fw-semibold">Subtotal</td>
-                                <td class="h6 invoice__total text-end">${{ format_price($order->orderItems->sum(fn($i) => $i->price * $i->quantity), 2) }}</td>
+                                <td class="h6 invoice__total text-end">${{ $order->orderItems->sum(fn($i) => $i->price * $i->quantity) }}</td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="h6 invoice__desc fw-semibold">Shipping</td>
-                                <td class="h6 invoice__total text-end">${{ format_price($order->shipping_cost, 2) }}</td>
+                                <td class="h6 invoice__total text-end">${{ $order->shipping_cost }}</td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="h6 invoice__desc fw-semibold">Discount</td>
-                                <td class="h6 invoice__total text-end">-${{ format_price($order->coupon_discount, 2) }}</td>
+                                <td class="h6 invoice__total text-end">-${{ $order->coupon_discount }}</td>
                             </tr>
                             <tr>
                                 <td class="h6 invoice__desc fw-semibold">Total</td>
                                 <td></td>
                                 <td></td>
-                                <td class="h6 invoice__amount fw-semibold text-primary text-end">${{ format_price($order->grand_total, 2) }}</td>
+                                <td class="h6 invoice__amount fw-semibold text-primary text-end">${{ $order->grand_total }}</td>
+                            </tr>
+                            <tr>
+                                <td class="h6 invoice__desc fw-semibold">Total Paid</td>
+                                <td></td>
+                                <td></td>
+                                <td class="h6 invoice__amount fw-semibold text-success text-end">${{ $order->paid_amount }}</td>
                             </tr>
                         </tbody>
                     </table>

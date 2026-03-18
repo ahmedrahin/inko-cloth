@@ -25,10 +25,14 @@ class OrderService
             $this->saveOrderItems($order, $cart);
             $this->afterOrderPlaced($order);
 
-            $printfulSuccess = $this->printfulService->createOrder($order);
-
-            if (!$printfulSuccess) {
-                throw new \Exception('Printful order failed');
+            try {
+                $printfulSuccess = $this->printfulService->createOrder($order);
+                
+                if (!$printfulSuccess) {
+                    throw new \Exception('Please check shipping details including ZIP code.');
+                }
+            } catch (\Exception $e) {
+                throw new \Exception($e->getMessage());
             }
 
             return $order;

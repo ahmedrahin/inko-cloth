@@ -77,10 +77,17 @@
                         <td>Payment:</td>
                         <td>{{ $order->payment_type == 'cod' ? 'Cash on Delivery' : 'Online Payment' }}</td>
                     </tr>
-                    <tr>
-                        <td>Payable:</td>
-                        <td class="amount">{{ $order->grand_total }} BDT</td>
-                    </tr>
+                    @if( $order->paid_amount > 1 )
+                        <tr>
+                            <td>Paid:</td>
+                            <td class="amount">{{ $order->grand_total }} BDT</td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td>Payable:</td>
+                            <td class="amount">{{ $order->grand_total }} BDT</td>
+                        </tr>
+                    @endif
                 </table>
             </td>
         </tr>

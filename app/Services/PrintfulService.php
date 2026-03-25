@@ -120,6 +120,10 @@ class PrintfulService
             ],
 
             'items' => $items,
+
+            'packing_slip' => [
+                ''
+            ]
         ];
     }
 

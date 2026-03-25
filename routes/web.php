@@ -8,12 +8,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PagesController;
 use App\Http\Controllers\Frontend\ShopController;
+
 use App\Http\Controllers\Frontend\UserDashboardController;
 use App\Models\Order;
 use App\Http\Controllers\Apps\Order\OrderController;
 use App\Http\Controllers\Apps\Marketing\OfferController;
 use App\Http\Controllers\Payment\StripePaymentController;
-use Illuminate\Support\Facades\Http;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -68,13 +69,6 @@ Route::middleware('clear.direct_checkout')->group(function(){
     });
 });
 
-Route::get('/printful-test', function () {
-    $productId = 415783222;
-    $response = Http::withToken(env('PRINTFUL_API_KEY'))
-        ->get("https://api.printful.com/store/products/$productId");
-
-    return $response->json();
-});
 
 // checkout page
 Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');

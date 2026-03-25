@@ -18,7 +18,7 @@
 
     <style>
         .s-invoice .heading {
-            margin-bottom: 46px;
+            margin-bottom: 16px;
         }
         @media screen and (max-width: 800px) {
             .invoice_head_right{
@@ -50,7 +50,7 @@
     <div class="s-invoice">
         <div class="container">
             <a href="{{ route('homepage') }}" class="heading h1 text-black fw-medium text-center d-block">
-                <img src="{{ asset(config('app.logo')) }}" alt="">
+                <img src="{{ asset(config('app.logo')) }}" alt="" style="width:100px;">
             </a>
             <div class="wg-invoice">
                 <div class="invoice-head">

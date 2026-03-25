@@ -2,10 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Frontend\PrintfulWebhookController;
 use App\Http\Controllers\Apps\BrandController;
 
-
+use Illuminate\Support\Facades\Http;
 
 // use App\Http\Controllers\Api\OrderController;
 // use App\Http\Controllers\Api\TicketParcentController;
@@ -24,3 +24,12 @@ use App\Http\Controllers\Apps\BrandController;
 |
 */
 
+Route::post('/printful/shipping_deliverd', [PrintfulWebhookController::class, 'shipping_deliverd']);
+
+Route::get('/printful-test', function () {
+    $productId = 415783222;
+    $response = Http::withToken(env('PRINTFUL_API_KEY'))
+        ->get("https://api.printful.com/store/products/$productId");
+
+    return $response->json();
+});

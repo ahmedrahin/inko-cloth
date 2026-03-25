@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\OrderPlaced;
+use App\Mail\{OrderPlaced,OrderPlacedCustomer};
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -30,5 +30,8 @@ class OrderSent implements ShouldQueue
     public function handle(): void
     {
         Mail::to(config('app.email'))->send(new OrderPlaced($this->order));
+        
+        // Customer mail
+        Mail::to($this->order->email)->send(new OrderPlacedCustomer($this->order));
     }
 }
